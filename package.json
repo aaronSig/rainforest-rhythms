@@ -7,8 +7,11 @@
     "@types/node": "11.9.5",
     "@types/react": "16.8.4",
     "@types/react-dom": "16.8.2",
+    "leaflet": "^1.4.0",
     "react": "^16.8.3",
+    "react-container-dimensions": "^1.4.1",
     "react-dom": "^16.8.3",
+    "react-leaflet": "^2.2.1",
     "react-scripts": "2.1.5",
     "typescript": "3.3.3333"
   },
@@ -26,5 +29,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@types/react-leaflet": "^1.1.6"
+  }
 }

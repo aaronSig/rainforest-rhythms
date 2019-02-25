@@ -1,0 +1,6 @@
+.InfoPane {
+  display: flex;
+  flex-basis: 33%;
+  min-width: 270px;
+  background-color: lightcoral;
+}

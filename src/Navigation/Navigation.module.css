@@ -1,0 +1,36 @@
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 3rem;
+  padding: 0px 2rem 0px 2rem;
+  background-color: #333333;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.nav h2 {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.nav ul {
+  display: flex;
+  list-style: none;
+}
+
+.nav li {
+  margin: 0px 1rem 0px 1rem;
+}
+
+.nav li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.nav li a:hover {
+  transition: color 200ms ease-in;
+  color: #70c38c;
+}

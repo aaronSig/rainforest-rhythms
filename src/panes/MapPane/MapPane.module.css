@@ -1,0 +1,12 @@
+.MapPane {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  background-color: darksalmon;
+}
+
+.MapPane .leaflet-pane {
+  width: 915px;
+  height: 575px;
+}

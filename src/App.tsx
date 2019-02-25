@@ -1,25 +1,23 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import ContainerDimensions from "react-container-dimensions";
+import "./App.css";
+import { Navigation } from "./Navigation/Navigation";
+import { AudioControlPane } from "./panes/AudioControlPane/AudioControlPane";
+import { InfoPane } from "./panes/InfoPane/InfoPane";
+import { MapPane } from "./panes/MapPane/MapPane";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Navigation />
+        <div className="row">
+          <ContainerDimensions>
+            <MapPane interactive={false} />
+          </ContainerDimensions>
+          <InfoPane />
+        </div>
+        <AudioControlPane />
       </div>
     );
   }
