@@ -3,9 +3,6 @@
   top: 1rem;
   left: 1rem;
 
-  width: 180px;
-  height: 180px;
-
   border: 3px solid;
   border-color: white;
   border-radius: 15px;
@@ -14,7 +11,7 @@
   z-index: 400;
 }
 
-.MiniMap .leaflet-pane {
+/* .MiniMap .leaflet-pane {
   width: 180px;
   height: 180px;
-}
+} */
