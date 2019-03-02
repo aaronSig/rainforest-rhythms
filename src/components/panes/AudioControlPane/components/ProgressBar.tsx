@@ -1,9 +1,11 @@
 import React, { ChangeEvent } from "react";
 import { connect } from "react-redux";
-import { Dispatch } from "redux";
-import { updateAudioControlProgress } from "../../../../actions";
-import { State } from "../../../../reducers";
-import { audioControlProgress } from "../../../../seletors";
+import {
+  commitAudioControlProgress,
+  updateAudioControlProgress
+} from "../../../../app/actions/audio";
+import { State } from "../../../../app/reducers";
+import { audioControlProgress } from "../../../../app/selectors/audio";
 import styles from "./ProgressBar.module.css";
 
 interface ProgressBarProps {
@@ -12,7 +14,7 @@ interface ProgressBarProps {
   commitProgressChange: () => void; // when the user has let go of the scrubber
 }
 
-const MAX = (24 * 60) / 20; // 72 20 min chunks in a day
+const MAX = 86400000; //(24 * 60) / 20; // 72 20 min chunks in a day
 
 /***
  * The progress bar should update when sound is playing BUT
@@ -48,12 +50,14 @@ const mapStateToProps = (state: State) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
     changeProgress: (progress: number) => {
       dispatch(updateAudioControlProgress(progress));
     },
-    commitProgressChange: () => {}
+    commitProgressChange: () => {
+      dispatch(commitAudioControlProgress());
+    }
   };
 };
 

@@ -11,7 +11,7 @@ import {
 } from "./types";
 
 const host = "https://davidorme.pythonanywhere.com";
-const base = "/call/json";
+const base = "/call/json/";
 
 async function get(
   path: string | (string | number | undefined)[],
@@ -48,7 +48,7 @@ export default {
     async search(siteId: number, time: number, shuffle?: boolean): Promise<StreamInfo | null> {
       return await get(["stream_get", siteId, time, shuffle ? "1" : undefined]);
     },
-    async info(streamId: string): Promise<StreamInfo | null> {
+    async info(streamId: string | number): Promise<StreamInfo | null> {
       return await get(["stream_play", streamId]);
     },
     /**
@@ -64,9 +64,14 @@ export default {
     /***
      * Get the link to the mp3. Will handle refreshing the access token if needed
      */
-    async audioStream(info: StreamInfo): Promise<string> {
+    async audioStream(boxId: string): Promise<string | null> {
       const token = await this.accessToken();
-      return `https://dl.boxcloud.com/api/2.0/files/${info.box_id}/content?access_token=${token}`;
+      if (!token) {
+        return null;
+      }
+      return `https://dl.boxcloud.com/api/2.0/files/${boxId}/content?access_token=${
+        token.access_token
+      }`;
     }
   },
 
@@ -83,17 +88,17 @@ export default {
   },
 
   taxa: {
-    async get(siteId: number, time?: number): Promise<Taxon[]> {
+    async get(siteId: number | string, time?: number): Promise<Taxon[]> {
       return await get(["get_taxa", siteId, time], []);
     }
   },
 
   geoJson: {
     async streams(): Promise<GeoJSON.GeoJsonObject> {
-      return await get("/rainforest_rhythms/static/geojson/stream_data.geojson", null, "");
+      return await get("rainforest_rhythms/static/geojson/stream_data.geojson", null, "");
     },
     async habitats(): Promise<GeoJSON.GeoJsonObject> {
-      return await get("/static/geojson/map_data.geojson", null, "");
+      return await get("static/geojson/map_data.geojson", null, "");
     }
   }
 };

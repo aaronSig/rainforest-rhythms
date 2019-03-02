@@ -1,6 +1,16 @@
 .InfoPane {
   display: flex;
+  flex-direction: column;
   flex-basis: 33%;
   min-width: 270px;
   background-color: #1e1e1e;
+  color: #fff;
+  padding: 1rem;
+}
+
+.Time {
+  text-align: center;
+}
+
+.Taxa {
 }

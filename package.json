@@ -4,14 +4,17 @@
   "private": true,
   "proxy": "https://davidorme.pythonanywhere.com",
   "dependencies": {
+    "@reach/router": "^1.2.1",
     "@types/jest": "24.0.6",
     "@types/node": "11.9.5",
+    "@types/reach__router": "^1.2.3",
     "@types/react": "16.8.4",
     "@types/react-dom": "16.8.2",
     "@types/react-redux": "^7.0.1",
     "@types/redux": "^3.6.0",
     "@types/redux-thunk": "^2.1.0",
     "@types/reselect": "^2.2.0",
+    "date-fns": "^1.30.1",
     "leaflet": "^1.4.0",
     "react": "^16.8.3",
     "react-container-dimensions": "^1.4.1",
@@ -28,6 +31,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "now-build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

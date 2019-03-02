@@ -1,0 +1,30 @@
+.SiteMarkerContainer {
+}
+
+.SiteMarker {
+  border: 3px solid #eee;
+  background-color: #99b3cc;
+  opacity: 0.8;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.focused {
+  border: 3px dashed black;
+  opacity: 1;
+  z-index: 9000;
+}
+
+.playing {
+  animation: play-spin infinite 8s linear;
+}
+
+@keyframes play-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
