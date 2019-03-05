@@ -1,17 +1,10 @@
 import { Dispatch } from "redux";
 import api from "../../api/api";
+import ax from "../../state/ax";
 import { State } from "../reducers";
 import { loadingCount } from "../selectors/global";
 import { setAudioFile } from "./audio";
 import { focusSiteId, setGeoJson, setSites } from "./map";
-
-// shorthand action factory.
-export function ax(type: string, item?: any) {
-  return {
-    type,
-    item
-  };
-}
 
 export const SET_LOADING = "SET_LOADING";
 export function setLoading(loading: boolean) {

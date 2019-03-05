@@ -22,6 +22,9 @@ async function get(
   if (path instanceof Array) {
     p = path.filter(t => t !== undefined).join("/");
   }
+  // -- when in the server contex
+  // const req = await fetch(`/api/${basePath}${p}`);
+
   const req = await fetch(`${basePath}${p}`);
   if (req.ok) {
     return await req.json();
@@ -37,26 +40,26 @@ export default {
 
   sites: {
     async list(): Promise<Site[]> {
-      return await get("get_sites", []);
+      return (await get("get_sites", [])).map(idsToString);
     },
     async get(siteId: number): Promise<SiteInfo> {
-      return await get("get_site", [siteId]);
+      return idsToString(await get("get_site", [siteId]));
     }
   },
 
   streams: {
     async search(siteId: number, time: number, shuffle?: boolean): Promise<StreamInfo | null> {
-      return await get(["stream_get", siteId, time, shuffle ? "1" : undefined]);
+      return idsToString(await get(["stream_get", siteId, time, shuffle ? "1" : undefined]));
     },
     async info(streamId: string | number): Promise<StreamInfo | null> {
-      return await get(["stream_play", streamId]);
+      return idsToString(await get(["stream_play", streamId]));
     },
     /**
      * takes an audio file id and returns the same standard set of information for the next track along.
      * @param streamId
      */
     async next(streamId: string): Promise<StreamInfo | null> {
-      return await get(["stream_next", streamId]);
+      return idsToString(await get(["stream_next", streamId]));
     },
     async accessToken(): Promise<AccessToken | null> {
       return await get("get_dl_access_token");
@@ -89,7 +92,7 @@ export default {
 
   taxa: {
     async get(siteId: number | string, time?: number): Promise<Taxon[]> {
-      return await get(["get_taxa", siteId, time], []);
+      return (await get(["get_taxa", siteId, time], [])).map(idsToString);
     }
   },
 
@@ -102,3 +105,23 @@ export default {
     }
   }
 };
+
+// The IDs from the api come in as numbers which Maps in ImmutableJS don't like
+function idsToString(obj: any) {
+  if (obj === null) {
+    return;
+  }
+  if ("id" in obj) {
+    obj.id = `${obj.id}`;
+  }
+  if ("gbif_key" in obj) {
+    obj.gbif_key = `${obj.gbif_key}`;
+  }
+  if ("audio" in obj) {
+    obj.audio = `${obj.audio}`;
+  }
+  if ("site" in obj) {
+    obj.site = `${obj.site}`;
+  }
+  return obj;
+}

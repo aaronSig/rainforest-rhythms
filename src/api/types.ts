@@ -9,36 +9,36 @@ export interface Taxon {
   scientific_name: string;
   taxon_rank: string;
   common_name: string;
-  id: number;
-  gbif_key: number;
+  id: string;
+  gbif_key: string;
 }
 
 export interface Site {
   site_name: string;
   habitat: string;
-  short_desc: string;
+  short_desc: string | null;
   longitude: number;
   latitude: number;
-  id: number;
+  id: string;
   n_audio: number;
 }
 
 export interface SiteInfo {
-  long_desc: string;
+  long_desc: string | null;
   site_name: string;
   habitat: string;
   image: string;
-  short_desc: string;
+  short_desc: string | null;
   longitude: number;
   latitude: number;
-  id: number;
+  id: string;
   window_counts: number[];
 }
 
 export interface StreamInfo {
   date: string;
-  audio: number;
-  site: number;
+  audio: string;
+  site: string;
   box_id: string;
   time: string;
 }
