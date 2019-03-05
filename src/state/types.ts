@@ -12,7 +12,7 @@ export interface State {
   streamData: GeoJSON.GeoJsonObject | null;
 
   // each of the recorder sites
-  sitesById: { [id: string]: Site };
+  sitesById: Map<string, Site>;
 
   // a cache of the audio info we've fetched from the server.
   // This is used to constuct a map of {TimeSegment: StreamInfo[]}

@@ -1,10 +1,27 @@
+import { Map } from "immutable";
 import api from "../api/api";
-import { Taxon } from "../api/types";
+import { Site, Taxon } from "../api/types";
 import { byNumberKey } from "../utils/objects";
-import { setTaxaById, setTaxaBySite, setTaxaBySiteByTime } from "./actions";
+import { setPreloadedData, setTaxaById, setTaxaBySite, setTaxaBySiteByTime } from "./actions";
 import { TimeSegment } from "./types";
 
 // these are actions / thunks that use the server to load in data
+
+// Go get all the stuff we need to layout the page
+export function initialLoad() {
+  return async (dispatch: any) => {
+    const [habitats, streams, sites] = await Promise.all([
+      api.geoJson.habitats(),
+      api.geoJson.streams(),
+      api.sites.list()
+    ]);
+    const sitesById = {} as { [key: string]: Site };
+    for (const site of sites) {
+      sitesById[site.id] = site;
+    }
+    dispatch(setPreloadedData(habitats, streams, Map(sitesById)));
+  };
+}
 
 export function loadTaxaForSite(siteId: string, time: TimeSegment | null = null) {
   return async (dispatch: any) => {

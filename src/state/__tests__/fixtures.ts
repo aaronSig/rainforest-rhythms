@@ -12,7 +12,7 @@ export const standardState: State = {
   sunset: "18:00",
   habitatData: null,
   streamData: null,
-  sitesById: {
+  sitesById: Map({
     "1": {
       site_name: "E100 edge",
       habitat: "Logged Fragment",
@@ -40,7 +40,7 @@ export const standardState: State = {
       id: "3",
       n_audio: 17
     }
-  },
+  }),
   siteAudioByAudioId: {
     "3086": {
       date: "2018-12-29",

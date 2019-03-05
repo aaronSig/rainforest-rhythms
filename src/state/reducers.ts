@@ -1,6 +1,15 @@
 import { Map, Set } from "immutable";
 import { AnyAction } from "redux";
-import { SET_TAXA_BY_ID, SET_TAXA_BY_SITE, SET_TAXA_BY_SITE_BY_TIME } from "./actions";
+import {
+  FOCUS_SITE_ID,
+  FOCUS_TAXON_ID,
+  FOCUS_TIME_SEGMENT,
+  SET_CURRENT_SITE_AUDIO_ID,
+  SET_PRELOADED_DATA,
+  SET_TAXA_BY_ID,
+  SET_TAXA_BY_SITE,
+  SET_TAXA_BY_SITE_BY_TIME
+} from "./actions";
 import { State } from "./types";
 
 const initialState: State = {
@@ -8,7 +17,7 @@ const initialState: State = {
   sunset: "18:00",
   habitatData: null,
   streamData: null,
-  sitesById: {},
+  sitesById: Map(),
   siteAudioByAudioId: {},
   taxaById: Map(),
   taxaIdBySiteId: Map(),
@@ -39,6 +48,13 @@ const initialState: State = {
 
 export default function mainReducer(state: State = initialState, action: AnyAction) {
   switch (action.type) {
+    case SET_PRELOADED_DATA:
+    case FOCUS_SITE_ID:
+    case FOCUS_TIME_SEGMENT:
+    case FOCUS_TAXON_ID:
+    case SET_CURRENT_SITE_AUDIO_ID:
+      return Object.assign({}, state, action.item);
+
     case SET_TAXA_BY_ID: {
       const taxaById = state.taxaById.merge(action.item);
       return Object.assign({}, state, { taxaById });

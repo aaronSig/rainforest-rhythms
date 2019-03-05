@@ -43,7 +43,7 @@ export const getSiteAudioByTimeSegment = createSelector(
     } = {};
 
     // build up the structure
-    const allSiteIds = Object.keys(sitesById);
+    const allSiteIds = Array.from(sitesById.keys());
     for (const siteId of allSiteIds) {
       siteAudioByTimeSegment[siteId] = allTimeSegments.reduce(
         (acc, curr: TimeSegment) => {
