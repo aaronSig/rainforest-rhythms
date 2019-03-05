@@ -8,24 +8,24 @@ export interface State {
   sunset: TimeSegment; // "18:00"
 
   // The features we're showing on the map
-  habitatData: GeoJSON.GeoJsonObject | null;
-  streamData: GeoJSON.GeoJsonObject | null;
+  habitatData: GeoJSON.GeoJsonObject | null; //  ++done
+  streamData: GeoJSON.GeoJsonObject | null; //  ++done
 
   // each of the recorder sites
-  sitesById: Map<string, Site>;
+  sitesById: Map<string, Site>; //  ++done
 
   // a cache of the audio info we've fetched from the server.
   // This is used to constuct a map of {TimeSegment: StreamInfo[]}
   siteAudioByAudioId: { [id: string]: StreamInfo };
 
   // We cache all the organisms that the API passes
-  taxaById: Map<string, Taxon>;
+  taxaById: Map<string, Taxon>; //  ++done
 
   // Ids of all the taxa available at a site
-  taxaIdBySiteId: Map<string, Set<string>>;
+  taxaIdBySiteId: Map<string, Set<string>>; //  ++done
 
   // Ids of taxa spotted at a particular time at a site
-  taxaIdBySiteIdByTime: Map<string, Map<TimeSegment, Set<string>>>;
+  taxaIdBySiteIdByTime: Map<string, Map<TimeSegment, Set<string>>>; //  ++done
 
   // If there is audio available for an animal you can look it up by it's gbif ID here
   taxaAudioById: { [gbif_key: string]: MediaUrl[] };
@@ -34,16 +34,16 @@ export interface State {
   taxaImageById: { [gbif_key: string]: MediaUrl[] };
 
   // User's focus a site by clicking on it from the map
-  focusedSiteId: string | null;
+  focusedSiteId: string | null; //  ++done
 
   // The time of day the user has selected
-  focusedTimeSegment: TimeSegment;
+  focusedTimeSegment: TimeSegment; //  ++done
 
   // The id for the currently showing animal in the info pane
-  focusedTaxonId: string | null;
+  focusedTaxonId: string | null; //  ++done
 
   // the currently loaded / playing audio for the site
-  currentSiteAudioId: string | null;
+  currentSiteAudioId: string | null; //  ++done
 
   // Audio states
   siteAudio: AudioState;

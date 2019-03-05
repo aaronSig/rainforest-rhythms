@@ -48,7 +48,7 @@ export default {
   },
 
   streams: {
-    async search(siteId: number, time: number, shuffle?: boolean): Promise<StreamInfo | null> {
+    async search(siteId: string, time: number, shuffle?: boolean): Promise<StreamInfo | null> {
       return idsToString(await get(["stream_get", siteId, time, shuffle ? "1" : undefined]));
     },
     async info(streamId: string | number): Promise<StreamInfo | null> {

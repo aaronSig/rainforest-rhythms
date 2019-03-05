@@ -18,7 +18,7 @@ const initialState: State = {
   habitatData: null,
   streamData: null,
   sitesById: Map(),
-  siteAudioByAudioId: {},
+  siteAudioByAudioId: Map(),
   taxaById: Map(),
   taxaIdBySiteId: Map(),
   taxaIdBySiteIdByTime: Map(),

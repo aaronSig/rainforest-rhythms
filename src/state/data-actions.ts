@@ -47,3 +47,18 @@ export function loadTaxaForSite(siteId: string, time: TimeSegment | null = null)
     }
   };
 }
+
+/****
+ * Find audio that matches the supplied site and time and slots it into siteAudioByAudioId
+ */
+export function searchForAudio(siteId: string, time: TimeSegment ) {
+  return async (dispatch: any) => {
+      const decimalTime = parseInt(time)
+      const result = await api.streams.search(siteId, decimalTime, false)
+
+    create an ID map
+    dispatch action
+    merge in in the reducer
+
+  }
+}

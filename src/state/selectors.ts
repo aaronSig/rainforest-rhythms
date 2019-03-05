@@ -66,6 +66,23 @@ export const getSiteAudioByTimeSegment = createSelector(
 );
 
 /***
+ * Returns an array of StreamInfo objects for the current selected site & time.
+ *
+ * If we don't have any audio yet will return and empty array
+ *
+ * StreamInfo[]
+ */
+export const getAudioForFocusedSiteAtCurrentTime = createSelector(
+  [getFocusedSiteId, getFocusedTimeSegment, getSiteAudioByTimeSegment],
+  (focusedSiteId, focusedTimeSegment, siteAudioByTimeSegment) => {
+    if (!focusedSiteId || !focusedTimeSegment) {
+      return [];
+    }
+    return siteAudioByTimeSegment[focusedSiteId][focusedTimeSegment];
+  }
+);
+
+/***
  * An array of the taxa that appear at the currently focused site
  */
 export const getTaxaForFocusedSite = createSelector(
