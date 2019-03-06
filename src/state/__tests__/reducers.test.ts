@@ -1,6 +1,8 @@
 import { GeoJsonObject } from "geojson";
 import { createStore } from "redux";
 import {
+  didFinishLoading,
+  didStartLoading,
   focusSiteId,
   focusTaxonId,
   focusTimeSegment,
@@ -51,4 +53,45 @@ test("Correctly set site current audio", () => {
   store.dispatch(setCurrentSiteAudio("65"));
   const state = store.getState();
   expect(state.currentSiteAudioId).toBe("65");
+});
+
+test("Set something loading", () => {
+  store.dispatch(didStartLoading());
+  const state = store.getState();
+  expect(state.loading).toBe(1);
+});
+
+test("Finish something loading", () => {
+  store.dispatch(didStartLoading());
+  let state = store.getState();
+  expect(state.loading).toBe(1);
+
+  store.dispatch(didFinishLoading());
+  state = store.getState();
+  expect(state.loading).toBe(0);
+});
+
+test("Loading can stack", () => {
+  store.dispatch(didStartLoading());
+  store.dispatch(didStartLoading());
+  let state = store.getState();
+  expect(state.loading).toBe(2);
+
+  store.dispatch(didFinishLoading());
+  store.dispatch(didFinishLoading());
+  state = store.getState();
+  expect(state.loading).toBe(0);
+});
+
+test("Loading cannot be less than zero", () => {
+  store.dispatch(didStartLoading());
+  store.dispatch(didStartLoading());
+  store.dispatch(didFinishLoading());
+  store.dispatch(didFinishLoading());
+  store.dispatch(didFinishLoading());
+  store.dispatch(didFinishLoading());
+  store.dispatch(didFinishLoading());
+
+  const state = store.getState();
+  expect(state.loading).toBe(0);
 });

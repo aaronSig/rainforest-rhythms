@@ -4,6 +4,8 @@ import { Site, StreamInfo, Taxon } from "../api/types";
 export type MediaUrl = string;
 
 export interface State {
+  loading: number; // a number larger than 1 means something is loading
+
   sunrise: TimeSegment; // "06:00"
   sunset: TimeSegment; // "18:00"
 
@@ -16,7 +18,7 @@ export interface State {
 
   // a cache of the audio info we've fetched from the server.
   // This is used to constuct a map of {TimeSegment: StreamInfo[]}
-  siteAudioByAudioId: { [id: string]: StreamInfo };
+  siteAudioByAudioId: Map<string, StreamInfo>;
 
   // We cache all the organisms that the API passes
   taxaById: Map<string, Taxon>; //  ++done

@@ -2,7 +2,13 @@ import { Map } from "immutable";
 import api from "../api/api";
 import { Site, Taxon } from "../api/types";
 import { byNumberKey } from "../utils/objects";
-import { setPreloadedData, setTaxaById, setTaxaBySite, setTaxaBySiteByTime } from "./actions";
+import {
+  addSiteAudioInfo,
+  setPreloadedData,
+  setTaxaById,
+  setTaxaBySite,
+  setTaxaBySiteByTime
+} from "./actions";
 import { TimeSegment } from "./types";
 
 // these are actions / thunks that use the server to load in data
@@ -51,14 +57,12 @@ export function loadTaxaForSite(siteId: string, time: TimeSegment | null = null)
 /****
  * Find audio that matches the supplied site and time and slots it into siteAudioByAudioId
  */
-export function searchForAudio(siteId: string, time: TimeSegment ) {
+export function searchForAudio(siteId: string, time: TimeSegment) {
   return async (dispatch: any) => {
-      const decimalTime = parseInt(time)
-      const result = await api.streams.search(siteId, decimalTime, false)
-
-    create an ID map
-    dispatch action
-    merge in in the reducer
-
-  }
+    const decimalTime = parseInt(time);
+    const result = await api.streams.search(siteId, decimalTime, false);
+    if (result) {
+      dispatch(addSiteAudioInfo(result));
+    }
+  };
 }

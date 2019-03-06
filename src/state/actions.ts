@@ -1,6 +1,6 @@
 import { GeoJsonObject } from "geojson";
 import { Map } from "immutable";
-import { Site, Taxon } from "../api/types";
+import { Site, StreamInfo, Taxon } from "../api/types";
 import ax from "./ax";
 import { TimeSegment } from "./types";
 
@@ -43,6 +43,18 @@ export function setPreloadedData(
   return ax(SET_PRELOADED_DATA, { habitatData, streamData, sitesById });
 }
 
+// -- MARK audio stream info
+
+// slots in a StreamInfo object we can use to tee up an audio stream
+export const ADD_SITE_AUDIO_INFO = "ADD_SITE_AUDIO_INFO";
+export function addSiteAudioInfo(info: StreamInfo) {
+  return {
+    type: ADD_SITE_AUDIO_INFO,
+    id: info.audio,
+    info
+  };
+}
+
 // -- MARK focusing
 
 export const FOCUS_SITE_ID = "FOCUS_SITE_ID";
@@ -64,4 +76,21 @@ export function focusTaxonId(focusedTaxonId: string) {
 export const SET_CURRENT_SITE_AUDIO_ID = "SET_CURRENT_SITE_AUDIO_ID";
 export function setCurrentSiteAudio(currentSiteAudioId: string) {
   return ax(SET_CURRENT_SITE_AUDIO_ID, { currentSiteAudioId });
+}
+
+// -- MARK loading
+
+// call when something has started loading
+export const DID_START_LOADING = "DID_START_LOADING";
+export function didStartLoading() {
+  return {
+    type: DID_START_LOADING
+  };
+}
+
+export const DID_FINISH_LOADING = "DID_FINISH_LOADING";
+export function didFinishLoading() {
+  return {
+    type: DID_FINISH_LOADING
+  };
 }

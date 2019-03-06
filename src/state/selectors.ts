@@ -3,6 +3,7 @@ import { StreamInfo } from "../api/types";
 import { getTimeSegment } from "../utils/dates";
 import { allTimeSegments, State, TimeSegment } from "./types";
 
+export const isLoading = (state: State) => state.loading > 0;
 export const getSunrise = (state: State) => state.sunrise;
 export const getSunset = (state: State) => state.sunset;
 export const getHabitatData = (state: State) => state.habitatData;
