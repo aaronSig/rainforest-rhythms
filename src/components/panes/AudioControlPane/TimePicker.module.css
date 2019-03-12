@@ -1,0 +1,66 @@
+.TimePicker {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  background-color: #006a60;
+  padding: 0px;
+  margin: 0px;
+}
+
+.TimePicker li {
+  padding-top: 4px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #002f2a;
+  color: #7cb8b2;
+  cursor: pointer;
+}
+
+.TimePicker .icon {
+  flex-grow: 1;
+}
+
+.TimePicker .icon img {
+  height: 24px;
+  width: 24px;
+  padding: 0.3rem;
+}
+
+.TimePicker li span {
+  font-size: 0.9rem;
+  font-weight: 100;
+  user-select: none;
+}
+
+.indicator {
+  width: 2px;
+  height: 0.4rem;
+  background-color: #002f2a;
+  margin-top: 4px;
+}
+
+li.active {
+  transition: background-color 0.3s ease-out;
+  background-color: #002f2a;
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  cursor: auto;
+}
+
+li.active .icon {
+  flex-grow: 0;
+}
+
+li.active .icon img {
+  height: 17px;
+  width: auto;
+}
+
+li.active .indicator {
+  height: 0px;
+  margin: 0px;
+}

@@ -1,0 +1,23 @@
+.Timeline {
+  flex-grow: 1;
+  display: flex;
+  background-color: #002f2a;
+}
+
+.Timeline button {
+  width: 4.1%;
+
+  border: none;
+  margin: 0;
+  padding: 0;
+
+  overflow: visible;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  -webkit-appearance: none;
+  appearance: none;
+
+  background-color: #00695f;
+}

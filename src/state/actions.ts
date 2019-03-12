@@ -72,10 +72,24 @@ export function focusTaxonId(focusedTaxonId: string) {
   return ax(FOCUS_TAXON_ID, { focusedTaxonId });
 }
 
-// The ID of the audio to switch to and load (and play)
 export const SET_CURRENT_SITE_AUDIO_ID = "SET_CURRENT_SITE_AUDIO_ID";
-export function setCurrentSiteAudio(currentSiteAudioId: string) {
-  return ax(SET_CURRENT_SITE_AUDIO_ID, { currentSiteAudioId });
+export function setCurrentSiteAudio(
+  currentSiteAudioId: string,
+  audioStreamUrl: string,
+  timestamp?: number
+) {
+  return ax(SET_CURRENT_SITE_AUDIO_ID, {
+    currentSiteAudioId,
+    siteAudio: {
+      url: audioStreamUrl,
+      progress: 0,
+      timestamp,
+      duration: 0,
+      isLoaded: false,
+      isPlaying: false,
+      isFinished: false
+    }
+  });
 }
 
 // -- MARK loading
@@ -92,5 +106,16 @@ export const DID_FINISH_LOADING = "DID_FINISH_LOADING";
 export function didFinishLoading() {
   return {
     type: DID_FINISH_LOADING
+  };
+}
+
+// -- MARK audio
+
+// scrub to a specific point in the audio
+export const SEEK_TO_TIME = "SEEK_TO_TIME";
+export function seekToTime(timestamp: number) {
+  return {
+    type: SEEK_TO_TIME,
+    timestamp
   };
 }

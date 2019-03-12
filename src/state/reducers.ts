@@ -7,6 +7,7 @@ import {
   FOCUS_SITE_ID,
   FOCUS_TAXON_ID,
   FOCUS_TIME_SEGMENT,
+  SEEK_TO_TIME,
   SET_CURRENT_SITE_AUDIO_ID,
   SET_PRELOADED_DATA,
   SET_TAXA_BY_ID,
@@ -33,6 +34,7 @@ const initialState: State = {
   focusedTaxonId: null,
   currentSiteAudioId: null,
   siteAudio: {
+    url: null,
     progress: 0,
     timestamp: 0,
     duration: 0,
@@ -41,6 +43,7 @@ const initialState: State = {
     isFinished: false
   },
   taxonAudio: {
+    url: null,
     progress: 0,
     timestamp: 0,
     duration: 0,
@@ -111,6 +114,11 @@ export default function mainReducer(state: State = initialState, action: AnyActi
       const byTime = taxaIdBySiteIdByTime.get(siteId)!.set(time, taxaIds);
       taxaIdBySiteIdByTime = taxaIdBySiteIdByTime.set(siteId, byTime);
       return Object.assign({}, state, { taxaIdBySiteIdByTime });
+    }
+
+    case SEEK_TO_TIME: {
+      console.error("SEEK_TO_TIME has not been implemented");
+      return state;
     }
 
     default:

@@ -4,7 +4,6 @@
   justify-content: flex-start;
   height: 3rem;
   padding: 0px 2rem 0px 2rem;
-  background-color: #333333;
   color: #fff;
   flex-shrink: 0;
 }
@@ -24,10 +23,11 @@
 }
 
 .nav li a {
+  font-family: "Lato", sans-serif;
   color: #fff;
   text-decoration: none;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 900;
 }
 
 .nav li a:hover {

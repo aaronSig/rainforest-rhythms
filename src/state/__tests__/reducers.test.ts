@@ -50,9 +50,10 @@ test("Correctly focus Taxon ID", () => {
 });
 
 test("Correctly set site current audio", () => {
-  store.dispatch(setCurrentSiteAudio("65"));
+  store.dispatch(setCurrentSiteAudio("65", "example.com/audio.mp3"));
   const state = store.getState();
   expect(state.currentSiteAudioId).toBe("65");
+  expect(state.siteAudio.url).toBe("example.com/audio.mp3");
 });
 
 test("Set something loading", () => {

@@ -1,0 +1,42 @@
+.InfoBar {
+  height: 8rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: "Montserrat", sans-serif;
+  color: #fff;
+  padding: 0px 1rem;
+}
+
+.ForestInfo {
+  flex-grow: 1;
+}
+
+.ForestInfo h2 {
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.ForestInfo p {
+  color: #75bba8;
+  margin-top: 0px;
+  font-size: 0.8rem;
+}
+
+.Time {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.Time h2 {
+  font-size: 3rem;
+  margin: 0px;
+}
+
+.Time img {
+  height: 3rem;
+  margin-left: 1rem;
+}

@@ -53,6 +53,7 @@ export interface State {
 }
 
 export interface AudioState {
+  url: string | null;
   progress: number;
   timestamp: number;
   duration: number;

@@ -25,7 +25,7 @@ export const getTaxonAudio = (state: State) => state.taxonAudio;
 // An array of all the sites
 export const getAllSites = createSelector(
   [getSitesById],
-  sitesById => Object.values(sitesById)
+  sitesById => Array.from(sitesById.values())
 );
 
 /***
@@ -118,5 +118,15 @@ export const getTaxaForFocusedSiteAtCurrentTime = createSelector(
       .map(id => {
         return taxaById.get(id);
       });
+  }
+);
+
+export const getFocusedSite = createSelector(
+  [getFocusedSiteId, getSitesById],
+  (focusedSiteId, sitesById) => {
+    if (!focusedSiteId || !sitesById.has(focusedSiteId)) {
+      return null;
+    }
+    return sitesById.get(focusedSiteId)!;
   }
 );
