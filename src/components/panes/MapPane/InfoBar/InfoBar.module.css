@@ -1,5 +1,7 @@
 .InfoBar {
-  height: 8rem;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 7rem;
   display: flex;
   flex-direction: row;
   align-items: center;

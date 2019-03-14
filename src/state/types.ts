@@ -61,6 +61,9 @@ export interface AudioState {
   isPlaying: boolean;
   // the audio has finished playing
   isFinished: boolean;
+
+  // instruct the audio to play, if it can.
+  shouldPlay: boolean;
 }
 
 export type TimeSegment =

@@ -4,15 +4,15 @@ import {
   ADD_SITE_AUDIO_INFO,
   DID_FINISH_LOADING,
   DID_START_LOADING,
-  FOCUS_SITE_ID,
   FOCUS_TAXON_ID,
-  FOCUS_TIME_SEGMENT,
+  ROUTE_DID_CHANGE,
   SEEK_TO_TIME,
   SET_CURRENT_SITE_AUDIO_ID,
   SET_PRELOADED_DATA,
   SET_TAXA_BY_ID,
   SET_TAXA_BY_SITE,
-  SET_TAXA_BY_SITE_BY_TIME
+  SET_TAXA_BY_SITE_BY_TIME,
+  UPDATE_SITE_AUDIO_STATE
 } from "./actions";
 import { State } from "./types";
 
@@ -22,7 +22,17 @@ const initialState: State = {
   sunset: "18:00",
   habitatData: null,
   streamData: null,
-  sitesById: Map(),
+  sitesById: Map({
+    "1": {
+      site_name: "E100_edge",
+      habitat: "Logged Fragment",
+      short_desc: null,
+      longitude: 117.58604,
+      latitude: 4.68392,
+      id: "1",
+      n_audio: 3826
+    }
+  }),
   siteAudioByAudioId: Map(),
   taxaById: Map(),
   taxaIdBySiteId: Map(),
@@ -40,7 +50,8 @@ const initialState: State = {
     duration: 0,
     isLoaded: false,
     isPlaying: false,
-    isFinished: false
+    isFinished: false,
+    shouldPlay: false
   },
   taxonAudio: {
     url: null,
@@ -49,22 +60,67 @@ const initialState: State = {
     duration: 0,
     isLoaded: false,
     isPlaying: false,
-    isFinished: false
+    isFinished: false,
+    shouldPlay: false
   }
 };
 
 export default function mainReducer(state: State = initialState, action: AnyAction) {
+  console.log("action", action);
   switch (action.type) {
     case SET_PRELOADED_DATA:
-    case FOCUS_SITE_ID:
-    case FOCUS_TIME_SEGMENT:
     case FOCUS_TAXON_ID:
-    case SET_CURRENT_SITE_AUDIO_ID:
       return Object.assign({}, state, action.item);
+
+    case SET_CURRENT_SITE_AUDIO_ID:
+    case ROUTE_DID_CHANGE: {
+      // stop any currently playing audio
+      return Object.assign(
+        {},
+        state,
+        {
+          siteAudio: {
+            url: null,
+            progress: 0,
+            timestamp: 0,
+            duration: 0,
+            isLoaded: false,
+            isPlaying: false,
+            isFinished: false,
+            shouldPlay: false
+          }
+        },
+        action.item
+      );
+    }
 
     case ADD_SITE_AUDIO_INFO: {
       return Object.assign({}, state, {
         siteAudioByAudioId: state.siteAudioByAudioId.set(action.id, action.info)
+      });
+    }
+
+    case UPDATE_SITE_AUDIO_STATE: {
+      const { timestamp, duration, isLoaded, isPlaying, isFinished } = action;
+      const items = {
+        timestamp,
+        duration,
+        isLoaded,
+        isPlaying,
+        isFinished,
+        progress: timestamp !== undefined && duration !== undefined && timestamp / duration
+      };
+      Object.keys(items).forEach(i => {
+        //@ts-ignore
+        if (items[i] === undefined) {
+          //@ts-ignore
+          delete items[i];
+        }
+      });
+
+      const siteAudio = Object.assign({}, state.siteAudio, items);
+      return Object.assign({}, state, {
+        siteAudio
       });
     }
 

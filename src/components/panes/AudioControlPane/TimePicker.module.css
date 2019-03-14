@@ -2,23 +2,56 @@
   display: flex;
   flex-direction: row;
   list-style: none;
-  background-color: #006a60;
+  background-color: #002e2a;
   padding: 0px;
   margin: 0px;
 }
 
 .TimePicker li {
   padding-top: 4px;
-  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+
+  max-width: calc(100% / 26);
+  flex-basis: calc(100% / 26);
+
+  background-color: #006a60;
+
+  border-top: 1px solid #002f2a;
+  border-bottom: 1px solid #002f2a;
+  border-left: 1px solid #002f2a;
+}
+
+.TimePicker li a {
+  color: #7cb8b2;
+  text-decoration: none;
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #002f2a;
-  color: #7cb8b2;
-  cursor: pointer;
 }
 
+.TimePicker li a:visited {
+  color: #7cb8b2;
+}
+
+.TimePicker li:hover {
+  opacity: 0.8;
+}
+
+.TimePicker li:first-of-type {
+  border-left: 0px;
+}
+
+.TimePicker li.dud {
+  cursor: auto;
+}
+
+.TimePicker li.dud:hover,
+.TimePicker li.active:hover {
+  opacity: 1;
+}
 .TimePicker .icon {
   flex-grow: 1;
 }

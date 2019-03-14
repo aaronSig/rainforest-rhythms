@@ -56,11 +56,14 @@ export const getSiteAudioByTimeSegment = createSelector(
     }
 
     // add in the data
-    Object.values(siteAudioByAudioId).forEach(a => {
-      const segment = getTimeSegment(a.time);
-      siteAudioByTimeSegment[a.site][segment].push(a);
-      siteAudioByTimeSegment[a.site][segment].sort((a, b) => (a.time < b.time ? 1 : -1));
-    });
+    siteAudioByAudioId
+      .valueSeq()
+      .filter(a => allSiteIds.includes(a.site)) // protect for when sites haven't yet loaded
+      .forEach(a => {
+        const segment = getTimeSegment(a.time);
+        siteAudioByTimeSegment[a.site][segment].push(a);
+        siteAudioByTimeSegment[a.site][segment].sort((a, b) => (a.time < b.time ? 1 : -1));
+      });
 
     return siteAudioByTimeSegment;
   }
@@ -79,7 +82,12 @@ export const getAudioForFocusedSiteAtCurrentTime = createSelector(
     if (!focusedSiteId || !focusedTimeSegment) {
       return [];
     }
-    return siteAudioByTimeSegment[focusedSiteId][focusedTimeSegment];
+
+    if (focusedSiteId in siteAudioByTimeSegment) {
+      return siteAudioByTimeSegment[focusedSiteId][focusedTimeSegment];
+    }
+
+    return [];
   }
 );
 
@@ -124,7 +132,7 @@ export const getTaxaForFocusedSiteAtCurrentTime = createSelector(
 export const getFocusedSite = createSelector(
   [getFocusedSiteId, getSitesById],
   (focusedSiteId, sitesById) => {
-    if (!focusedSiteId || !sitesById.has(focusedSiteId)) {
+    if (!focusedSiteId || !sitesById || !sitesById.has(focusedSiteId)) {
       return null;
     }
     return sitesById.get(focusedSiteId)!;

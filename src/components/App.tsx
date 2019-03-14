@@ -6,7 +6,9 @@ function App() {
   return (
     <Router style={{ height: "100%" }}>
       <Index path="/" />
-      <Index path="/:audioId" />
+      <Index path="/:timeSegment" />
+      <Index path="/:timeSegment/:siteId" />
+      <Index path="/:timeSegment/:siteId/:audioId" />
     </Router>
   );
 }

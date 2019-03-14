@@ -1,10 +1,12 @@
 .WaveformContainer {
   flex-grow: 1;
   display: flex;
+  height: 136px;
+  overflow: hidden;
 }
 
 .Waveform {
   position: relative;
-  height: 100%;
+  height: 272px;
   width: 100%;
 }

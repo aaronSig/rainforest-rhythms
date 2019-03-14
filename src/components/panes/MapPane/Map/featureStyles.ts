@@ -11,33 +11,24 @@ export function styleForest(feature?: Feature<GeometryObject, any>): PathOptions
   switch (type) {
     case "primary":
       return {
-        stroke: true,
-        color: "#6A9955",
+        stroke: false,
         fill: true,
-        fillColor: "#70C38C",
-        opacity: 1,
-        weight: 0.5,
+        fillColor: "#04463e",
         fillOpacity: 0.8
       };
     case "logged":
       return {
-        stroke: true,
-        color: "#CFB283",
+        stroke: false,
         fill: true,
-        fillColor: "#CE9178",
-        opacity: 1,
-        weight: 0.5,
-        fillOpacity: 0.8
+        fillColor: "#04463e",
+        fillOpacity: 0.6
       };
     case "matrix":
       return {
-        stroke: true,
-        color: "#C9AD7F",
+        stroke: false,
         fill: true,
-        fillColor: "#D9D9A8",
-        opacity: 1,
-        weight: 0.5,
-        fillOpacity: 0.8
+        fillColor: "#04463e",
+        fillOpacity: 0.4
       };
   }
 
@@ -50,8 +41,8 @@ export function styleForest(feature?: Feature<GeometryObject, any>): PathOptions
 export function styleStreams(feature?: Feature<GeometryObject, any>): PathOptions {
   return {
     stroke: true,
-    opacity: 1,
+    opacity: 0.3,
     weight: 2,
-    color: "#99B3CC"
+    color: "#39c0ff"
   };
 }

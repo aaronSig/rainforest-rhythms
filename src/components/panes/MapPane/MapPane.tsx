@@ -7,17 +7,16 @@ import InfoBar from "./InfoBar/InfoBar";
 import MapView from "./Map/MapView";
 import styles from "./MapPane.module.css";
 
-interface MapPaneProps {
-  height?: number;
-  width?: number;
-}
+interface MapPaneProps {}
 
 export function MapPaneView(props: MapPaneProps) {
   return (
     <section className={styles.MapPane}>
-      <Navigation />
-      <MapView width={props.width} height={(props.height || 200) - 200} />
-      <InfoBar />
+      <div className={styles.Inner}>
+        <Navigation />
+        <MapView />
+        <InfoBar />
+      </div>
     </section>
   );
 }

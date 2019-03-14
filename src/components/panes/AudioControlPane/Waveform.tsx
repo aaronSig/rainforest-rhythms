@@ -1,62 +1,135 @@
 import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import { State } from "../../../state/types";
+import { updateSiteAudioState } from "../../../state/actions";
+import { getSiteAudio } from "../../../state/selectors";
+import { AudioState, State } from "../../../state/types";
 import styles from "./Waveform.module.css";
 
-interface WaveformProps {}
+interface WaveformProps {
+  siteAudio: AudioState;
+  updateState: (
+    timestamp?: number,
+    duration?: number,
+    isLoaded?: boolean,
+    isPlaying?: boolean,
+    isFinished?: boolean
+  ) => void;
+}
 
+const settings = () => {
+  const WaveSurfer = (window as any).WaveSurfer as any;
+  return {
+    // backend: "MediaElement",
+    waveColor: "#020001",
+    progressColor: "#FF450A",
+    barWidth: 4,
+    height: 272,
+    barGap: 2,
+    normalize: true,
+    plugins: [
+      WaveSurfer.cursor.create({
+        showTime: true,
+        opacity: 1,
+        customShowTimeStyle: {
+          "background-color": "#000",
+          color: "#fff",
+          padding: "2px",
+          "font-size": "10px"
+        }
+      })
+    ]
+  };
+};
+
+/***
+ * Handles laying out the waveform and contolling the main audio
+ */
 function WaveformView(props: WaveformProps) {
   const wavesurfer = useRef(null as any);
   const waveformRef = useRef(null as any);
 
+  // Setup the wavesurfer object
   useEffect(() => {
     if (!waveformRef.current) {
-      console.log("dropout");
       return;
     }
-
     const WaveSurfer = (window as any).WaveSurfer as any;
     wavesurfer.current = WaveSurfer.create({
       container: waveformRef.current,
-      backend: "MediaElement",
-      waveColor: "#020001",
-      progressColor: "#FF450A",
-      barWidth: 1,
-      // barGap: 2,
-      normalize: true,
-      plugins: [
-        WaveSurfer.cursor.create({
-          showTime: true,
-          opacity: 1,
-          customShowTimeStyle: {
-            "background-color": "#000",
-            color: "#fff",
-            padding: "2px",
-            "font-size": "10px"
-          }
-        })
-      ]
+      ...settings()
     });
-
-    wavesurfer.current.load(
-      "https://dl.boxcloud.com/api/2.0/files/381511138890/content?access_token=1!HxBWMzPJtbpcWrXISeDxb-dg-hds-EbL2RWt2sNzSJP9G3I2YU_1HhZRMG8Kas1HOX4oklPVKvn1CaYi634rhKpEYmNv898FF_A4feuA6ymQX_CCYNfYd2aJSVVQGz5dEbmgG_987XFodKb-64ypI09fiNGvsdwz7AurxqAa8S5osqe-co2OVKj9ltZBEXJ4OllCVdvfud1MH1BOcoiLoI7KHwrxJO1UgJerIGx3MtQR-GLRtOmt_NmSaYiDiCUiIowKWGsV-5ii2h6c2M57heFV-652K5zhFiEdj3K9z2uidAy2DcV1kmX3azkPNKnzTN4sPinhoCJ8L9qI4b1t48jU9ffLuexdcuGiSCYhXHal8-HLUMnN8SyiXV4yz2EsofSmyEjH98XBHWu5S1TyWtC5J-5D"
-    );
-    wavesurfer.current.on("ready", function() {
-      console.log("ready");
-      //   wavesurfer.current.play();
-    });
-
-    wavesurfer.current.on("waveform-ready", function() {
-      console.log("waveform-ready");
-    });
-
     return () => {
       if (wavesurfer.current) {
-        console.log("Cleanup wavesurfer");
         wavesurfer.current.destroy();
       }
     };
   }, [wavesurfer, waveformRef]);
+
+  // Loading audio in when the url is set
+  useEffect(() => {
+    if (!wavesurfer.current || !props.siteAudio.url) {
+      return;
+    }
+
+    // wavesurfer.current.load(props.siteAudio.url);
+    return () => {
+      wavesurfer.current.empty();
+    };
+  }, [wavesurfer, props.siteAudio.url]);
+
+  // play/pause
+  useEffect(() => {
+    if (!wavesurfer.current) {
+      return;
+    }
+    if (props.siteAudio.shouldPlay) {
+      if (props.siteAudio.isLoaded) {
+        wavesurfer.current.play();
+      }
+    } else {
+      wavesurfer.current.pause();
+    }
+  }, [wavesurfer, props.siteAudio.shouldPlay, props.siteAudio.isLoaded]);
+
+  // Watch the events
+  useEffect(() => {
+    if (!wavesurfer.current) {
+      return;
+    }
+
+    wavesurfer.current.on("error", (err: any) => {
+      console.error(err);
+    });
+
+    wavesurfer.current.on("audioprocess", (timestamp: any) => {
+      // this is quite chatty
+      // props.updateState(timestamp, wavesurfer.current.getDuration());
+    });
+
+    wavesurfer.current.on("play", () => {
+      props.updateState(undefined, undefined, true, true);
+    });
+
+    wavesurfer.current.on("loading", () => {
+      props.updateState(undefined, undefined, false);
+    });
+
+    wavesurfer.current.on("pause", () => {
+      props.updateState(undefined, undefined, true, false);
+    });
+
+    wavesurfer.current.on("ready", () => {
+      props.updateState(undefined, undefined, true);
+    });
+
+    wavesurfer.current.on("finish", () => {
+      props.updateState(undefined, undefined, true, false, true);
+    });
+
+    return () => {
+      wavesurfer.current.unAll();
+    };
+  }, [wavesurfer, props.siteAudio.url]);
 
   return (
     <div className={styles.WaveformContainer}>
@@ -66,11 +139,23 @@ function WaveformView(props: WaveformProps) {
 }
 
 const mapStateToProps = (state: State) => {
-  return {};
+  return {
+    siteAudio: getSiteAudio(state)
+  };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {};
+const mapDispatchToProps = (dispatch: any, props: WaveformProps) => {
+  return {
+    updateState: (
+      timestamp?: number,
+      duration?: number,
+      isLoaded?: boolean,
+      isPlaying?: boolean,
+      isFinished?: boolean
+    ) => {
+      dispatch(updateSiteAudioState(timestamp, duration, isLoaded, isPlaying, isFinished));
+    }
+  };
 };
 
 const Waveform = connect(
@@ -78,4 +163,4 @@ const Waveform = connect(
   mapDispatchToProps
 )(WaveformView);
 
-export default Waveform;
+export default Waveform as any;

@@ -5,19 +5,44 @@
 }
 
 .Timeline button {
-  width: 4.1%;
-
+  width: calc(100% / 26 - 1px);
   border: none;
   margin: 0;
   padding: 0;
-
   overflow: visible;
   background: transparent;
-  color: inherit;
   font: inherit;
   line-height: normal;
   -webkit-appearance: none;
   appearance: none;
+  color: #fff;
+  background-color: #006a60;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  background-color: #00695f;
+.Timeline button:hover {
+  opacity: 0.8;
+}
+
+showtitle div {
+  transform: translateY(-100px);
+  font-size: 18px;
+  font-family: "Lato", sans-serif;
+  padding: 4px !important;
+  background-color: #7cb8b2 !important;
+}
+
+cursor {
+  border-color: #7cb8b2 !important;
+}
+
+.Timeline button img {
+  height: 1.5rem;
+}
+
+.left {
+  transform: rotateY(180deg);
 }

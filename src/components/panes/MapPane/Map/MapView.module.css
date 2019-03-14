@@ -1,4 +1,6 @@
 .MapPane {
+  flex-grow: 1;
+  flex-shrink: 0;
   position: relative;
   display: flex;
   background-color: #252525;

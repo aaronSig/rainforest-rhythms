@@ -1,27 +1,51 @@
+import { Link } from "@reach/router";
 import React, { ReactElement } from "react";
 import { connect } from "react-redux";
+import { StreamInfo } from "../../../api/types";
 import moon from "../../../icons/moon.svg";
 import play from "../../../icons/play.svg";
 import sun from "../../../icons/sun.svg";
-import { focusTimeSegment } from "../../../state/actions";
-import { getFocusedTimeSegment, getSunrise, getSunset } from "../../../state/selectors";
+import {
+  getFocusedSiteId,
+  getFocusedTimeSegment,
+  getSiteAudioByTimeSegment,
+  getSunrise,
+  getSunset
+} from "../../../state/selectors";
 import { allTimeSegments, State, TimeSegment } from "../../../state/types";
 import styles from "./TimePicker.module.css";
 
 interface TimePickerProps {
   sunrise: TimeSegment;
   sunset: TimeSegment;
+  focusedSiteId: string | null;
   focusedTimeSegment: TimeSegment;
   timeSegments: TimeSegment[];
-
-  focusTimeSegment: (timeSegment: TimeSegment) => void;
+  siteAudioByTimeSegment: { [siteId: string]: { [time in TimeSegment]: StreamInfo[] } };
 }
 
 function TimePickerView(props: TimePickerProps) {
+  const { focusedSiteId, focusedTimeSegment, siteAudioByTimeSegment } = props;
+
+  function urlFor(t: TimeSegment) {
+    const parts = [t] as string[];
+    if (focusedSiteId) {
+      parts.push(focusedSiteId);
+      if (focusedSiteId in siteAudioByTimeSegment) {
+        const audio = siteAudioByTimeSegment[focusedSiteId][t];
+        if (audio.length) {
+          parts.push(audio[0].audio);
+        }
+      }
+    }
+    return "/" + parts.join("/");
+  }
+
   return (
     <ul className={styles.TimePicker}>
+      <li className={styles.dud} />
       {props.timeSegments.map(t => {
-        const active = props.focusedTimeSegment === t ? styles.active : undefined;
+        const active = focusedTimeSegment === t ? styles.active : undefined;
         let icon = null as ReactElement | null;
         if (props.sunrise === t) {
           icon = <img src={sun} alt="Sunrise" />;
@@ -33,19 +57,17 @@ function TimePickerView(props: TimePickerProps) {
           icon = <img src={play} alt="Play" />;
         }
 
-        function focusTimeSegment() {
-          if (!active) {
-            props.focusTimeSegment(t);
-          }
-        }
         return (
-          <li key={t} className={active} onClick={focusTimeSegment}>
-            <div className={styles.icon}>{icon}</div>
-            <span>{t}</span>
-            <div className={styles.indicator} />
+          <li key={t} className={active}>
+            <Link to={urlFor(t)}>
+              <div className={styles.icon}>{icon}</div>
+              <span>{t}</span>
+              <div className={styles.indicator} />
+            </Link>
           </li>
         );
       })}
+      <li className={styles.dud} />
     </ul>
   );
 }
@@ -55,16 +77,14 @@ const mapStateToProps = (state: State) => {
     sunrise: getSunrise(state),
     sunset: getSunset(state),
     focusedTimeSegment: getFocusedTimeSegment(state),
-    timeSegments: allTimeSegments
+    focusedSiteId: getFocusedSiteId(state),
+    timeSegments: allTimeSegments,
+    siteAudioByTimeSegment: getSiteAudioByTimeSegment(state)
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {
-    focusTimeSegment: (timeSegment: TimeSegment) => {
-      dispatch(focusTimeSegment(timeSegment));
-    }
-  };
+  return {};
 };
 
 const TimePicker = connect(

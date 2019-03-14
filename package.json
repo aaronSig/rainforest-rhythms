@@ -3,32 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "https://davidorme.pythonanywhere.com",
-  "dependencies": {
-    "@reach/router": "^1.2.1",
-    "@types/jest": "^24.0.9",
-    "@types/node": "^11.10.4",
-    "@types/reach__router": "^1.2.3",
-    "@types/react": "^16.8.6",
-    "@types/react-dom": "^16.8.2",
-    "@types/react-redux": "^7.0.1",
-    "@types/redux": "^3.6.0",
-    "@types/redux-thunk": "^2.1.0",
-    "@types/reselect": "^2.2.0",
-    "date-fns": "^1.30.1",
-    "immutable": "^4.0.0-rc.12",
-    "leaflet": "^1.4.0",
-    "react": "^16.8.3",
-    "react-container-dimensions": "^1.4.1",
-    "react-dom": "^16.8.3",
-    "react-leaflet": "^2.2.1",
-    "react-redux": "^6.0.1",
-    "react-scripts": "2.1.5",
-    "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0",
-    "typescript": "^3.3.3333",
-    "whatwg-fetch": "^3.0.0"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -36,16 +10,52 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "dependencies": {
+    "date-fns": "^1.30.1",
+    "immutable": "^4.0.0-rc.12",
+    "leaflet": "^1.4.0",
+    "nuka-carousel": "^4.5.2",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "react-leaflet": "^2.2.1",
+    "react-redux": "^6.0.1",
+    "react-resize-aware": "3.0.0-beta.3",
+    "react-scripts": "2.1.5",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
+    "typescript": "^3.3.3333",
+    "whatwg-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "@reach/router": "^1.2.1",
+    "@types/jest": "^24.0.9",
+    "@types/node": "^11.10.4",
+    "@types/reach__router": "^1.2.3",
+    "@types/react": "^16.8.6",
+    "@types/react-dom": "^16.8.2",
+    "@types/react-redux": "^7.0.1",
+    "@types/react-slick": "^0.23.3",
+    "@types/redux": "^3.6.0",
+    "@types/redux-thunk": "^2.1.0",
+    "@types/reselect": "^2.2.0",
+    "@types/react-leaflet": "^1.1.6",
+    "eslint-plugin-react-hooks": "^1.5.0"
+  },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "plugins": [
+      "react-hooks"
+    ],
+    "rules": {
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn"
+    }
   },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "@types/react-leaflet": "^1.1.6"
-  }
+  ]
 }

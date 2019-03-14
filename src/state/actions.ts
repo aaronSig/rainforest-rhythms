@@ -57,14 +57,9 @@ export function addSiteAudioInfo(info: StreamInfo) {
 
 // -- MARK focusing
 
-export const FOCUS_SITE_ID = "FOCUS_SITE_ID";
-export function focusSiteId(focusedSiteId: string) {
-  return ax(FOCUS_SITE_ID, { focusedSiteId });
-}
-
-export const FOCUS_TIME_SEGMENT = "FOCUS_TIME_SEGMENT";
-export function focusTimeSegment(focusedTimeSegment: TimeSegment) {
-  return ax(FOCUS_TIME_SEGMENT, { focusedTimeSegment });
+export const ROUTE_DID_CHANGE = "ROUTE_DID_CHANGE";
+export function routeDidChange(timeSegment: TimeSegment, siteId?: string) {
+  return ax(ROUTE_DID_CHANGE, { focusedTimeSegment: timeSegment, focusedSiteId: siteId });
 }
 
 export const FOCUS_TAXON_ID = "FOCUSED_TAXON_ID";
@@ -87,9 +82,28 @@ export function setCurrentSiteAudio(
       duration: 0,
       isLoaded: false,
       isPlaying: false,
-      isFinished: false
+      isFinished: false,
+      shouldPlay: true
     }
   });
+}
+
+export const UPDATE_SITE_AUDIO_STATE = "UPDATE_SITE_AUDIO_STATE";
+export function updateSiteAudioState(
+  timestamp?: number,
+  duration?: number,
+  isLoaded?: boolean,
+  isPlaying?: boolean,
+  isFinished?: boolean
+) {
+  return {
+    type: UPDATE_SITE_AUDIO_STATE,
+    timestamp,
+    duration,
+    isLoaded,
+    isPlaying,
+    isFinished
+  };
 }
 
 // -- MARK loading

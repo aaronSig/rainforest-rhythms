@@ -1,0 +1,73 @@
+.PlayButton {
+  height: 100%;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  position: relative;
+
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.PlayButton.paused {
+  transform: translateX(2px);
+  transition: transform 0.1s ease;
+}
+
+.left {
+  height: 100%;
+  float: left;
+  background-color: #fff;
+  width: 36%;
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+
+.right {
+  height: 100%;
+  float: right;
+  width: 36%;
+  background-color: #fff;
+  transition: all 0.25s ease;
+}
+
+.triangleA {
+  transform: translate(0, -100%);
+}
+
+.triangleB {
+  transform: translate(0, 100%);
+}
+
+.triangleA,
+.triangleB {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent;
+  box-sizing: border-box;
+  transition: transform 0.25s ease;
+  transition: transform 0.25s ease;
+}
+
+.paused .left {
+  width: 50%;
+}
+.paused .right {
+  width: 50%;
+}
+.paused .triangleA {
+  transform: translate(0, -50%);
+}
+.paused .triangleB {
+  transform: translate(0, 50%);
+}
