@@ -1,27 +1,31 @@
 import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
+import useResizeAware from "react-resize-aware";
 import { updateSiteAudioState } from "../../../state/actions";
-import { getSiteAudio } from "../../../state/selectors";
-import { AudioState, State } from "../../../state/types";
+import { didSeek } from "../../../state/data-actions";
+import { getRequestedTimestamp, getSiteAudio } from "../../../state/selectors";
+import { SiteAudioState, State } from "../../../state/types";
 import styles from "./Waveform.module.css";
 
 interface WaveformProps {
-  siteAudio: AudioState;
+  siteAudio: SiteAudioState;
+  requestedTimestamp: number | null;
   updateState: (
-    timestamp?: number,
-    duration?: number,
-    isLoaded?: boolean,
+    loadedPercent?: number,
+    isReady?: boolean,
     isPlaying?: boolean,
     isFinished?: boolean
   ) => void;
+  seek: (percent: string) => void;
 }
 
 const settings = () => {
   const WaveSurfer = (window as any).WaveSurfer as any;
   return {
-    // backend: "MediaElement",
+    backend: "MediaElement",
     waveColor: "#020001",
     progressColor: "#FF450A",
+    responsive: true,
     barWidth: 4,
     height: 272,
     barGap: 2,
@@ -31,10 +35,12 @@ const settings = () => {
         showTime: true,
         opacity: 1,
         customShowTimeStyle: {
-          "background-color": "#000",
+          "background-color": "#7cb8b2",
           color: "#fff",
-          padding: "2px",
-          "font-size": "10px"
+          padding: "4px",
+          transform: "translateY(-100px)",
+          "font-family": `"Lato", sans-serif`,
+          "font-size": "13px"
         }
       })
     ]
@@ -47,6 +53,7 @@ const settings = () => {
 function WaveformView(props: WaveformProps) {
   const wavesurfer = useRef(null as any);
   const waveformRef = useRef(null as any);
+  const [resizeComponent, containerSize] = useResizeAware();
 
   // Setup the wavesurfer object
   useEffect(() => {
@@ -70,8 +77,9 @@ function WaveformView(props: WaveformProps) {
     if (!wavesurfer.current || !props.siteAudio.url) {
       return;
     }
-
-    // wavesurfer.current.load(props.siteAudio.url);
+    console.log("Loading audio");
+    (window as any).surfer = wavesurfer.current;
+    wavesurfer.current.load(props.siteAudio.url);
     return () => {
       wavesurfer.current.empty();
     };
@@ -82,14 +90,12 @@ function WaveformView(props: WaveformProps) {
     if (!wavesurfer.current) {
       return;
     }
-    if (props.siteAudio.shouldPlay) {
-      if (props.siteAudio.isLoaded) {
-        wavesurfer.current.play();
-      }
+    if (props.siteAudio.shouldPlay && props.siteAudio.isReady) {
+      wavesurfer.current.play();
     } else {
       wavesurfer.current.pause();
     }
-  }, [wavesurfer, props.siteAudio.shouldPlay, props.siteAudio.isLoaded]);
+  }, [wavesurfer, props.siteAudio.shouldPlay, props.siteAudio.isReady]);
 
   // Watch the events
   useEffect(() => {
@@ -106,54 +112,80 @@ function WaveformView(props: WaveformProps) {
       // props.updateState(timestamp, wavesurfer.current.getDuration());
     });
 
-    wavesurfer.current.on("play", () => {
-      props.updateState(undefined, undefined, true, true);
+    wavesurfer.current.on("loading", (percent: number) => {
+      console.log("loading", percent);
+      props.updateState(percent);
     });
 
-    wavesurfer.current.on("loading", () => {
-      props.updateState(undefined, undefined, false);
+    wavesurfer.current.on("play", () => {
+      props.updateState(undefined, true, true);
     });
 
     wavesurfer.current.on("pause", () => {
-      props.updateState(undefined, undefined, true, false);
+      props.updateState(undefined, true, false);
+    });
+
+    wavesurfer.current.on("seek", (progress: string) => {
+      const n = parseFloat(progress).toFixed(4);
+      props.seek(n);
     });
 
     wavesurfer.current.on("ready", () => {
-      props.updateState(undefined, undefined, true);
+      props.updateState(undefined, true);
+      if (props.requestedTimestamp) {
+        wavesurfer.current.seekTo(props.requestedTimestamp);
+      }
+
+      // Draw placeholder peaks.
+      // Haven't included width in the deps array as don't want to trigger on resize
+      const demoPeaks = Array(containerSize.width)
+        .fill(0.5)
+        .concat([1, -1]);
+
+      wavesurfer.current.drawer.drawPeaks(demoPeaks, containerSize.width, 0, containerSize.width);
+    });
+
+    wavesurfer.current.on("waveform-ready", () => {
+      console.log("waveform-ready");
     });
 
     wavesurfer.current.on("finish", () => {
-      props.updateState(undefined, undefined, true, false, true);
+      props.updateState(undefined, undefined, false, true);
     });
 
     return () => {
       wavesurfer.current.unAll();
     };
-  }, [wavesurfer, props.siteAudio.url]);
+  }, [wavesurfer, props.siteAudio.url, props.seek, props.requestedTimestamp]);
 
   return (
     <div className={styles.WaveformContainer}>
-      <div ref={waveformRef} className={styles.Waveform} />
+      <div ref={waveformRef} className={styles.Waveform}>
+        {resizeComponent}
+      </div>
     </div>
   );
 }
 
 const mapStateToProps = (state: State) => {
   return {
-    siteAudio: getSiteAudio(state)
+    siteAudio: getSiteAudio(state),
+    requestedTimestamp: getRequestedTimestamp(state)
   };
 };
 
 const mapDispatchToProps = (dispatch: any, props: WaveformProps) => {
   return {
     updateState: (
-      timestamp?: number,
-      duration?: number,
-      isLoaded?: boolean,
+      loadedPercent?: number,
+      isReady?: boolean,
       isPlaying?: boolean,
       isFinished?: boolean
     ) => {
-      dispatch(updateSiteAudioState(timestamp, duration, isLoaded, isPlaying, isFinished));
+      dispatch(updateSiteAudioState(loadedPercent, isReady, isPlaying, isFinished));
+    },
+    seek: (percent: string) => {
+      dispatch(didSeek(percent));
     }
   };
 };

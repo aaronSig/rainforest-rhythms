@@ -1,3 +1,4 @@
+import { navigate } from "@reach/router";
 import { Map } from "immutable";
 import api from "../api/api";
 import { Site, Taxon } from "../api/types";
@@ -6,7 +7,6 @@ import {
   addSiteAudioInfo,
   didFinishLoading,
   didStartLoading,
-  seekToTime,
   setCurrentSiteAudio,
   setPreloadedData,
   setTaxaById,
@@ -15,6 +15,8 @@ import {
 } from "./actions";
 import {
   getCurrentSiteAudioId,
+  getFocusedSiteId,
+  getFocusedTimeSegment,
   getSiteAudioByAudioId,
   getSiteAudioByTimeSegment
 } from "./selectors";
@@ -112,10 +114,7 @@ export function loadAudioInfo(audioId: string, timestamp?: number) {
       if (focusedAudio !== streamInfo!.audio) {
         const stream = await api.streams.audioStream(streamInfo!.box_id);
         dispatch(setCurrentSiteAudio(streamInfo!.audio, stream!, timestamp));
-      }
-
-      if (timestamp !== undefined) {
-        dispatch(seekToTime(timestamp));
+        console.log("Stream set to ", stream);
       }
     } finally {
       dispatch(didFinishLoading());
@@ -148,5 +147,28 @@ export function searchForAudio(siteId: string, time: TimeSegment) {
     } finally {
       dispatch(didFinishLoading());
     }
+  };
+}
+
+/***
+ * Called when the user has clicked on the audio waveform.
+ * In here we update the URL so people can share this audio at this time
+ */
+export function didSeek(progressPercent: string) {
+  return async (dispatch: any, getState: () => State) => {
+    const state = getState();
+    const siteId = getFocusedSiteId(state);
+    const timeSegment = getFocusedTimeSegment(state);
+    const audioId = getCurrentSiteAudioId(state);
+
+    if (siteId === null || audioId === null) {
+      return;
+    }
+
+    navigate(`/${timeSegment}/${siteId}/${audioId}?t=${progressPercent}`, {
+      replace: true
+    });
+
+    console.log("User did seek to position", progressPercent);
   };
 }

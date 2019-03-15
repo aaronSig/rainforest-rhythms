@@ -20,6 +20,7 @@ export const getFocusedTimeSegment = (state: State) => state.focusedTimeSegment;
 export const getFocusedTaxonId = (state: State) => state.focusedTaxonId;
 export const getCurrentSiteAudioId = (state: State) => state.currentSiteAudioId;
 export const getSiteAudio = (state: State) => state.siteAudio;
+export const getRequestedTimestamp = (state: State) => state.requestedTimestamp;
 export const getTaxonAudio = (state: State) => state.taxonAudio;
 
 // An array of all the sites

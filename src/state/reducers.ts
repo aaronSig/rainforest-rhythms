@@ -6,7 +6,6 @@ import {
   DID_START_LOADING,
   FOCUS_TAXON_ID,
   ROUTE_DID_CHANGE,
-  SEEK_TO_TIME,
   SET_CURRENT_SITE_AUDIO_ID,
   SET_PRELOADED_DATA,
   SET_TAXA_BY_ID,
@@ -43,19 +42,17 @@ const initialState: State = {
   focusedTimeSegment: "09:00",
   focusedTaxonId: null,
   currentSiteAudioId: null,
+  requestedTimestamp: null,
   siteAudio: {
     url: null,
-    progress: 0,
-    timestamp: 0,
-    duration: 0,
-    isLoaded: false,
+    loadedPercent: 0,
+    isReady: false,
     isPlaying: false,
     isFinished: false,
     shouldPlay: false
   },
   taxonAudio: {
     url: null,
-    progress: 0,
     timestamp: 0,
     duration: 0,
     isLoaded: false,
@@ -74,21 +71,13 @@ export default function mainReducer(state: State = initialState, action: AnyActi
 
     case SET_CURRENT_SITE_AUDIO_ID:
     case ROUTE_DID_CHANGE: {
-      // stop any currently playing audio
+      // stop any currently playing audio. Reset
       return Object.assign(
         {},
         state,
         {
-          siteAudio: {
-            url: null,
-            progress: 0,
-            timestamp: 0,
-            duration: 0,
-            isLoaded: false,
-            isPlaying: false,
-            isFinished: false,
-            shouldPlay: false
-          }
+          siteAudio: initialState.siteAudio,
+          requestedTimestamp: null
         },
         action.item
       );
@@ -101,14 +90,12 @@ export default function mainReducer(state: State = initialState, action: AnyActi
     }
 
     case UPDATE_SITE_AUDIO_STATE: {
-      const { timestamp, duration, isLoaded, isPlaying, isFinished } = action;
+      const { loadedPercent, isReady, isPlaying, isFinished } = action;
       const items = {
-        timestamp,
-        duration,
-        isLoaded,
+        loadedPercent,
+        isReady,
         isPlaying,
-        isFinished,
-        progress: timestamp !== undefined && duration !== undefined && timestamp / duration
+        isFinished
       };
       Object.keys(items).forEach(i => {
         //@ts-ignore
@@ -170,11 +157,6 @@ export default function mainReducer(state: State = initialState, action: AnyActi
       const byTime = taxaIdBySiteIdByTime.get(siteId)!.set(time, taxaIds);
       taxaIdBySiteIdByTime = taxaIdBySiteIdByTime.set(siteId, byTime);
       return Object.assign({}, state, { taxaIdBySiteIdByTime });
-    }
-
-    case SEEK_TO_TIME: {
-      console.error("SEEK_TO_TIME has not been implemented");
-      return state;
     }
 
     default:

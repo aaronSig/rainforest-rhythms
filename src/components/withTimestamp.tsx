@@ -7,16 +7,24 @@ import React, { useEffect, useState } from "react";
  */
 export default function withTimestamp(WrappedComponent: any) {
   return function Timestamp(props: any) {
-    const [timestamp, setTimestamp] = useState(null as null | number);
+    const [timestamp, setTimestamp] = useState(undefined as undefined | null | number);
     useEffect(() => {
       const url = new URL(window.location.href);
       if (props.audioId && url.searchParams.has("t")) {
         const val = (url.searchParams.get("t") || "").trim() as any;
         if (!isNaN(val)) {
-          setTimestamp(parseInt(val));
+          setTimestamp(parseFloat(val));
+          return;
         }
       }
+      setTimestamp(null);
     }, []);
+
+    if (timestamp === undefined) {
+      // prevents a race condition with the timestamp appearing
+      // as null
+      return null;
+    }
 
     return <WrappedComponent {...props} timestamp={timestamp} />;
   };

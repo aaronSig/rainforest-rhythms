@@ -77,30 +77,23 @@ export function setCurrentSiteAudio(
     currentSiteAudioId,
     siteAudio: {
       url: audioStreamUrl,
-      progress: 0,
-      timestamp,
-      duration: 0,
-      isLoaded: false,
-      isPlaying: false,
-      isFinished: false,
       shouldPlay: true
-    }
+    },
+    requestedTimestamp: timestamp || null
   });
 }
 
 export const UPDATE_SITE_AUDIO_STATE = "UPDATE_SITE_AUDIO_STATE";
 export function updateSiteAudioState(
-  timestamp?: number,
-  duration?: number,
-  isLoaded?: boolean,
+  loadedPercent?: number,
+  isReady?: boolean,
   isPlaying?: boolean,
   isFinished?: boolean
 ) {
   return {
     type: UPDATE_SITE_AUDIO_STATE,
-    timestamp,
-    duration,
-    isLoaded,
+    loadedPercent,
+    isReady,
     isPlaying,
     isFinished
   };
@@ -120,16 +113,5 @@ export const DID_FINISH_LOADING = "DID_FINISH_LOADING";
 export function didFinishLoading() {
   return {
     type: DID_FINISH_LOADING
-  };
-}
-
-// -- MARK audio
-
-// scrub to a specific point in the audio
-export const SEEK_TO_TIME = "SEEK_TO_TIME";
-export function seekToTime(timestamp: number) {
-  return {
-    type: SEEK_TO_TIME,
-    timestamp
   };
 }

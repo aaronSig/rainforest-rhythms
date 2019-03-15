@@ -46,15 +46,24 @@ export interface State {
 
   // the currently loaded / playing audio for the site
   currentSiteAudioId: string | null; //  ++done
+  requestedTimestamp: number | null; // this is the timestamp the user requested in the url
 
   // Audio states
-  siteAudio: AudioState;
+  siteAudio: SiteAudioState;
   taxonAudio: AudioState;
+}
+
+export interface SiteAudioState {
+  url: string | null;
+  loadedPercent: number;
+  isReady: boolean;
+  isPlaying: boolean;
+  isFinished: boolean;
+  shouldPlay: boolean;
 }
 
 export interface AudioState {
   url: string | null;
-  progress: number;
   timestamp: number;
   duration: number;
   isLoaded: boolean;

@@ -33,8 +33,8 @@ export default function useIndexHook(props: IndexProps) {
     }
   }, [props.timeSegment, props.siteId, props.sitesById]);
 
-  //Search for audio to play when the site changes IF we don't have
-  // streaminfo for this site already
+  //Search for the audio metadata when the site or time changes IF we don't have
+  // streaminfo for this combination already
   useEffect(() => {
     if (props.siteId && props.timeSegment) {
       if (props.availableAudio.length === 0) {
@@ -56,23 +56,37 @@ export default function useIndexHook(props: IndexProps) {
     }
   }, [props.siteId, props.timeSegment, props.audioId, props.availableAudio]);
 
-  // watch for audio to load
+  // This is triggered when the audioId is added to the url
+  // watch for audio to load. This fetches the audio stream URL
   useEffect(() => {
     if (props.audioId) {
-      props.loadAudio(props.audioId, props.timestamp);
-      console.log("useIndexHook, Loading audio", props.audioId, props.timestamp);
+      if (props.audioId !== props.currentSiteAudioId) {
+        // only load on change
+        console.log("useIndexHook, Loading audio", props.audioId, props.timestamp);
+        props.loadAudio(props.audioId, props.timestamp);
+      } else {
+        // just the timestamp has changed. We don't support seeking by manually changing the URL as
+        // clicking the timeline will change the url too.
+        // Seeking to a time is supported if the whole url is reladed though.
+      }
     }
-  }, [props.audioId, props.timestamp]);
+  }, [props.audioId, props.timestamp, props.currentSiteAudioId]);
 
   // Play the audio once we've loaded the stream info
   useEffect(() => {
     // pop the audio ID into the url. It'll be picked up in IndexView
     if (props.currentSiteAudioId === null) {
-      if (props.availableAudio.length > 0) {
+      if (!props.audioId && props.availableAudio.length > 0) {
         const streamInfo = props.availableAudio[0];
         console.log("useIndexHook, Setting audio", streamInfo);
         navigate(`/${props.timeSegment}/${props.siteId}/${streamInfo.audio}`);
       }
     }
-  }, [props.siteId, props.timeSegment, props.availableAudio, props.currentSiteAudioId]);
+  }, [
+    props.siteId,
+    props.timeSegment,
+    props.audioId,
+    props.availableAudio,
+    props.currentSiteAudioId
+  ]);
 }
