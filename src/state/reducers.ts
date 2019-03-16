@@ -65,7 +65,6 @@ const initialState: State = {
 };
 
 export default function mainReducer(state: State = initialState, action: AnyAction) {
-  console.log("action", action);
   switch (action.type) {
     case SET_PRELOADED_DATA:
     case FOCUS_TAXON_ID:
