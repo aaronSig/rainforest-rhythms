@@ -9,18 +9,22 @@ import {
   didStartLoading,
   setCurrentSiteAudio,
   setPreloadedData,
+  setTaxaAudio,
   setTaxaById,
   setTaxaBySite,
-  setTaxaBySiteByTime
+  setTaxaBySiteByTime,
+  setTaxaImages
 } from "./actions";
 import {
   getCurrentSiteAudioId,
   getFocusedSiteId,
   getFocusedTimeSegment,
   getSiteAudioByAudioId,
-  getSiteAudioByTimeSegment
+  getSiteAudioByTimeSegment,
+  getTaxaAudioById,
+  getTaxaImageById
 } from "./selectors";
-import { State, TimeSegment } from "./types";
+import { State, TaxonAudio, TaxonImage, TimeSegment } from "./types";
 
 // these are actions / thunks that use the server to load in data
 
@@ -35,7 +39,7 @@ export function initialLoad() {
         api.sites.list()
       ]);
 
-      const sitesById = {} as { [key: string]: Site };
+      const sitesById: { [key: string]: Site } = {};
       for (const site of sites) {
         sitesById[site.id] = site;
       }
@@ -48,7 +52,7 @@ export function initialLoad() {
 }
 
 export function loadTaxaForSite(siteId: string, time: TimeSegment | null = null) {
-  return async (dispatch: any) => {
+  return async (dispatch: any, getState: () => State) => {
     try {
       dispatch(didStartLoading());
       let result: Taxon[];
@@ -70,6 +74,44 @@ export function loadTaxaForSite(siteId: string, time: TimeSegment | null = null)
 
       if (time !== null) {
         dispatch(setTaxaBySiteByTime(siteId, time, taxaIds));
+      }
+
+      const state = getState();
+      const imagesLoaded = getTaxaImageById(state);
+      const audioLoaded = getTaxaAudioById(state);
+
+      // fetch all the images and audio for the taxa
+      const imageRequests = result
+        .filter(t => !imagesLoaded.has(t.id))
+        .map(t => api.taxa.image(t.id));
+      const audioRequests = result
+        .filter(t => !audioLoaded.has(t.id))
+        .map(t => api.taxa.audio(t.id));
+
+      {
+        const images = (await Promise.all(imageRequests)).filter(i => i !== null) as TaxonImage[];
+        const imagesById = images.reduce(
+          (acc, curr) => {
+            acc[curr.taxon_id] = curr;
+            return acc;
+          },
+          {} as { [id: string]: TaxonImage }
+        );
+        dispatch(setTaxaImages(imagesById));
+      }
+
+      {
+        const audio = await Promise.all(audioRequests);
+        const audioById = audio
+          .filter(a => a.length > 0)
+          .reduce(
+            (acc, curr) => {
+              acc[curr[0]!.taxon_id] = curr;
+              return acc;
+            },
+            {} as { [id: string]: TaxonAudio[] }
+          );
+        dispatch(setTaxaAudio(audioById));
       }
     } finally {
       dispatch(didFinishLoading());

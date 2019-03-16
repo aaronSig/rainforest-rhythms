@@ -2,7 +2,7 @@ import { GeoJsonObject } from "geojson";
 import { Map } from "immutable";
 import { Site, StreamInfo, Taxon } from "../api/types";
 import ax from "./ax";
-import { TimeSegment } from "./types";
+import { TaxonAudio, TaxonImage, TimeSegment } from "./types";
 
 // in here are normal actions that will lead into reducers
 
@@ -29,6 +29,22 @@ export function setTaxaBySiteByTime(siteId: string, time: TimeSegment, taxaIds: 
     siteId,
     time,
     taxaIds
+  };
+}
+
+export const SET_TAXA_AUDIO = "SET_TAXA_AUDIO";
+export function setTaxaAudio(audio: { [id: string]: TaxonAudio[] }) {
+  return {
+    type: SET_TAXA_AUDIO,
+    audio: Map(audio)
+  };
+}
+
+export const SET_TAXA_IMAGES = "SET_TAXA_IMAGES";
+export function setTaxaImages(images: { [id: string]: TaxonImage }) {
+  return {
+    type: SET_TAXA_IMAGES,
+    images: Map(images)
   };
 }
 
@@ -77,7 +93,7 @@ export function setCurrentSiteAudio(
     currentSiteAudioId,
     siteAudio: {
       url: audioStreamUrl,
-      shouldPlay: true
+      shouldPlay: false
     },
     requestedTimestamp: timestamp || null
   });

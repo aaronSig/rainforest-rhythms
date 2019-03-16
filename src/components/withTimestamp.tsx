@@ -18,7 +18,7 @@ export default function withTimestamp(WrappedComponent: any) {
         }
       }
       setTimestamp(null);
-    }, []);
+    }, [window.location.href, props.audioId]);
 
     if (timestamp === undefined) {
       // prevents a race condition with the timestamp appearing

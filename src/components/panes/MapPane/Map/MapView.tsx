@@ -21,8 +21,13 @@ interface MapViewProps {
 
 function MapView(props: MapViewProps) {
   const [forestRef, annotatedForestBounds] = useBounds();
-  const { habitatData, streamData, sites } = props;
   const [resizeComponent, containerSize] = useResizeAware();
+  const { habitatData, streamData, sites } = props;
+
+  if (resizeComponent) {
+    return <NewMap />;
+  }
+
   return (
     <div className={styles.MapPane}>
       {resizeComponent}
@@ -40,14 +45,14 @@ function MapView(props: MapViewProps) {
             }}
           >
             <TileLayer
-              url="https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}"
-              //url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
+              // url="https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}"
+              url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
               attribution='Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               ext="png"
             />
             <ScaleControl position="bottomright" />
-            <GeoJSON ref={forestRef} data={habitatData!} style={styleForest} />
-            {streamData && <GeoJSON data={streamData!} style={styleStreams} />}
+            <GeoJSON ref={forestRef} data={habitatData} style={styleForest} />
+            {streamData && <GeoJSON data={streamData} style={styleStreams} />}
 
             {sites.map(s => (
               //@ts-ignore
@@ -58,6 +63,40 @@ function MapView(props: MapViewProps) {
           <MiniMap focusedBounds={annotatedForestBounds} />
         </>
       )}
+    </div>
+  );
+}
+
+const borneoBoundingBox: [number, number][] = [
+  [-4.6822871904, 108.4120987684],
+  [7.7670030257, 119.7582291395]
+];
+function NewMap() {
+  const [resizeComponent, containerSize] = useResizeAware();
+
+  console.log("containerSize", containerSize);
+  return (
+    <div className={styles.MapPane}>
+      {resizeComponent}
+
+      <Map
+        center={[51.505, -0.09]}
+        // dragging={false}
+        // touchZoom={false}
+        // doubleClickZoom={false}
+        // scrollWheelZoom={false}
+        // boxZoom={false}
+        // keyboard={false}
+        // tap={false}
+        // zoomControl={false}
+        preferCanvas={true}
+        attributionControl={false}
+      >
+        <TileLayer
+          url="https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}"
+          ext="png"
+        />
+      </Map>
     </div>
   );
 }

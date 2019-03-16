@@ -133,6 +133,8 @@ function WaveformView(props: WaveformProps) {
     wavesurfer.current.on("ready", () => {
       props.updateState(undefined, true);
       if (props.requestedTimestamp) {
+        console.log("SEEKING TO TIMESTAMP", props.requestedTimestamp);
+
         wavesurfer.current.seekTo(props.requestedTimestamp);
       }
 

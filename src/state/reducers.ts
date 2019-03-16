@@ -8,12 +8,14 @@ import {
   ROUTE_DID_CHANGE,
   SET_CURRENT_SITE_AUDIO_ID,
   SET_PRELOADED_DATA,
+  SET_TAXA_AUDIO,
   SET_TAXA_BY_ID,
   SET_TAXA_BY_SITE,
   SET_TAXA_BY_SITE_BY_TIME,
+  SET_TAXA_IMAGES,
   UPDATE_SITE_AUDIO_STATE
 } from "./actions";
-import { State } from "./types";
+import { State, TaxonAudio, TaxonImage } from "./types";
 
 const initialState: State = {
   loading: 0,
@@ -36,8 +38,8 @@ const initialState: State = {
   taxaById: Map(),
   taxaIdBySiteId: Map(),
   taxaIdBySiteIdByTime: Map(),
-  taxaAudioById: {},
-  taxaImageById: {},
+  taxaAudioById: Map(),
+  taxaImageById: Map(),
   focusedSiteId: null,
   focusedTimeSegment: "09:00",
   focusedTaxonId: null,
@@ -77,7 +79,8 @@ export default function mainReducer(state: State = initialState, action: AnyActi
         state,
         {
           siteAudio: initialState.siteAudio,
-          requestedTimestamp: null
+          requestedTimestamp: null,
+          currentSiteAudioId: null
         },
         action.item
       );
@@ -157,6 +160,18 @@ export default function mainReducer(state: State = initialState, action: AnyActi
       const byTime = taxaIdBySiteIdByTime.get(siteId)!.set(time, taxaIds);
       taxaIdBySiteIdByTime = taxaIdBySiteIdByTime.set(siteId, byTime);
       return Object.assign({}, state, { taxaIdBySiteIdByTime });
+    }
+
+    case SET_TAXA_AUDIO: {
+      const audio = action.audio as Map<string, TaxonAudio[]>;
+      const taxaAudioById = state.taxaAudioById.merge(audio);
+      return Object.assign({}, state, { taxaAudioById });
+    }
+
+    case SET_TAXA_IMAGES: {
+      const images = action.images as Map<string, TaxonImage>;
+      const taxaImageById = state.taxaImageById.merge(images);
+      return Object.assign({}, state, { taxaImageById });
     }
 
     default:

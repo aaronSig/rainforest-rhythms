@@ -1,6 +1,5 @@
 import { Feature, GeometryObject } from "geojson";
 import { PathOptions } from "leaflet";
-import "leaflet/dist/leaflet.css";
 
 /**
  *  Styling for the GEOJson map features

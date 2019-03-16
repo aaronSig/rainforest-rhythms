@@ -1,7 +1,32 @@
 import { Map, Set } from "immutable";
 import { Site, StreamInfo, Taxon } from "../api/types";
 
-export type MediaUrl = string;
+export interface TaxonImage {
+  taxon_id: string;
+  // The url to the page in GBIF for this occurrence
+  gbif_occurrence_key: string;
+  // The URL for the image
+  gbif_media_identifier: string;
+}
+
+export interface TaxonAudio {
+  taxon_id: string;
+  // The url to the page in GBIF for this occurrence
+  gbif_occurrence_key: string;
+  // url for the  sound
+  gbif_media_identifier: string;
+  // if the recording is a song, call or of both
+  gbif_occurrence_behavior: string;
+}
+
+// an object merging the taxon data with its images and audio when they're loaded
+export interface TaxonWithMedia extends Taxon {
+  audio: TaxonAudio[];
+  image: TaxonImage;
+  // A flag denoting if this animal is ususally present at
+  // the currently focused time.
+  seenAtThisTime: boolean;
+}
 
 export interface State {
   loading: number; // a number larger than 1 means something is loading
@@ -29,11 +54,11 @@ export interface State {
   // Ids of taxa spotted at a particular time at a site
   taxaIdBySiteIdByTime: Map<string, Map<TimeSegment, Set<string>>>; //  ++done
 
-  // If there is audio available for an animal you can look it up by it's gbif ID here
-  taxaAudioById: { [gbif_key: string]: MediaUrl[] };
+  // If there is audio available for an animal you can look it up by it's ID here
+  taxaAudioById: Map<string, TaxonAudio[]>;
 
-  // Simiar as the audio but for images. Again uses the gbif ID
-  taxaImageById: { [gbif_key: string]: MediaUrl[] };
+  // Simiar as the audio but for images.
+  taxaImageById: Map<string, TaxonImage>;
 
   // User's focus a site by clicking on it from the map
   focusedSiteId: string | null; //  ++done

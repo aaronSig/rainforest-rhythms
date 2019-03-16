@@ -18,6 +18,8 @@
   display: inline-block;
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
   animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+
+  box-shadow: 0px 0px 2px 1px rgba(27, 25, 26, 0.35);
 }
 
 .spinner .bounce1 {

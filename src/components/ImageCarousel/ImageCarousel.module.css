@@ -1,0 +1,17 @@
+.carousel {
+  flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.page {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

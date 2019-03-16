@@ -1,4 +1,5 @@
 import "whatwg-fetch";
+import { TaxonAudio, TaxonImage } from "../state/types";
 import {
   AccessToken,
   HabitatName,
@@ -93,15 +94,29 @@ export default {
   taxa: {
     async get(siteId: number | string, time?: number): Promise<Taxon[]> {
       return (await get(["get_taxa", siteId, time], [])).map(idsToString);
+    },
+    async image(taxonId: string): Promise<TaxonImage | null> {
+      const result = (await get(["get_taxon_image", taxonId], null)) as TaxonImage | null;
+      if (result) {
+        result.taxon_id = taxonId;
+      }
+      return result;
+    },
+    async audio(taxonId: string): Promise<TaxonAudio[]> {
+      let results = (await get(["get_taxon_sounds", taxonId], [])) as TaxonAudio[];
+      if (results) {
+        results.forEach(r => (r.taxon_id = taxonId));
+      }
+      return results;
     }
   },
 
   geoJson: {
     async streams(): Promise<GeoJSON.GeoJsonObject> {
-      return await get("rainforest_rhythms/static/geojson/stream_data.geojson", null, "");
+      return await get("/rainforest_rhythms/static/geojson/stream_data.geojson", null, "");
     },
     async habitats(): Promise<GeoJSON.GeoJsonObject> {
-      return await get("static/geojson/map_data.geojson", null, "");
+      return await get("/static/geojson/map_data.geojson", null, "");
     }
   }
 };

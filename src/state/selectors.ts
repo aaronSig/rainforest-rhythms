@@ -1,7 +1,8 @@
+import { Set } from "immutable";
 import { createSelector } from "reselect";
-import { StreamInfo } from "../api/types";
+import { StreamInfo, Taxon } from "../api/types";
 import { getTimeSegment } from "../utils/dates";
-import { allTimeSegments, State, TimeSegment } from "./types";
+import { allTimeSegments, State, TaxonWithMedia, TimeSegment } from "./types";
 
 export const isLoading = (state: State) => state.loading > 0;
 export const getSunrise = (state: State) => state.sunrise;
@@ -99,11 +100,16 @@ export const getTaxaForFocusedSite = createSelector(
   [getFocusedSiteId, getTaxaIdBySiteId, getTaxaById],
   (focusedSiteId, taxaIdBySiteId, taxaById) => {
     if (!focusedSiteId || !taxaIdBySiteId.has(focusedSiteId)) {
-      return [];
+      return [] as Taxon[];
     }
-    return taxaIdBySiteId.get(focusedSiteId)!.map(id => {
-      return taxaById.get(id);
-    });
+    const taxa = taxaIdBySiteId
+      .get(focusedSiteId)!
+      .map(id => {
+        return taxaById.get(id);
+      })
+      .filter(t => t !== undefined) as Set<Taxon>;
+
+    return taxa.toArray() as Taxon[];
   }
 );
 
@@ -119,14 +125,34 @@ export const getTaxaForFocusedSiteAtCurrentTime = createSelector(
       !taxaIdBySiteIdByTime.has(focusedSiteId) ||
       !taxaIdBySiteIdByTime.get(focusedSiteId)!.has(focusedTimeSegment)
     ) {
-      return [];
+      return [] as Taxon[];
     }
-    return taxaIdBySiteIdByTime
+    const taxa = taxaIdBySiteIdByTime
       .get(focusedSiteId)!
       .get(focusedTimeSegment)!
       .map(id => {
         return taxaById.get(id);
-      });
+      })
+      .filter(t => t !== undefined) as Set<Taxon>;
+
+    return taxa.toArray() as Taxon[];
+  }
+);
+
+export const getTaxaWithMedia = createSelector(
+  [getTaxaForFocusedSite, getTaxaForFocusedSiteAtCurrentTime, getTaxaAudioById, getTaxaImageById],
+  (taxaForFocusedSite, taxaForFocusedSiteAtCurrentTime, taxaAudioById, taxaImageById) => {
+    const withMedia = taxaForFocusedSite
+      .filter(t => taxaImageById.has(t.id))
+      .map(t =>
+        Object.assign({}, t, {
+          audio: taxaAudioById.has(t.id) ? taxaAudioById.get(t.id) : [],
+          image: taxaImageById.get(t.id),
+          seenAtThisTime: taxaForFocusedSiteAtCurrentTime.includes(t)
+        })
+      ) as TaxonWithMedia[];
+
+    return withMedia.sort((a, b) => (a.seenAtThisTime && !b.seenAtThisTime ? 1 : -1));
   }
 );
 

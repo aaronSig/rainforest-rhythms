@@ -1,5 +1,7 @@
 import { navigate } from "@reach/router";
+import { format } from "date-fns";
 import { useEffect } from "react";
+import { getTimeSegment } from "../../utils/dates";
 import { IndexProps } from "./Index";
 /**
  * pulling out the main logic. Anything that controls data fetching
@@ -14,7 +16,9 @@ export default function useIndexHook(props: IndexProps) {
   // focus the site & time segment based on the url. Start loading if needed
   useEffect(() => {
     if (!props.timeSegment) {
-      navigate(`/09:00`, {
+      //if there isn't a time segment set, set it to the closest one to the current time
+      const timeSegment = getTimeSegment(format(new Date(), "HH:mm:ss"));
+      navigate(`/${timeSegment}`, {
         replace: true
       });
     }
