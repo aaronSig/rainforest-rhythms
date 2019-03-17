@@ -23,7 +23,9 @@ interface AudioPlayerProps {
 function AudioPlayer(props: AudioPlayerProps) {
   const sound = useRef(null as Howl | null);
 
-  useEffect(() => {}, [sound.current]);
+  useEffect(() => {
+      
+  }, [sound.current]);
 
   return <div />;
 }

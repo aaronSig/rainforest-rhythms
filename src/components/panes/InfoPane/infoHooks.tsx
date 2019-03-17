@@ -21,4 +21,5 @@ export default function useInfoPaneData(props: InfoPaneProps) {
       props.loadTaxaForSite(props.focusedSite.id);
     }
   }, [props.focusedSite, props.loadTaxaForSite, props.taxa]);
+
 }
