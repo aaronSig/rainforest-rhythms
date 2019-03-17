@@ -1,18 +1,29 @@
+import { format, isValid, parse } from "date-fns";
 import React from "react";
 import { connect } from "react-redux";
-import { Site } from "../../../../api/types";
+import { Site, StreamInfo } from "../../../../api/types";
 import moon from "../../../../icons/moon.svg";
 import sun from "../../../../icons/sun.svg";
-import { getFocusedSite } from "../../../../state/selectors";
-import { State } from "../../../../state/types";
+import {
+  getCurrentSiteAudio,
+  getFocusedSite,
+  getFocusedTimeSegment
+} from "../../../../state/selectors";
+import { State, TimeSegment } from "../../../../state/types";
 import styles from "./InfoBar.module.css";
 
 interface InfoBarProps {
+  focusedTimeSegment: TimeSegment;
   focusedSite: Site | null;
+  currentSiteAudio: StreamInfo | null;
 }
 
 function InfoBarView(props: InfoBarProps) {
   const site = props.focusedSite || ({} as Site);
+  const streamInfo = props.currentSiteAudio || ({} as StreamInfo);
+  const date = parse(`${streamInfo.date}T${streamInfo.time}`);
+  const valid = isValid(date);
+  const time = valid ? format(date, "HH:mm") : props.focusedTimeSegment;
   return (
     <div className={styles.InfoBar}>
       <div className={styles.ForestInfo}>
@@ -23,9 +34,12 @@ function InfoBarView(props: InfoBarProps) {
         </p>
       </div>
       <div className={styles.Time}>
-        <h2>{"09:40"}</h2>
-        <img src={sun} alt="A sun icon symbolising day" />
-        {false && <img src={moon} alt="A moon icon symbolising night" />}
+        <div className={styles.tooltip}>
+          <h2>{time}</h2>
+          {valid && <span>Recorded {format(date, "Do MMM YYYY")}</span>}
+        </div>
+        <img src={sun} alt="Day time" />
+        {false && <img src={moon} alt="Night time" />}
       </div>
     </div>
   );
@@ -33,7 +47,9 @@ function InfoBarView(props: InfoBarProps) {
 
 const mapStateToProps = (state: State) => {
   return {
-    focusedSite: getFocusedSite(state)
+    focusedTimeSegment: getFocusedTimeSegment(state),
+    focusedSite: getFocusedSite(state),
+    currentSiteAudio: getCurrentSiteAudio(state)
   };
 };
 

@@ -30,6 +30,17 @@ export const getAllSites = createSelector(
   sitesById => Array.from(sitesById.values())
 );
 
+// The audio loaded for this site and time
+export const getCurrentSiteAudio = createSelector(
+  [getCurrentSiteAudioId, getSiteAudioByAudioId],
+  (currentAudioId, audioById) => {
+    if (currentAudioId === null || !audioById.has(currentAudioId)) {
+      return null;
+    }
+    return audioById.get(currentAudioId)!;
+  }
+);
+
 /***
  * Retuns an array of StreamInfo objects organised by site and TimeSegment
  * {
