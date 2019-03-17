@@ -2,14 +2,13 @@ import { format, isValid, parse } from "date-fns";
 import React from "react";
 import { connect } from "react-redux";
 import { Site, StreamInfo } from "../../../../api/types";
-import moon from "../../../../icons/moon.svg";
-import sun from "../../../../icons/sun.svg";
 import {
   getCurrentSiteAudio,
   getFocusedSite,
   getFocusedTimeSegment
 } from "../../../../state/selectors";
 import { State, TimeSegment } from "../../../../state/types";
+import DayIndicator from "./DayIndicator";
 import styles from "./InfoBar.module.css";
 
 interface InfoBarProps {
@@ -38,8 +37,7 @@ function InfoBarView(props: InfoBarProps) {
           <h2>{time}</h2>
           {valid && <span>Recorded {format(date, "Do MMM YYYY")}</span>}
         </div>
-        <img src={sun} alt="Day time" />
-        {false && <img src={moon} alt="Night time" />}
+        <DayIndicator timeSegment={props.focusedTimeSegment} />
       </div>
     </div>
   );

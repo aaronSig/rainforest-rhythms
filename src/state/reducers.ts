@@ -13,9 +13,10 @@ import {
   SET_TAXA_BY_SITE,
   SET_TAXA_BY_SITE_BY_TIME,
   SET_TAXA_IMAGES,
+  TOGGLE_SITE_AUDIO_PLAY_STATE,
   UPDATE_SITE_AUDIO_STATE
 } from "./actions";
-import { State, TaxonAudio, TaxonImage } from "./types";
+import { SiteAudioState, State, TaxonAudio, TaxonImage } from "./types";
 
 const initialState: State = {
   loading: 0,
@@ -54,10 +55,8 @@ const initialState: State = {
     shouldPlay: false
   },
   taxonAudio: {
-    url: null,
-    timestamp: 0,
-    duration: 0,
-    isLoaded: false,
+    audioInfo: null,
+    isReady: false,
     isPlaying: false,
     isFinished: false,
     shouldPlay: false
@@ -67,7 +66,6 @@ const initialState: State = {
 export default function mainReducer(state: State = initialState, action: AnyAction) {
   switch (action.type) {
     case SET_PRELOADED_DATA:
-    case FOCUS_TAXON_ID:
       return Object.assign({}, state, action.item);
 
     case SET_CURRENT_SITE_AUDIO_ID:
@@ -93,7 +91,7 @@ export default function mainReducer(state: State = initialState, action: AnyActi
 
     case UPDATE_SITE_AUDIO_STATE: {
       const { loadedPercent, isReady, isPlaying, isFinished } = action;
-      const items = {
+      const items: { [key in keyof SiteAudioState]?: any } = {
         loadedPercent,
         isReady,
         isPlaying,
@@ -107,7 +105,20 @@ export default function mainReducer(state: State = initialState, action: AnyActi
         }
       });
 
+      if (items.isFinished) {
+        items.shouldPlay = false;
+      }
+
       const siteAudio = Object.assign({}, state.siteAudio, items);
+      return Object.assign({}, state, {
+        siteAudio
+      });
+    }
+
+    case TOGGLE_SITE_AUDIO_PLAY_STATE: {
+      const siteAudio = Object.assign({}, state.siteAudio, {
+        shouldPlay: !state.siteAudio.shouldPlay
+      });
       return Object.assign({}, state, {
         siteAudio
       });
@@ -171,6 +182,23 @@ export default function mainReducer(state: State = initialState, action: AnyActi
       const images = action.images as Map<string, TaxonImage>;
       const taxaImageById = state.taxaImageById.merge(images);
       return Object.assign({}, state, { taxaImageById });
+    }
+
+    case FOCUS_TAXON_ID: {
+      // stop the taxon audio (if playing)
+      // set the taxon focused.
+      // setup the new taxon audio (if available)
+      const focusedTaxonId = action.item.focusedTaxonId;
+      let taxonAudio = initialState.taxonAudio;
+      if (state.taxaAudioById.has(focusedTaxonId)) {
+        const audioFiles = state.taxaAudioById.get(focusedTaxonId)!;
+        if (audioFiles.length) {
+          taxonAudio = Object.assign({}, taxonAudio, {
+            audioInfo: audioFiles.values().next().value
+          });
+        }
+      }
+      return Object.assign({}, state, { focusedTaxonId, taxonAudio });
     }
 
     default:

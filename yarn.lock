@@ -1942,6 +1942,10 @@
   version "4.7.2"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.2.tgz#0e670ea254d559241b6eeb3894f8754991e73220"
 
+"@types/howler@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/howler/-/howler-2.1.0.tgz#a525727788dd941aaab0dfde937e374c0f37cf95"
+
 "@types/jest-diff@*":
   version "20.0.1"
   resolved "https://registry.yarnpkg.com/@types/jest-diff/-/jest-diff-20.0.1.tgz#35cc15b9c4f30a18ef21852e255fdb02f6d59b89"
@@ -5096,6 +5100,10 @@ hoopy@^0.1.2:
 hosted-git-info@^2.1.4:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.7.1.tgz#97f236977bd6e125408930ff6de3eec6281ec047"
+
+howler@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/howler/-/howler-2.1.1.tgz#b8ae44b83f4b8a5b5ef354030ed0927314d8a996"
 
 hpack.js@^2.1.6:
   version "2.1.6"

@@ -150,6 +150,11 @@ export const getTaxaForFocusedSiteAtCurrentTime = createSelector(
   }
 );
 
+/***
+ * The species that appear at this site, sorted to put the ones that ususally appear at this time at the top
+ *
+ * Will merge in the image and audio info. Filters out any without images.
+ */
 export const getTaxaWithMedia = createSelector(
   [getTaxaForFocusedSite, getTaxaForFocusedSiteAtCurrentTime, getTaxaAudioById, getTaxaImageById],
   (taxaForFocusedSite, taxaForFocusedSiteAtCurrentTime, taxaAudioById, taxaImageById) => {

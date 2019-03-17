@@ -8,7 +8,7 @@ interface LoadingIndicatorViewProps {
   isloading: boolean;
 }
 
-function LoadingIndicatorView(props: LoadingIndicatorViewProps) {
+export function LoadingIndicatorView(props: LoadingIndicatorViewProps) {
   if (!props.isloading) {
     return null;
   }

@@ -7,12 +7,14 @@ import { useMemo } from "react";
 /***
  * Calculate a bounding box around some geojson
  */
-export default function useBounds(geoJson: AllGeoJSON | GeoJsonObject | null): LatLngBoundsLiteral {
+export default function useBounds(
+  geoJson: AllGeoJSON | GeoJsonObject | null
+): LatLngBoundsLiteral | null {
   return useMemo(() => {
     if (!geoJson) {
-      return [[0, 0], [0, 0]] as LatLngBoundsLiteral;
+      return null;
     }
     const twoDBox = bbox(geoJson as AllGeoJSON);
-    return [[twoDBox[0], twoDBox[1]], [twoDBox[2], twoDBox[3]]] as LatLngBoundsLiteral;
+    return [[twoDBox[1], twoDBox[0]], [twoDBox[3], twoDBox[2]]] as LatLngBoundsLiteral;
   }, [geoJson]);
 }

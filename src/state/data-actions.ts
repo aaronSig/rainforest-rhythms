@@ -152,11 +152,22 @@ export function loadAudioInfo(audioId: string, timestamp?: number) {
       //   dispatch(focusTimeSegment(streamTimeSegment));
       // }
 
+      const preStreamLoadedState = getState();
+      const focusedSite = getFocusedSiteId(preStreamLoadedState);
+      const focusedTime = getFocusedTimeSegment(preStreamLoadedState);
+
       const focusedAudio = getCurrentSiteAudioId(state);
       if (focusedAudio !== streamInfo!.audio) {
         const stream = await api.streams.audioStream(streamInfo!.box_id);
-        dispatch(setCurrentSiteAudio(streamInfo!.audio, stream!, timestamp));
-        console.log("Stream set to ", stream);
+
+        // race condition check.
+        const postStreamLoadedState = getState();
+        const latestFocusedSite = getFocusedSiteId(postStreamLoadedState);
+        const latestFocusedTime = getFocusedTimeSegment(postStreamLoadedState);
+        if (focusedSite === latestFocusedSite && focusedTime === latestFocusedTime) {
+          dispatch(setCurrentSiteAudio(streamInfo!.audio, stream!, timestamp));
+          console.log("Stream set to ", stream);
+        }
       }
     } finally {
       dispatch(didFinishLoading());

@@ -1,5 +1,6 @@
 import React from "react";
 import useResizeAware from "react-resize-aware";
+import AudioLoadingSpinner from "./AudioLoadingSpinner";
 import styles from "./PlayButton.module.css";
 
 // adapted from https://codepen.io/aralon/pen/NqGWXZ
@@ -10,13 +11,16 @@ interface PlayButtonProps
     HTMLButtonElement
   > {
   paused: boolean;
+  loading: boolean;
   backgroundColor: string;
+  className?: string;
 }
 
 function PlayButton(props: PlayButtonProps) {
-  const [resizeListener, { width }] = useResizeAware();
-  const { paused, backgroundColor, ...remainingProps } = props;
-  const pausedClass = props.paused ? styles.paused : "";
+  const [resizeListener, { width, height }] = useResizeAware();
+  const { paused, backgroundColor, loading, className, ...remainingProps } = props;
+  const playingClass = props.paused ? styles.playing : "";
+  const loadingClass = props.loading ? styles.loading : "";
 
   const triangleStyles = {
     borderRightColor: backgroundColor,
@@ -26,12 +30,20 @@ function PlayButton(props: PlayButtonProps) {
   };
 
   return (
-    <button type="button" className={`${styles.PlayButton} ${pausedClass}`} {...remainingProps}>
-      {resizeListener}
-      <div className={styles.left} />
-      <div className={styles.right} />
-      <div className={styles.triangleA} style={triangleStyles} />
-      <div className={styles.triangleB} style={triangleStyles} />
+    <button
+      type="button"
+      className={`${className} ${styles.PlayButton} ${playingClass} ${loadingClass}`}
+      {...remainingProps}
+    >
+      {props.loading && <AudioLoadingSpinner />}
+
+      <div className={styles.PlayButtonInner}>
+        {resizeListener}
+        <div className={styles.left} />
+        <div className={styles.right} />
+        <div className={styles.triangleA} style={triangleStyles} />
+        <div className={styles.triangleB} style={triangleStyles} />
+      </div>
     </button>
   );
 }

@@ -59,7 +59,7 @@ export function setPreloadedData(
   return ax(SET_PRELOADED_DATA, { habitatData, streamData, sitesById });
 }
 
-// -- MARK audio stream info
+// -- MARK audio
 
 // slots in a StreamInfo object we can use to tee up an audio stream
 export const ADD_SITE_AUDIO_INFO = "ADD_SITE_AUDIO_INFO";
@@ -68,6 +68,14 @@ export function addSiteAudioInfo(info: StreamInfo) {
     type: ADD_SITE_AUDIO_INFO,
     id: info.audio,
     info
+  };
+}
+
+// play / pause the site audio
+export const TOGGLE_SITE_AUDIO_PLAY_STATE = "TOGGLE_SITE_AUDIO_PLAY_STATE";
+export function toggleSiteAudioPlayState() {
+  return {
+    type: TOGGLE_SITE_AUDIO_PLAY_STATE
   };
 }
 

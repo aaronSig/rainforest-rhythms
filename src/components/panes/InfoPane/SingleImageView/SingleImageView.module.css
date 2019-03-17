@@ -46,16 +46,15 @@
   width: 44px;
   background-color: #e23e1d;
   border-radius: 50%;
-  border: 0px;
+  /* border: 0px;
   display: flex;
   justify-content: stretch;
-  align-items: stretch;
-  cursor: pointer;
+  align-items: stretch; */
 }
 
 .AudioButton > * {
-  padding: 12px;
-  width: 100%;
+  /* padding: 12px;
+  width: 100%; */
 }
 
 .SliderButton {

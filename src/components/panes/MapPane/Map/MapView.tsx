@@ -10,6 +10,7 @@ import useBounds from "../../../../utils/useBounds";
 import { styleForest, styleStreams } from "./featureStyles";
 import styles from "./MapView.module.css";
 import { MiniMap } from "./MiniMap";
+import ResizableMap from "./ResizableMap";
 import SiteMarker from "./SiteMarker";
 
 interface MapViewProps {
@@ -22,35 +23,34 @@ function MapView(props: MapViewProps) {
   const { habitatData, streamData, sites } = props;
   const annotatedForestBounds = useBounds(habitatData);
 
-  console.log("annotatedForestBounds", annotatedForestBounds);
+  console.log("annotatedForestBounds", annotatedForestBounds, habitatData);
   return (
     <div className={styles.MapPane}>
-      {habitatData && (
+      {habitatData && annotatedForestBounds && (
         <>
-          {/* <ResizableMap> */}
-          <Map
-            bounds={annotatedForestBounds}
-            // maxBounds={annotatedForestBounds}
-            maxZoom={12}
-            zoomControl={false}
-            style={{ width: 800, height: 500 }}
-          >
-            <TileLayer
-              // url="https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}"
-              url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
-              attribution='Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              ext="png"
-            />
-            <ScaleControl position="bottomright" />
-            <GeoJSON data={habitatData} style={styleForest} />
-            {streamData && <GeoJSON data={streamData} style={styleStreams} />}
+          <ResizableMap>
+            <Map
+              bounds={annotatedForestBounds}
+              maxBounds={annotatedForestBounds}
+              maxZoom={12}
+              zoomControl={false}
+            >
+              <TileLayer
+                // url="https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}"
+                url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
+                attribution='Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                ext="png"
+              />
+              <ScaleControl position="bottomright" />
+              <GeoJSON data={habitatData} style={styleForest} />
+              {streamData && <GeoJSON data={streamData} style={styleStreams} />}
 
-            {sites.map(s => (
-              //@ts-ignore
-              <SiteMarker key={s.id} site={s} />
-            ))}
-          </Map>
-          {/* </ResizableMap> */}
+              {sites.map(s => (
+                //@ts-ignore
+                <SiteMarker key={s.id} site={s} />
+              ))}
+            </Map>
+          </ResizableMap>
 
           <MiniMap focusedBounds={annotatedForestBounds} />
         </>

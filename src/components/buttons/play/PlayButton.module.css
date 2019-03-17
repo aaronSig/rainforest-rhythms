@@ -1,10 +1,11 @@
 .PlayButton {
   height: 100%;
   width: 100%;
-  display: block;
   overflow: hidden;
   position: relative;
-
+  display: flex;
+  justify-content: stretch;
+  align-content: stretch;
   border: none;
   margin: 0;
   padding: 0;
@@ -12,9 +13,27 @@
   -webkit-appearance: none;
   appearance: none;
   outline: none;
+  cursor: pointer;
 }
 
-.PlayButton.paused {
+.PlayButton.loading {
+  padding: 20px;
+}
+
+.PlayButtonInner {
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  right: 30%;
+  bottom: 30%;
+  transform: translateX(0px);
+}
+
+.loading .PlayButtonInner {
+  visibility: hidden;
+}
+
+.playing .PlayButtonInner {
   transform: translateX(2px);
   transition: transform 0.1s ease;
 }
@@ -59,15 +78,15 @@
   transition: transform 0.25s ease;
 }
 
-.paused .left {
+.playing .left {
   width: 50%;
 }
-.paused .right {
+.playing .right {
   width: 50%;
 }
-.paused .triangleA {
+.playing .triangleA {
   transform: translate(0, -50%);
 }
-.paused .triangleB {
+.playing .triangleB {
   transform: translate(0, 50%);
 }

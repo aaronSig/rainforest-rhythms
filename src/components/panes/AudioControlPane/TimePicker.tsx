@@ -5,6 +5,7 @@ import { StreamInfo } from "../../../api/types";
 import moon from "../../../icons/moon.svg";
 import play from "../../../icons/play.svg";
 import sun from "../../../icons/sun.svg";
+import { toggleSiteAudioPlayState } from "../../../state/actions";
 import {
   getFocusedSiteId,
   getFocusedTimeSegment,
@@ -22,6 +23,8 @@ interface TimePickerProps {
   focusedTimeSegment: TimeSegment;
   timeSegments: TimeSegment[];
   siteAudioByTimeSegment: { [siteId: string]: { [time in TimeSegment]: StreamInfo[] } };
+
+  toggleSiteAudioPlaying: () => void;
 }
 
 function TimePickerView(props: TimePickerProps) {
@@ -41,6 +44,10 @@ function TimePickerView(props: TimePickerProps) {
     return "/" + parts.join("/");
   }
 
+  function togglePlay() {
+    props.toggleSiteAudioPlaying();
+  }
+
   return (
     <ul className={styles.TimePicker}>
       <li className={styles.dud} />
@@ -55,6 +62,16 @@ function TimePickerView(props: TimePickerProps) {
 
         if (active) {
           icon = <img src={play} alt="Play" />;
+
+          return (
+            <li key={t} className={active}>
+              <button type="button" onClick={togglePlay}>
+                <div className={styles.icon}>{icon}</div>
+                <span>{t}</span>
+                <div className={styles.indicator} />
+              </button>
+            </li>
+          );
         }
 
         return (
@@ -84,7 +101,11 @@ const mapStateToProps = (state: State) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {};
+  return {
+    toggleSiteAudioPlaying: () => {
+      dispatch(toggleSiteAudioPlayState());
+    }
+  };
 };
 
 const TimePicker = connect(

@@ -1,0 +1,107 @@
+.AudioLoadingSpinner .circle {
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  left: 5%;
+  top: 5%;
+}
+
+.AudioLoadingSpinner .circle:before {
+  content: "";
+  display: block;
+  margin: 0 auto;
+  width: 15%;
+  height: 15%;
+  background-color: #fff;
+  border-radius: 100%;
+  -webkit-animation: circleFadeDelay 1.2s infinite ease-in-out both;
+  animation: circleFadeDelay 1.2s infinite ease-in-out both;
+}
+.AudioLoadingSpinner .circle2 {
+  transform: rotate(30deg);
+}
+.AudioLoadingSpinner .circle3 {
+  transform: rotate(60deg);
+}
+.AudioLoadingSpinner .circle4 {
+  transform: rotate(90deg);
+}
+.AudioLoadingSpinner .circle5 {
+  transform: rotate(120deg);
+}
+.AudioLoadingSpinner .circle6 {
+  transform: rotate(150deg);
+}
+.AudioLoadingSpinner .circle7 {
+  transform: rotate(180deg);
+}
+.AudioLoadingSpinner .circle8 {
+  transform: rotate(210deg);
+}
+.AudioLoadingSpinner .circle9 {
+  transform: rotate(240deg);
+}
+.AudioLoadingSpinner .circle10 {
+  transform: rotate(270deg);
+}
+.AudioLoadingSpinner .circle11 {
+  transform: rotate(300deg);
+}
+.AudioLoadingSpinner .circle12 {
+  transform: rotate(330deg);
+}
+.AudioLoadingSpinner .circle2:before {
+  animation-delay: -1.1s;
+}
+.AudioLoadingSpinner .circle3:before {
+  animation-delay: -1s;
+}
+.AudioLoadingSpinner .circle4:before {
+  animation-delay: -0.9s;
+}
+.AudioLoadingSpinner .circle5:before {
+  animation-delay: -0.8s;
+}
+.AudioLoadingSpinner .circle6:before {
+  animation-delay: -0.7s;
+}
+.AudioLoadingSpinner .circle7:before {
+  animation-delay: -0.6s;
+}
+.AudioLoadingSpinner .circle8:before {
+  animation-delay: -0.5s;
+}
+.AudioLoadingSpinner .circle9:before {
+  animation-delay: -0.4s;
+}
+.AudioLoadingSpinner .circle10:before {
+  animation-delay: -0.3s;
+}
+.AudioLoadingSpinner .circle11:before {
+  animation-delay: -0.2s;
+}
+.AudioLoadingSpinner .circle12:before {
+  animation-delay: -0.1s;
+}
+
+@-webkit-keyframes circleFadeDelay {
+  0%,
+  39%,
+  100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+@keyframes circleFadeDelay {
+  0%,
+  39%,
+  100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+}

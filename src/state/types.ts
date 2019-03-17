@@ -75,7 +75,7 @@ export interface State {
 
   // Audio states
   siteAudio: SiteAudioState;
-  taxonAudio: AudioState;
+  taxonAudio: TaxonAudioState;
 }
 
 export interface SiteAudioState {
@@ -87,15 +87,12 @@ export interface SiteAudioState {
   shouldPlay: boolean;
 }
 
-export interface AudioState {
-  url: string | null;
-  timestamp: number;
-  duration: number;
-  isLoaded: boolean;
+export interface TaxonAudioState {
+  audioInfo: TaxonAudio | null;
+  isReady: boolean;
   isPlaying: boolean;
   // the audio has finished playing
   isFinished: boolean;
-
   // instruct the audio to play, if it can.
   shouldPlay: boolean;
 }
@@ -126,6 +123,7 @@ export type TimeSegment =
   | "23:00"
   | "00:00";
 
+// These need to be in order
 export const allTimeSegments: TimeSegment[] = [
   "01:00",
   "02:00",

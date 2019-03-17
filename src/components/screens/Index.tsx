@@ -53,9 +53,9 @@ export function IndexView(props: IndexProps) {
       <LoadingIndicator />
       <div className="row">
         <MapPane />
-        {false && <InfoPane />}
+        <InfoPane />
       </div>
-      {false && <AudioControlPane />}
+      <AudioControlPane />
     </div>
   );
 }

@@ -103,10 +103,12 @@ function AudioButton(props: AudioButtonProps) {
   }
 
   return (
-    <div className={styles.AudioButton} onClick={toggle}>
-      <div>
-        <PlayButton paused={paused} backgroundColor={"#e23e1d"} />
-      </div>
-    </div>
+    <PlayButton
+      className={styles.AudioButton}
+      onClick={toggle}
+      loading={false}
+      paused={paused}
+      backgroundColor={"#e23e1d"}
+    />
   );
 }
