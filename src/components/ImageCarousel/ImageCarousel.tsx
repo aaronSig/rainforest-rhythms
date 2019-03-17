@@ -10,11 +10,14 @@ interface ImageCarouselProps {
 }
 
 function ImageCarousel(props: ImageCarouselProps) {
-  const { index, height, imageUrls } = props;
-
-  if (imageUrls.length === 0) {
+  if (props.imageUrls.length === 0) {
     return <div className={styles.carousel} />;
   }
+  return <ImageCarouselInner {...props} />;
+}
+
+function ImageCarouselInner(props: ImageCarouselProps) {
+  const { index, height, imageUrls } = props;
 
   const previousIndex = usePrevious(index, -1);
   const movingToNext = previousIndex < index;
@@ -29,6 +32,7 @@ function ImageCarousel(props: ImageCarouselProps) {
   const beforeIndex = (imageUrls.length + index - 1) % imageUrls.length;
   const afterIndex = (imageUrls.length + index + 1) % imageUrls.length;
   const linksToPreload = [imageUrls[beforeIndex], imageUrls[afterIndex]];
+
   return (
     <div className={styles.carousel}>
       {transitions.map(({ item, props, key }) => {

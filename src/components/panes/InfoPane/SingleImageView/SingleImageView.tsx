@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import arrowLight from "../../../../icons/arrow-light.svg";
 import { TaxonWithMedia } from "../../../../state/types";
-import PlayButton from "../../../buttons/play/PlayButton";
 import ImageCarousel from "../../../ImageCarousel/ImageCarousel";
+import TaxonAudioButton from "../TaxonAudioButton";
 import styles from "./SingleImageView.module.css";
 
 interface SingleImageViewProps {
@@ -13,20 +13,25 @@ interface SingleImageViewProps {
 }
 
 function SingleImageView(props: SingleImageViewProps) {
+  const { height, taxa, focusedTaxonId, focusTaxonId } = props;
+
   const slide = useMemo(() => {
-    return props.taxa.findIndex(t => t.id === props.focusedTaxonId);
-  }, [props.focusedTaxonId, props.taxa]);
+    return taxa.findIndex(t => t.id === focusedTaxonId);
+  }, [focusedTaxonId, taxa]);
 
   const imageUrls = useMemo(() => {
-    return props.taxa.map(t => t.image.gbif_media_identifier);
-  }, [props.taxa]);
+    return taxa.map(t => t.image.gbif_media_identifier);
+  }, [taxa]);
 
-  function setSlide(index: number) {
-    props.focusTaxonId(props.taxa[index].id);
-  }
+  const setSlide = useCallback(
+    (index: number) => {
+      focusTaxonId(taxa[index].id);
+    },
+    [focusTaxonId, taxa]
+  );
 
   function next() {
-    if (slide + 1 === props.taxa.length) {
+    if (slide + 1 === taxa.length) {
       setSlide(0);
     } else {
       setSlide(slide + 1);
@@ -35,7 +40,7 @@ function SingleImageView(props: SingleImageViewProps) {
 
   function previous() {
     if (slide - 1 === -1) {
-      setSlide(props.taxa.length - 1);
+      setSlide(taxa.length - 1);
     } else {
       setSlide(slide - 1);
     }
@@ -44,23 +49,23 @@ function SingleImageView(props: SingleImageViewProps) {
   // Set the focus to the first slide if the currently focused
   // taxon isn't in the taxa array
   useEffect(() => {
-    if (slide === -1 && props.taxa.length > 0) {
+    if (slide === -1 && taxa.length > 0) {
       setSlide(0);
     }
-  }, [setSlide, slide, props.taxa]);
+  }, [setSlide, slide, taxa]);
 
   return (
     <>
-      <ImageCarousel index={slide} imageUrls={imageUrls} height={props.height} />
-      {props.taxa.length > 0 && slide > -1 && (
+      <ImageCarousel index={slide} imageUrls={imageUrls} height={height} />
+      {taxa.length > 0 && slide > -1 && (
         <div className={styles.Controls}>
-          <AudioButton taxon={props.taxa[slide]} />
+          <TaxonAudioButton taxon={taxa[slide]} />
           <button type="button" className={styles.SliderButton} onClick={previous}>
             <img className={styles.left} src={arrowLight} alt="Left Arrow" />
           </button>
           <div className={styles.InfoText}>
-            <h1>{props.taxa[slide].common_name}</h1>
-            <h4>{props.taxa[slide].scientific_name}</h4>
+            <h1>{taxa[slide].common_name}</h1>
+            <h4>{taxa[slide].scientific_name}</h4>
             <ul className={styles.pips}>
               {imageUrls.map((u, i) => {
                 function moveToSlide() {
@@ -86,29 +91,3 @@ function SingleImageView(props: SingleImageViewProps) {
 }
 
 export default SingleImageView;
-
-interface AudioButtonProps {
-  taxon: TaxonWithMedia;
-}
-
-function AudioButton(props: AudioButtonProps) {
-  const [paused, setPaused] = useState(true);
-
-  function toggle() {
-    setPaused(!paused);
-  }
-
-  if (props.taxon.audio.length === 0) {
-    return null;
-  }
-
-  return (
-    <PlayButton
-      className={styles.AudioButton}
-      onClick={toggle}
-      loading={false}
-      paused={paused}
-      backgroundColor={"#e23e1d"}
-    />
-  );
-}

@@ -15,19 +15,18 @@ interface DayIndicatorProps {
 }
 
 function DayIndicator(props: DayIndicatorProps) {
-  const daylightHours = useMemo(() => daylightMap(props.sunrise, props.sunset, allTimeSegments), [
-    daylightMap,
-    props.sunrise,
-    props.sunset,
-    allTimeSegments
+  const { timeSegment, sunrise, sunset } = props;
+  const daylightHours = useMemo(() => daylightMap(sunrise, sunset, allTimeSegments), [
+    sunrise,
+    sunset
   ]);
 
   const [isDaylight, setDaylight] = useState(true);
   const wasDaylight = usePrevious(isDaylight, true);
 
   useEffect(() => {
-    setDaylight(daylightHours[props.timeSegment]);
-  }, [daylightHours, props.timeSegment]);
+    setDaylight(daylightHours[timeSegment]);
+  }, [daylightHours, timeSegment]);
 
   const day = <img src={sun} alt="Day time" />;
   const night = <img src={moon} alt="Night time" />;

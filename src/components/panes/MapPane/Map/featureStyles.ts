@@ -29,12 +29,12 @@ export function styleForest(feature?: Feature<GeometryObject, any>): PathOptions
         fillColor: "#04463e",
         fillOpacity: 0.4
       };
+    default:
+      return {
+        stroke: true,
+        color: "white"
+      };
   }
-
-  return {
-    stroke: true,
-    color: "white"
-  };
 }
 
 export function styleStreams(feature?: Feature<GeometryObject, any>): PathOptions {

@@ -78,10 +78,34 @@
 li.active {
   transition: background-color 0.3s ease-out;
   background-color: #002f2a;
+}
+
+li.active {
   color: #fff;
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  cursor: auto;
+  justify-content: center;
+}
+
+li.active button {
+  height: 28px;
+  width: 28px;
+  background-color: #fff;
+  border-radius: 50%;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+li.active button.loading {
+  transition: background-color 0.3s ease-out;
+  background-color: transparent;
+
+  padding: 10px;
+}
+
+li.active button:hover {
+  opacity: 1;
 }
 
 li.active .icon {

@@ -51,9 +51,12 @@ const settings = () => {
  * Handles laying out the waveform and contolling the main audio
  */
 function WaveformView(props: WaveformProps) {
+  const { siteAudio, requestedTimestamp, updateState, seek } = props;
+
   const wavesurfer = useRef(null as any);
   const waveformRef = useRef(null as any);
   const [resizeComponent, containerSize] = useResizeAware();
+  const width = containerSize.width;
 
   // Setup the wavesurfer object
   useEffect(() => {
@@ -74,28 +77,28 @@ function WaveformView(props: WaveformProps) {
 
   // Loading audio in when the url is set
   useEffect(() => {
-    if (!wavesurfer.current || !props.siteAudio.url) {
+    if (!wavesurfer.current || !siteAudio.url) {
       return;
     }
     console.log("Loading audio");
     (window as any).surfer = wavesurfer.current;
-    wavesurfer.current.load(props.siteAudio.url);
+    wavesurfer.current.load(siteAudio.url);
     return () => {
       wavesurfer.current.empty();
     };
-  }, [wavesurfer, props.siteAudio.url]);
+  }, [wavesurfer, siteAudio.url]);
 
   // play/pause
   useEffect(() => {
     if (!wavesurfer.current) {
       return;
     }
-    if (props.siteAudio.shouldPlay && props.siteAudio.isReady) {
+    if (siteAudio.shouldPlay && siteAudio.isReady) {
       wavesurfer.current.play();
     } else {
       wavesurfer.current.pause();
     }
-  }, [wavesurfer, props.siteAudio.shouldPlay, props.siteAudio.isReady]);
+  }, [wavesurfer, siteAudio.shouldPlay, siteAudio.isReady]);
 
   // Watch the events
   useEffect(() => {
@@ -109,42 +112,42 @@ function WaveformView(props: WaveformProps) {
 
     wavesurfer.current.on("audioprocess", (timestamp: any) => {
       // this is quite chatty
-      // props.updateState(timestamp, wavesurfer.current.getDuration());
+      // updateState(timestamp, wavesurfer.current.getDuration());
     });
 
     wavesurfer.current.on("loading", (percent: number) => {
       console.log("loading", percent);
-      props.updateState(percent);
+      updateState(percent);
     });
 
     wavesurfer.current.on("play", () => {
-      props.updateState(undefined, true, true);
+      updateState(undefined, true, true);
     });
 
     wavesurfer.current.on("pause", () => {
-      props.updateState(undefined, true, false);
+      updateState(undefined, true, false);
     });
 
     wavesurfer.current.on("seek", (progress: string) => {
       const n = parseFloat(progress).toFixed(4);
-      props.seek(n);
+      seek(n);
     });
 
     wavesurfer.current.on("ready", () => {
-      props.updateState(undefined, true);
-      if (props.requestedTimestamp) {
-        console.log("SEEKING TO TIMESTAMP", props.requestedTimestamp);
+      updateState(undefined, true);
+      if (requestedTimestamp) {
+        console.log("SEEKING TO TIMESTAMP", requestedTimestamp);
 
-        wavesurfer.current.seekTo(props.requestedTimestamp);
+        wavesurfer.current.seekTo(requestedTimestamp);
       }
 
       // Draw placeholder peaks.
       // Haven't included width in the deps array as don't want to trigger on resize
-      const demoPeaks = Array(containerSize.width)
+      const demoPeaks = Array(width)
         .fill(0.5)
         .concat([1, -1]);
 
-      wavesurfer.current.drawer.drawPeaks(demoPeaks, containerSize.width, 0, containerSize.width);
+      wavesurfer.current.drawer.drawPeaks(demoPeaks, width, 0, width);
     });
 
     wavesurfer.current.on("waveform-ready", () => {
@@ -152,13 +155,13 @@ function WaveformView(props: WaveformProps) {
     });
 
     wavesurfer.current.on("finish", () => {
-      props.updateState(undefined, undefined, false, true);
+      updateState(undefined, undefined, false, true);
     });
 
     return () => {
       wavesurfer.current.unAll();
     };
-  }, [wavesurfer, props.siteAudio.url, props.seek, props.requestedTimestamp]);
+  }, [wavesurfer, siteAudio.url, seek, requestedTimestamp, updateState, width]);
 
   return (
     <div className={styles.WaveformContainer}>

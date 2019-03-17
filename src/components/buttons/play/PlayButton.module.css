@@ -41,7 +41,6 @@
 .left {
   height: 100%;
   float: left;
-  background-color: #fff;
   width: 36%;
   transition: all 0.25s ease;
   overflow: hidden;
@@ -51,7 +50,6 @@
   height: 100%;
   float: right;
   width: 36%;
-  background-color: #fff;
   transition: all 0.25s ease;
 }
 
@@ -90,3 +88,17 @@
 .playing .triangleB {
   transform: translate(0, 50%);
 }
+
+/* 
+.playing .left {
+  width: 50%;
+}
+.playing .right {
+  width: 50%;
+}
+.playing .triangleA {
+  transform: translate(0, -50%);
+}
+.playing .triangleB {
+  transform: translate(0, 50%);
+} */

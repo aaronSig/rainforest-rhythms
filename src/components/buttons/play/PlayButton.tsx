@@ -13,12 +13,13 @@ interface PlayButtonProps
   paused: boolean;
   loading: boolean;
   backgroundColor: string;
+  foregroundColor?: string;
   className?: string;
 }
 
 function PlayButton(props: PlayButtonProps) {
-  const [resizeListener, { width, height }] = useResizeAware();
-  const { paused, backgroundColor, loading, className, ...remainingProps } = props;
+  const [resizeListener, { width }] = useResizeAware();
+  const { paused, backgroundColor, loading, className, foregroundColor, ...remainingProps } = props;
   const playingClass = props.paused ? styles.playing : "";
   const loadingClass = props.loading ? styles.loading : "";
 
@@ -29,6 +30,10 @@ function PlayButton(props: PlayButtonProps) {
     borderRightWidth: width
   };
 
+  const barStyles = {
+    backgroundColor: foregroundColor || "#fff"
+  };
+
   return (
     <button
       type="button"
@@ -37,13 +42,15 @@ function PlayButton(props: PlayButtonProps) {
     >
       {props.loading && <AudioLoadingSpinner />}
 
-      <div className={styles.PlayButtonInner}>
-        {resizeListener}
-        <div className={styles.left} />
-        <div className={styles.right} />
-        <div className={styles.triangleA} style={triangleStyles} />
-        <div className={styles.triangleB} style={triangleStyles} />
-      </div>
+      {!props.loading && (
+        <div className={styles.PlayButtonInner}>
+          {resizeListener}
+          <div className={styles.left} style={barStyles} />
+          <div className={styles.right} style={barStyles} />
+          <div className={styles.triangleA} style={triangleStyles} />
+          <div className={styles.triangleB} style={triangleStyles} />
+        </div>
+      )}
     </button>
   );
 }

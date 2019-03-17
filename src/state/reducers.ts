@@ -13,6 +13,10 @@ import {
   SET_TAXA_BY_SITE,
   SET_TAXA_BY_SITE_BY_TIME,
   SET_TAXA_IMAGES,
+  SET_TAXON_AUDIO_FINISHED,
+  SET_TAXON_AUDIO_PLAYING,
+  SET_TAXON_AUDIO_READY,
+  SET_TAXON_AUDIO_SHOULD_PLAY,
   TOGGLE_SITE_AUDIO_PLAY_STATE,
   UPDATE_SITE_AUDIO_STATE
 } from "./actions";
@@ -77,7 +81,9 @@ export default function mainReducer(state: State = initialState, action: AnyActi
         {
           siteAudio: initialState.siteAudio,
           requestedTimestamp: null,
-          currentSiteAudioId: null
+          currentSiteAudioId: null,
+          focusedTaxonId: null,
+          taxonAudio: initialState.taxonAudio
         },
         action.item
       );
@@ -99,7 +105,7 @@ export default function mainReducer(state: State = initialState, action: AnyActi
       };
       Object.keys(items).forEach(i => {
         //@ts-ignore
-        if (items[i] === undefined) {
+        if (items[i] === undefined || items[i] === null) {
           //@ts-ignore
           delete items[i];
         }
@@ -199,6 +205,14 @@ export default function mainReducer(state: State = initialState, action: AnyActi
         }
       }
       return Object.assign({}, state, { focusedTaxonId, taxonAudio });
+    }
+
+    case SET_TAXON_AUDIO_READY:
+    case SET_TAXON_AUDIO_PLAYING:
+    case SET_TAXON_AUDIO_FINISHED:
+    case SET_TAXON_AUDIO_SHOULD_PLAY: {
+      const taxonAudio = Object.assign({}, state.taxonAudio, action.item);
+      return Object.assign({}, state, { taxonAudio });
     }
 
     default:

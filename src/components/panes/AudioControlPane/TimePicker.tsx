@@ -3,17 +3,18 @@ import React, { ReactElement } from "react";
 import { connect } from "react-redux";
 import { StreamInfo } from "../../../api/types";
 import moon from "../../../icons/moon.svg";
-import play from "../../../icons/play.svg";
 import sun from "../../../icons/sun.svg";
 import { toggleSiteAudioPlayState } from "../../../state/actions";
 import {
   getFocusedSiteId,
   getFocusedTimeSegment,
+  getSiteAudio,
   getSiteAudioByTimeSegment,
   getSunrise,
   getSunset
 } from "../../../state/selectors";
-import { allTimeSegments, State, TimeSegment } from "../../../state/types";
+import { allTimeSegments, SiteAudioState, State, TimeSegment } from "../../../state/types";
+import PlayButton from "../../buttons/play/PlayButton";
 import styles from "./TimePicker.module.css";
 
 interface TimePickerProps {
@@ -23,12 +24,13 @@ interface TimePickerProps {
   focusedTimeSegment: TimeSegment;
   timeSegments: TimeSegment[];
   siteAudioByTimeSegment: { [siteId: string]: { [time in TimeSegment]: StreamInfo[] } };
+  siteAudioInfo: SiteAudioState;
 
   toggleSiteAudioPlaying: () => void;
 }
 
 function TimePickerView(props: TimePickerProps) {
-  const { focusedSiteId, focusedTimeSegment, siteAudioByTimeSegment } = props;
+  const { focusedSiteId, focusedTimeSegment, siteAudioByTimeSegment, siteAudioInfo } = props;
 
   function urlFor(t: TimeSegment) {
     const parts = [t] as string[];
@@ -61,21 +63,24 @@ function TimePickerView(props: TimePickerProps) {
         }
 
         if (active) {
-          icon = <img src={play} alt="Play" />;
-
+          const loadingStyle = !siteAudioInfo.isReady ? styles.loading : undefined;
           return (
             <li key={t} className={active}>
-              <button type="button" onClick={togglePlay}>
-                <div className={styles.icon}>{icon}</div>
-                <span>{t}</span>
-                <div className={styles.indicator} />
-              </button>
+              <PlayButton
+                className={loadingStyle}
+                onClick={togglePlay}
+                paused={!siteAudioInfo.isPlaying}
+                loading={!siteAudioInfo.isReady}
+                backgroundColor={"#fff"}
+                foregroundColor={"#002f2a"}
+              />
+              <span>{t}</span>
             </li>
           );
         }
 
         return (
-          <li key={t} className={active}>
+          <li key={t}>
             <Link to={urlFor(t)}>
               <div className={styles.icon}>{icon}</div>
               <span>{t}</span>
@@ -95,6 +100,7 @@ const mapStateToProps = (state: State) => {
     sunset: getSunset(state),
     focusedTimeSegment: getFocusedTimeSegment(state),
     focusedSiteId: getFocusedSiteId(state),
+    siteAudioInfo: getSiteAudio(state),
     timeSegments: allTimeSegments,
     siteAudioByTimeSegment: getSiteAudioByTimeSegment(state)
   };

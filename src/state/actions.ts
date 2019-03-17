@@ -79,6 +79,41 @@ export function toggleSiteAudioPlayState() {
   };
 }
 
+// -- MARK Taxon Audio
+
+export const SET_TAXON_AUDIO_READY = "SET_TAXON_AUDIO_READY";
+export function setTaxonAudioReady(isReady: boolean) {
+  return {
+    type: SET_TAXON_AUDIO_READY,
+    item: { isReady }
+  };
+}
+
+export const SET_TAXON_AUDIO_PLAYING = "SET_TAXON_AUDIO_PLAYING";
+export function setTaxonAudioPlaying(isPlaying: boolean) {
+  return {
+    type: SET_TAXON_AUDIO_PLAYING,
+    item: { isPlaying }
+  };
+}
+
+export const SET_TAXON_AUDIO_FINISHED = "SET_TAXON_AUDIO_FINISHED";
+export function setTaxonAudioFinished(isFinished: boolean) {
+  return {
+    type: SET_TAXON_AUDIO_FINISHED,
+    item: { isFinished }
+  };
+}
+
+// will attempt to play, it it can't will play when ready
+export const SET_TAXON_AUDIO_SHOULD_PLAY = "SET_TAXON_AUDIO_SHOULD_PLAY";
+export function setTaxonAudioShouldPlay(shouldPlay: boolean) {
+  return {
+    type: SET_TAXON_AUDIO_SHOULD_PLAY,
+    item: { shouldPlay }
+  };
+}
+
 // -- MARK focusing
 
 export const ROUTE_DID_CHANGE = "ROUTE_DID_CHANGE";

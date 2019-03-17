@@ -14,6 +14,7 @@ import { State, TaxonWithMedia, TimeSegment } from "../../../state/types";
 import useInfoPaneData from "./infoHooks";
 import styles from "./InfoPane.module.css";
 import SingleImageView from "./SingleImageView/SingleImageView";
+import TaxonAudioPlayer from "./TaxonAudioPlayer";
 
 export interface InfoPaneProps {
   focusedSite: Site | null;
@@ -39,6 +40,7 @@ function InfoPaneView(props: InfoPaneProps) {
         focusedTaxonId={props.focusedTaxonId}
         focusTaxonId={props.focusTaxonId}
       />
+      <TaxonAudioPlayer />
     </section>
   );
 }

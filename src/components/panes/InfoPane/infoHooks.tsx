@@ -4,22 +4,23 @@ import { InfoPaneProps } from "./InfoPane";
 /***
  * Load in the data,
  */
+
 export default function useInfoPaneData(props: InfoPaneProps) {
+  const { focusedSite, focusedTimeSegment, taxa, loadTaxaForSite } = props;
+
   // Fetch the taxon data when the site and time changes
   useEffect(() => {
     // We've already got the data for this time
-    const hasLoaded = props.taxa.some(t => t.seenAtThisTime);
-
-    if (props.focusedSite && !hasLoaded) {
-      props.loadTaxaForSite(props.focusedSite.id, props.focusedTimeSegment);
+    const hasLoaded = taxa.some(t => t.seenAtThisTime);
+    if (focusedSite && !hasLoaded) {
+      loadTaxaForSite(focusedSite.id, focusedTimeSegment);
     }
-  }, [props.focusedSite, props.focusedTimeSegment, props.taxa, props.loadTaxaForSite]);
+  }, [focusedSite, focusedTimeSegment, taxa, loadTaxaForSite]);
 
   // Fetch the taxon data for the whole site
   useEffect(() => {
-    if (props.focusedSite && props.taxa.length === 0) {
-      props.loadTaxaForSite(props.focusedSite.id);
+    if (focusedSite && taxa.length === 0) {
+      loadTaxaForSite(focusedSite.id);
     }
-  }, [props.focusedSite, props.loadTaxaForSite, props.taxa]);
-
+  }, [focusedSite, loadTaxaForSite, taxa]);
 }

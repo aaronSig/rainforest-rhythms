@@ -7,10 +7,10 @@ export function Navigation() {
       <h2>Logo</h2>
       <ul>
         <li>
-          <a href="#">Find Out More</a>
+          <a href="#findoutmore">Find Out More</a>
         </li>
         <li>
-          <a href="#">Contact Us</a>
+          <a href="#contact">Contact Us</a>
         </li>
       </ul>
     </header>

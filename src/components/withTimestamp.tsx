@@ -7,10 +7,11 @@ import React, { useEffect, useState } from "react";
  */
 export default function withTimestamp(WrappedComponent: any) {
   return function Timestamp(props: any) {
+    const audioId = props.audioId;
     const [timestamp, setTimestamp] = useState(undefined as undefined | null | number);
     useEffect(() => {
       const url = new URL(window.location.href);
-      if (props.audioId && url.searchParams.has("t")) {
+      if (audioId && url.searchParams.has("t")) {
         const val = (url.searchParams.get("t") || "").trim() as any;
         if (!isNaN(val)) {
           setTimestamp(parseFloat(val));
@@ -18,7 +19,7 @@ export default function withTimestamp(WrappedComponent: any) {
         }
       }
       setTimestamp(null);
-    }, [window.location.href, props.audioId]);
+    }, [audioId]);
 
     if (timestamp === undefined) {
       // prevents a race condition with the timestamp appearing

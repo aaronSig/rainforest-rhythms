@@ -11,7 +11,7 @@ import {
   Taxon
 } from "./types";
 
-const host = "https://davidorme.pythonanywhere.com";
+// const host = "https://davidorme.pythonanywhere.com";
 const base = "/call/json/";
 
 async function get(
