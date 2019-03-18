@@ -23,7 +23,7 @@
 }
 
 .TimePicker li a {
-  color: #7cb8b2;
+  color: #abd3cf;
   text-decoration: none;
   text-align: center;
   display: flex;
@@ -33,7 +33,7 @@
 }
 
 .TimePicker li a:visited {
-  color: #7cb8b2;
+  color: #abd3cf;
 }
 
 .TimePicker li:hover {

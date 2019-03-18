@@ -107,6 +107,7 @@ function WaveformView(props: WaveformProps) {
     }
 
     wavesurfer.current.on("error", (err: any) => {
+      console.log("Error loading audio", siteAudio.url);
       console.error(err);
     });
 
@@ -116,8 +117,8 @@ function WaveformView(props: WaveformProps) {
     });
 
     wavesurfer.current.on("loading", (percent: number) => {
-      console.log("loading", percent);
-      updateState(percent);
+      // console.log("loading", percent);
+      // updateState(percent);
     });
 
     wavesurfer.current.on("play", () => {

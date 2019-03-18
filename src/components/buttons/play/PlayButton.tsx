@@ -10,6 +10,7 @@ interface PlayButtonProps
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
+  ariaLabel: string;
   paused: boolean;
   loading: boolean;
   backgroundColor: string;
@@ -19,7 +20,15 @@ interface PlayButtonProps
 
 function PlayButton(props: PlayButtonProps) {
   const [resizeListener, { width }] = useResizeAware();
-  const { paused, backgroundColor, loading, className, foregroundColor, ...remainingProps } = props;
+  const {
+    paused,
+    backgroundColor,
+    loading,
+    className,
+    foregroundColor,
+    ariaLabel,
+    ...remainingProps
+  } = props;
   const playingClass = props.paused ? styles.playing : "";
   const loadingClass = props.loading ? styles.loading : "";
 
@@ -37,6 +46,7 @@ function PlayButton(props: PlayButtonProps) {
   return (
     <button
       type="button"
+      aria-label={ariaLabel}
       className={`${className} ${styles.PlayButton} ${playingClass} ${loadingClass}`}
       {...remainingProps}
     >

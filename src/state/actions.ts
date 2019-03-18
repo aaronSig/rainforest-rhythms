@@ -110,7 +110,7 @@ export const SET_TAXON_AUDIO_SHOULD_PLAY = "SET_TAXON_AUDIO_SHOULD_PLAY";
 export function setTaxonAudioShouldPlay(shouldPlay: boolean) {
   return {
     type: SET_TAXON_AUDIO_SHOULD_PLAY,
-    item: { shouldPlay }
+    shouldPlay
   };
 }
 
@@ -135,8 +135,7 @@ export function setCurrentSiteAudio(
   return ax(SET_CURRENT_SITE_AUDIO_ID, {
     currentSiteAudioId,
     siteAudio: {
-      url: audioStreamUrl,
-      shouldPlay: false
+      url: audioStreamUrl
     },
     requestedTimestamp: timestamp || null
   });

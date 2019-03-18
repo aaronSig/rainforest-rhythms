@@ -74,7 +74,12 @@ export default function mainReducer(state: State = initialState, action: AnyActi
 
     case SET_CURRENT_SITE_AUDIO_ID:
     case ROUTE_DID_CHANGE: {
+      if (action.item.currentSiteAudioId === state.currentSiteAudioId) {
+        // no change, we're already loading this audio
+        return state;
+      }
       // stop any currently playing audio. Reset
+      const siteAudio = Object.assign({}, initialState.siteAudio, action.item.siteAudio);
       return Object.assign(
         {},
         state,
@@ -85,7 +90,8 @@ export default function mainReducer(state: State = initialState, action: AnyActi
           focusedTaxonId: null,
           taxonAudio: initialState.taxonAudio
         },
-        action.item
+        action.item,
+        { siteAudio }
       );
     }
 
@@ -122,12 +128,10 @@ export default function mainReducer(state: State = initialState, action: AnyActi
     }
 
     case TOGGLE_SITE_AUDIO_PLAY_STATE: {
-      const siteAudio = Object.assign({}, state.siteAudio, {
-        shouldPlay: !state.siteAudio.shouldPlay
-      });
-      return Object.assign({}, state, {
-        siteAudio
-      });
+      const shouldPlay = !state.siteAudio.shouldPlay;
+      const taxonAudio = Object.assign({}, state.taxonAudio, { shouldPlay: false });
+      const siteAudio = Object.assign({}, state.siteAudio, { shouldPlay });
+      return Object.assign({}, state, { taxonAudio, siteAudio });
     }
 
     case DID_START_LOADING: {
@@ -209,10 +213,16 @@ export default function mainReducer(state: State = initialState, action: AnyActi
 
     case SET_TAXON_AUDIO_READY:
     case SET_TAXON_AUDIO_PLAYING:
-    case SET_TAXON_AUDIO_FINISHED:
-    case SET_TAXON_AUDIO_SHOULD_PLAY: {
+    case SET_TAXON_AUDIO_FINISHED: {
       const taxonAudio = Object.assign({}, state.taxonAudio, action.item);
       return Object.assign({}, state, { taxonAudio });
+    }
+
+    case SET_TAXON_AUDIO_SHOULD_PLAY: {
+      const shouldPlay: boolean = action.shouldPlay;
+      const taxonAudio = Object.assign({}, state.taxonAudio, { shouldPlay });
+      const siteAudio = Object.assign({}, state.siteAudio, { shouldPlay: false });
+      return Object.assign({}, state, { taxonAudio, siteAudio });
     }
 
     default:

@@ -14,6 +14,7 @@ interface TaxonAudioButtonProps {
 
 function TaxonAudioButtonView(props: TaxonAudioButtonProps) {
   const audio = props.taxonAudioState;
+  const { taxon } = props;
 
   if (props.taxon.audio.length === 0) {
     return null;
@@ -25,8 +26,16 @@ function TaxonAudioButtonView(props: TaxonAudioButtonProps) {
 
   const loading = audio.shouldPlay && !audio.isPlaying;
 
+  let label = `Hear a clip of a ${taxon.common_name} ${taxon.audio[0].gbif_occurrence_behavior}`;
+  if (!audio.isReady) {
+    label = `Loading clip`;
+  } else if (audio.isPlaying) {
+    label = `Pause clip`;
+  }
+
   return (
     <PlayButton
+      ariaLabel={label}
       className={styles.TaxonAudioButton}
       onClick={toggle}
       loading={loading}

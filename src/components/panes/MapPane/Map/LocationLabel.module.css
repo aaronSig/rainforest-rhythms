@@ -1,0 +1,22 @@
+.LocationLabel {
+  position: absolute;
+  bottom: 1.6rem;
+  right: 1.6rem;
+
+  z-index: 400;
+
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  height: 1.6rem;
+}
+
+.LocationLabel span {
+  font-size: 14px;
+  font-family: "Montserrat", sans-serif;
+  color: #fff;
+  font-weight: bold;
+  margin-right: 0.5rem;
+}

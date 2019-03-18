@@ -123,10 +123,15 @@ export function loadTaxaForSite(siteId: string, time: TimeSegment | null = null)
  * Loads a specifc piece of audio, setting the site, time and optionally the timestamp
  */
 export function loadAudioInfo(audioId: string, timestamp?: number) {
+  // const audioId = "33631"; //14:00 6
   return async (dispatch: any, getState: () => State) => {
     try {
       dispatch(didStartLoading());
       let state = getState();
+      // The site and time before we've made any API calls
+      const initialFocusedSite = getFocusedSiteId(state);
+      const initialFocusedTime = getFocusedTimeSegment(state);
+
       let audioById = getSiteAudioByAudioId(state);
       let streamInfo = audioById.get(audioId);
       if (!audioById.has(audioId)) {
@@ -143,18 +148,18 @@ export function loadAudioInfo(audioId: string, timestamp?: number) {
       // but can be a source of bugs. If the app is used correctly
       // then the site and time should never end up out of sync with the audio
       // const focusedSiteId = getFocusedSiteId(state);
-      // if (focusedSiteId !== streamInfo!.site) {
-      //   dispatch(focusSiteId(streamInfo!.site));
-      // }
       // const focusedTimeSegment = getFocusedTimeSegment(state);
       // const streamTimeSegment = getTimeSegment(streamInfo!.time);
-      // if (focusedTimeSegment !== streamTimeSegment) {
-      //   dispatch(focusTimeSegment(streamTimeSegment));
+      // if (focusedSiteId !== streamInfo!.site || focusedTimeSegment !== streamTimeSegment) {
+      //   navigate(
+      //     `/${streamTimeSegment}/${streamInfo!.site}/${audioId}${
+      //       timestamp !== null ? `?t=${timestamp}` : ""
+      //     }`,
+      //     {
+      //       replace: true
+      //     }
+      //   );
       // }
-
-      const preStreamLoadedState = getState();
-      const focusedSite = getFocusedSiteId(preStreamLoadedState);
-      const focusedTime = getFocusedTimeSegment(preStreamLoadedState);
 
       const focusedAudio = getCurrentSiteAudioId(state);
       if (focusedAudio !== streamInfo!.audio) {
@@ -164,7 +169,8 @@ export function loadAudioInfo(audioId: string, timestamp?: number) {
         const postStreamLoadedState = getState();
         const latestFocusedSite = getFocusedSiteId(postStreamLoadedState);
         const latestFocusedTime = getFocusedTimeSegment(postStreamLoadedState);
-        if (focusedSite === latestFocusedSite && focusedTime === latestFocusedTime) {
+
+        if (initialFocusedSite === latestFocusedSite && initialFocusedTime === latestFocusedTime) {
           dispatch(setCurrentSiteAudio(streamInfo!.audio, stream!, timestamp));
           console.log("Stream set to ", stream);
         }

@@ -62,25 +62,12 @@ export default function useIndexHook(props: IndexProps) {
     }
   }, [siteId, timeSegment, availableAudio, searchForAudio]);
 
-  // Add the audio ID to the url once it's loaded (if there isn't one already)
-  useEffect(() => {
-    if (siteId && timeSegment && !audioId) {
-      if (availableAudio.length > 0) {
-        const audio = availableAudio[0];
-        navigate(`/${timeSegment}/${siteId}/${audio.audio}`, {
-          replace: true
-        });
-      }
-    }
-  }, [siteId, timeSegment, audioId, availableAudio]);
-
   // This is triggered when the audioId is added to the url
   // watch for audio to load. This fetches the audio stream URL
   useEffect(() => {
     if (audioId) {
       if (audioId !== currentSiteAudioId) {
         // only load on change
-        console.log("useIndexHook, Loading audio", audioId, timestamp);
         loadAudio(audioId, timestamp);
       } else {
         // just the timestamp has changed. We don't support seeking by manually changing the URL as

@@ -64,9 +64,16 @@ function TimePickerView(props: TimePickerProps) {
 
         if (active) {
           const loadingStyle = !siteAudioInfo.isReady ? styles.loading : undefined;
+          let label = `Play`;
+          if (!siteAudioInfo.isReady) {
+            label = `Loading`;
+          } else if (siteAudioInfo.isPlaying) {
+            label = `Pause`;
+          }
           return (
             <li key={t} className={active}>
               <PlayButton
+                ariaLabel={label}
                 className={loadingStyle}
                 onClick={togglePlay}
                 paused={!siteAudioInfo.isPlaying}

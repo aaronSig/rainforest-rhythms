@@ -21,7 +21,7 @@
 }
 
 .ForestInfo p {
-  color: #75bba8;
+  color: #abd3cf;
   margin-top: 0px;
   font-size: 0.8rem;
 }
@@ -31,6 +31,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-left: 1rem;
 }
 
 .Time h2 {
