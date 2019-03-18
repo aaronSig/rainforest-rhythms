@@ -19,6 +19,7 @@ import {
   getCurrentSiteAudioId,
   getFocusedSiteId,
   getFocusedTimeSegment,
+  getSiteAudio,
   getSiteAudioByAudioId,
   getSiteAudioByTimeSegment,
   getTaxaAudioById,
@@ -169,8 +170,13 @@ export function loadAudioInfo(audioId: string, timestamp?: number) {
         const postStreamLoadedState = getState();
         const latestFocusedSite = getFocusedSiteId(postStreamLoadedState);
         const latestFocusedTime = getFocusedTimeSegment(postStreamLoadedState);
+        const latestSiteAudio = getSiteAudio(postStreamLoadedState);
 
-        if (initialFocusedSite === latestFocusedSite && initialFocusedTime === latestFocusedTime) {
+        if (
+          initialFocusedSite === latestFocusedSite &&
+          initialFocusedTime === latestFocusedTime &&
+          latestSiteAudio.url !== stream
+        ) {
           dispatch(setCurrentSiteAudio(streamInfo!.audio, stream!, timestamp));
           console.log("Stream set to ", stream);
         }

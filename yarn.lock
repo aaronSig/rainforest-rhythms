@@ -7998,10 +7998,6 @@ react-redux@^6.0.1:
     prop-types "^15.7.2"
     react-is "^16.8.2"
 
-react-resize-aware@3.0.0-beta.3:
-  version "3.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/react-resize-aware/-/react-resize-aware-3.0.0-beta.3.tgz#35aeddebfc4595f01323d0f473884099c4633f1b"
-
 react-scripts@3.0.0-next.b0cbf2ca:
   version "3.0.0-next.b0cbf2ca"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-3.0.0-next.b0cbf2ca.tgz#f3b97b1e1594403fd0eae28785b1b725e29e9918"

@@ -1,11 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import useResizeAware from "react-resize-aware";
 import { updateSiteAudioState } from "../../../state/actions";
 import { didSeek } from "../../../state/data-actions";
 import { getRequestedTimestamp, getSiteAudio } from "../../../state/selectors";
 import { SiteAudioState, State } from "../../../state/types";
+import useResizeAware from "../../../utils/useResizeAware";
 import styles from "./Waveform.module.css";
+
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+const allowPlaybackBeforeLoad = !isSafari;
 
 interface WaveformProps {
   siteAudio: SiteAudioState;
@@ -21,30 +24,41 @@ interface WaveformProps {
 
 const settings = () => {
   const WaveSurfer = (window as any).WaveSurfer as any;
-  return {
-    backend: "MediaElement",
-    waveColor: "#020001",
-    progressColor: "#FF450A",
-    responsive: true,
-    barWidth: 4,
-    height: 272,
-    barGap: 2,
-    normalize: true,
-    plugins: [
-      WaveSurfer.cursor.create({
-        showTime: true,
-        opacity: 1,
-        customShowTimeStyle: {
-          "background-color": "#7cb8b2",
-          color: "#fff",
-          padding: "4px",
-          transform: "translateY(-100px)",
-          "font-family": `"Lato", sans-serif`,
-          "font-size": "13px"
-        }
-      })
-    ]
-  };
+
+  // Safari has tighter restrictions on when a media element can be created
+  // that can play. As we have to load the StreamInfo after the click it's unlikely
+  // the media element will be made soon enough after the click to work.
+  const backend: any = {};
+  if (allowPlaybackBeforeLoad) {
+    backend["backend"] = "MediaElement";
+  }
+
+  return Object.assign(
+    {
+      waveColor: "#020001",
+      progressColor: "#FF450A",
+      responsive: true,
+      barWidth: 4,
+      height: 272,
+      barGap: 2,
+      normalize: true,
+      plugins: [
+        WaveSurfer.cursor.create({
+          showTime: true,
+          opacity: 1,
+          customShowTimeStyle: {
+            "background-color": "#7cb8b2",
+            color: "#fff",
+            padding: "4px",
+            transform: "translateY(-100px)",
+            "font-family": `"Lato", sans-serif`,
+            "font-size": "13px"
+          }
+        })
+      ]
+    },
+    backend
+  );
 };
 
 /***
@@ -142,17 +156,20 @@ function WaveformView(props: WaveformProps) {
         wavesurfer.current.seekTo(requestedTimestamp);
       }
 
-      // Draw placeholder peaks.
-      // Haven't included width in the deps array as don't want to trigger on resize
-      const demoPeaks = Array(width)
-        .fill(0.5)
-        .concat([1, -1]);
+      if (allowPlaybackBeforeLoad) {
+        // Draw placeholder peaks.
+        // Haven't included width in the deps array as don't want to trigger on resize
+        const demoPeaks = Array(width! * 2)
+          .fill(0.5)
+          .concat([1, -1]);
 
-      wavesurfer.current.drawer.drawPeaks(demoPeaks, width, 0, width);
+        wavesurfer.current.drawer.drawPeaks(demoPeaks, width! * 2, 0, width! * 2);
+      }
     });
 
     wavesurfer.current.on("waveform-ready", () => {
       console.log("waveform-ready");
+      updateState(undefined, true);
     });
 
     wavesurfer.current.on("finish", () => {

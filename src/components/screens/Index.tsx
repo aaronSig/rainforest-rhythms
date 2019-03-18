@@ -12,6 +12,7 @@ import {
 import { State, TimeSegment } from "../../state/types";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import AudioControlPane from "../panes/AudioControlPane/AudioControlPane";
+import InfoPane from "../panes/InfoPane/InfoPane";
 import MapPane from "../panes/MapPane/MapPane";
 import withTimestamp from "../withTimestamp";
 import styles from "./Index.module.css";
@@ -52,7 +53,7 @@ export function IndexView(props: IndexProps) {
       <LoadingIndicator />
       <div className="row">
         <MapPane />
-        {/* <InfoPane /> */}
+        <InfoPane />
       </div>
       <AudioControlPane />
     </div>

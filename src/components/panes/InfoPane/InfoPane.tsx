@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import useResizeAware from "react-resize-aware";
 import { Site } from "../../../api/types";
 import { focusTaxonId } from "../../../state/actions";
 import { loadTaxaForSite } from "../../../state/data-actions";
@@ -11,6 +10,7 @@ import {
   getTaxaWithMedia
 } from "../../../state/selectors";
 import { State, TaxonWithMedia, TimeSegment } from "../../../state/types";
+import useResizeAware from "../../../utils/useResizeAware";
 import useInfoPaneData from "./infoHooks";
 import styles from "./InfoPane.module.css";
 import SingleImageView from "./SingleImageView/SingleImageView";
@@ -30,12 +30,12 @@ export interface InfoPaneProps {
 function InfoPaneView(props: InfoPaneProps) {
   useInfoPaneData(props);
   const [resizeListener, sizes] = useResizeAware();
-
+  const height = sizes.height || 0;
   return (
     <section className={styles.InfoPaneContainer}>
       {resizeListener}
       <SingleImageView
-        height={sizes.height}
+        height={height}
         taxa={props.taxa}
         focusedTaxonId={props.focusedTaxonId}
         focusTaxonId={props.focusTaxonId}

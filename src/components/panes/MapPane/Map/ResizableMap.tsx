@@ -1,33 +1,36 @@
 import React, { ReactElement } from "react";
-import useResizeAware from "react-resize-aware";
+import useResizeAware from "../../../../utils/useResizeAware";
 
 interface ResizableMapProps {
-  children: ReactElement;
+  children?: ReactElement;
 }
 
 /***
  * A map that'll safely resize to it's parents bounds
  */
 export default function ResizableMap(props: ResizableMapProps) {
-  const [resizeComponent, containerSize] = useResizeAware();
+  const [resizeComponent, { width, height }] = useResizeAware();
   const element: ReactElement = props.children as any;
   const mapStyle = Object.assign(
     {},
     {
-      width: containerSize.width,
-      height: containerSize.height,
+      width: width || 0,
+      height: height || 0,
       position: "absolute"
     },
     element.props.style
   );
+
+  // Key is needed to reload the map when the viewport changes
+  const key = width || 0 + (height || 0);
   const clone = React.cloneElement(element, {
-    key: containerSize.width + containerSize.height,
+    key,
     style: mapStyle
   });
   return (
     <>
-      {resizeComponent}
       {clone}
+      {resizeComponent}
     </>
   );
 }

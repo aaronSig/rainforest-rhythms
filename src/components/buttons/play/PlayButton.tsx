@@ -1,5 +1,5 @@
 import React from "react";
-import useResizeAware from "react-resize-aware";
+import useResizeAware from "../../../utils/useResizeAware";
 import AudioLoadingSpinner from "./AudioLoadingSpinner";
 import styles from "./PlayButton.module.css";
 
@@ -19,7 +19,8 @@ interface PlayButtonProps
 }
 
 function PlayButton(props: PlayButtonProps) {
-  const [resizeListener, { width }] = useResizeAware();
+  const [resizeListener, sizes] = useResizeAware();
+  const width = sizes.width || 0;
   const {
     paused,
     backgroundColor,

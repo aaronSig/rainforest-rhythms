@@ -41,7 +41,7 @@ function MapView(props: MapViewProps) {
               maxZoom={12}
               zoomControl={false}
               preferCanvas={true}
-              attributionControl={false}
+              // attributionControl={false}
             >
               <TileLayer
                 url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"

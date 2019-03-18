@@ -1,14 +1,17 @@
 // from http://tobiasahlin.com/spinkit/
 
 import React from "react";
-import useResizeAware from "react-resize-aware";
+import useResizeAware from "../../../utils/useResizeAware";
 import styles from "./AudioLoadingSpinner.module.css";
 
 export default function AudioLoadingSpinner() {
   const [resizeListener, { width, height }] = useResizeAware();
 
   return (
-    <div className={styles.AudioLoadingSpinner} style={{ minWidth: width, minHeight: height }}>
+    <div
+      className={styles.AudioLoadingSpinner}
+      style={{ minWidth: width || 0, minHeight: height || 0 }}
+    >
       {resizeListener}
       <div className={`${styles.circle1} ${styles.circle}`} />
       <div className={`${styles.circle2} ${styles.circle}`} />
