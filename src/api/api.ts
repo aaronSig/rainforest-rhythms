@@ -48,6 +48,15 @@ export default {
     },
     async get(siteId: number): Promise<SiteInfo> {
       return idsToString(await get("get_site", [siteId]));
+    },
+
+    /***
+     * Gets an image for this site at this time
+     */
+    async imageUrl(time: number, siteId: string): Promise<string | null> {
+      const image = await get(["get_site_image", siteId, time], null);
+      console.log("habitatPhoto imageUrl image", image, time, siteId);
+      return image;
     }
   },
 

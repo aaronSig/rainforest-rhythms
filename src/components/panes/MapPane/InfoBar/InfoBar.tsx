@@ -1,6 +1,7 @@
 import { format, isValid, parse } from "date-fns";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import api from "../../../../api/api";
 import { Site, StreamInfo } from "../../../../api/types";
 import {
   getCurrentSiteAudio,
@@ -25,15 +26,26 @@ function InfoBarView(props: InfoBarProps) {
   const streamInfo = props.currentSiteAudio || ({} as StreamInfo);
   const date = parse(`${streamInfo.date}T${streamInfo.time}`);
   const valid = isValid(date);
+  const habitatPhoto = useHabitatPhoto(props.focusedTimeSegment, props.focusedSite);
+
   return (
     <div className={styles.InfoBar}>
       <HabitatIcon habitat={site.habitat} />
       <div className={styles.ForestInfo}>
-        <h2>{site.habitat}</h2>
-        <p>
-          {site.short_desc ||
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
-        </p>
+        {!habitatPhoto && <h2>{site.habitat}</h2>}
+        {habitatPhoto && (
+          <div className={styles.tooltip}>
+            <h2>{site.habitat}</h2>
+            <img
+              src={habitatPhoto}
+              alt={`The ${props.focusedSite && props.focusedSite.habitat} habitat at ${
+                props.focusedTimeSegment
+              } o'clock`}
+            />
+            <link rel="preload" as="image" href={habitatPhoto} />
+          </div>
+        )}
+        <p>{site.short_desc || `Information about ${site.habitat} here`}</p>
       </div>
       <div className={styles.Time}>
         <div className={styles.tooltip}>
@@ -65,3 +77,23 @@ const InfoBar = connect(
 )(InfoBarView);
 
 export default InfoBar;
+
+// Fetches the photo for the habitiat at this time
+function useHabitatPhoto(timeSegment: TimeSegment, site: Site | null) {
+  const [photoUrl, setPhotoUrl] = useState(null as string | null);
+  useEffect(() => {
+    if (!site) {
+      return;
+    }
+    const decimalTime = parseInt(timeSegment);
+    api.sites.imageUrl(decimalTime, site.id).then(url => {
+      setPhotoUrl(url);
+    });
+
+    return () => {
+      setPhotoUrl(null);
+    };
+  }, [site, timeSegment]);
+
+  return photoUrl;
+}

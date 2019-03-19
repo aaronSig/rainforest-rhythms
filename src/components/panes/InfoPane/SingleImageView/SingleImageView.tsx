@@ -8,6 +8,7 @@ import styles from "./SingleImageView.module.css";
 
 interface SingleImageViewProps {
   height: number;
+  isLoading: boolean;
   taxa: TaxonWithMedia[];
   focusedTaxonId: string | null;
   focusTaxonId: (focusedTaxonId: string) => void;
@@ -60,7 +61,7 @@ function SingleImageView(props: SingleImageViewProps) {
   return (
     <>
       <ImageCarousel index={slide} imageUrls={imageUrls} height={height} />
-      {taxon && <Attribution taxon={taxon} />}
+      {taxon && <Attribution isLoading={props.isLoading} taxon={taxon} />}
       {taxa.length > 0 && slide > -1 && (
         <div className={styles.Controls}>
           <TaxonAudioButton taxon={taxa[slide]} />

@@ -7,6 +7,7 @@ import ccIcon from "./cc.svg";
 
 interface AttributionProps {
   taxon: TaxonWithMedia;
+  isLoading: boolean;
 }
 
 export default function Attribution(props: AttributionProps) {
@@ -18,7 +19,7 @@ export default function Attribution(props: AttributionProps) {
   const audioRightsHolder = useRightsHolder(audio ? audio.gbif_occurrence_key : null);
 
   return (
-    <div className={styles.Attribution}>
+    <div className={`${styles.Attribution} ${props.isLoading ? styles.loading : ""}`}>
       <div className={styles.CCIcon}>
         <img src={ccIcon} alt="Creative Commons Icon" />
       </div>

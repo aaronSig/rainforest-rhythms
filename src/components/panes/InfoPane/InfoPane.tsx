@@ -7,7 +7,8 @@ import {
   getFocusedSite,
   getFocusedTaxonId,
   getFocusedTimeSegment,
-  getTaxaWithMedia
+  getTaxaWithMedia,
+  isLoading
 } from "../../../state/selectors";
 import { State, TaxonWithMedia, TimeSegment } from "../../../state/types";
 import useResizeAware from "../../../utils/useResizeAware";
@@ -20,6 +21,7 @@ export interface InfoPaneProps {
   focusedSite: Site | null;
   focusedTimeSegment: TimeSegment;
   focusedTaxonId: string | null;
+  isLoading: boolean;
 
   taxa: TaxonWithMedia[];
 
@@ -35,6 +37,7 @@ function InfoPaneView(props: InfoPaneProps) {
     <section className={styles.InfoPaneContainer}>
       {resizeListener}
       <SingleImageView
+        isLoading={props.isLoading}
         height={height}
         taxa={props.taxa}
         focusedTaxonId={props.focusedTaxonId}
@@ -50,7 +53,8 @@ const mapStateToProps = (state: State) => {
     focusedSite: getFocusedSite(state),
     focusedTimeSegment: getFocusedTimeSegment(state),
     taxa: getTaxaWithMedia(state),
-    focusedTaxonId: getFocusedTaxonId(state)
+    focusedTaxonId: getFocusedTaxonId(state),
+    isLoading: isLoading(state)
   };
 };
 
