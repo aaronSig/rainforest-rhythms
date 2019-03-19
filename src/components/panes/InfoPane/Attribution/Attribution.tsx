@@ -61,14 +61,18 @@ function useRightsHolder(occuranceKey: string | null) {
 
     const apiUrl = occuranceKey.replace(
       "https://www.gbif.org/occurrence/",
-      "http://api.gbif.org/v1/occurrence/"
+      "https://api.gbif.org/v1/occurrence/"
     );
-    fetch(apiUrl).then(async result => {
-      if (result.ok) {
-        const occurance = await result.json();
-        setRightsholder(occurance.rightsHolder);
-      }
-    });
+    fetch(apiUrl)
+      .then(async result => {
+        if (result.ok) {
+          const occurance = await result.json();
+          setRightsholder(occurance.rightsHolder);
+        }
+      })
+      .catch(e => {
+        console.error("Problem fetching attribution info", e);
+      });
   }, [occuranceKey, setRightsholder]);
 
   return rightsHolder;

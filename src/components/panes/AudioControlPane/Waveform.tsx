@@ -1,9 +1,15 @@
+import { navigate } from "@reach/router";
 import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { updateSiteAudioState } from "../../../state/actions";
 import { didSeek, siteAudioTimestampDidUpdate } from "../../../state/data-actions";
-import { getRequestedTimestamp, getSiteAudio } from "../../../state/selectors";
-import { SiteAudioState, State } from "../../../state/types";
+import {
+  getFocusedSiteId,
+  getFocusedTimeSegment,
+  getRequestedTimestamp,
+  getSiteAudio
+} from "../../../state/selectors";
+import { allTimeSegments, SiteAudioState, State, TimeSegment } from "../../../state/types";
 import useResizeAware from "../../../utils/useResizeAware";
 import styles from "./Waveform.module.css";
 
@@ -12,6 +18,8 @@ const allowPlaybackBeforeLoad = !isSafari;
 
 interface WaveformProps {
   siteAudio: SiteAudioState;
+  focusedTimeSegment: TimeSegment;
+  focusedSiteId: string | null;
   requestedTimestamp: number | null;
   updateState: (
     loadedPercent?: number,
@@ -66,7 +74,16 @@ const settings = () => {
  * Handles laying out the waveform and contolling the main audio
  */
 function WaveformView(props: WaveformProps) {
-  const { siteAudio, requestedTimestamp, updateState, seek, timestampDidUpdate } = props;
+  const {
+    siteAudio,
+    requestedTimestamp,
+    updateState,
+    seek,
+    timestampDidUpdate,
+    focusedTimeSegment,
+    focusedSiteId
+  } = props;
+  const isFinishedPlaying = siteAudio.isFinished;
 
   const wavesurfer = useRef(null as any);
   const waveformRef = useRef(null as any);
@@ -114,6 +131,22 @@ function WaveformView(props: WaveformProps) {
       wavesurfer.current.pause();
     }
   }, [wavesurfer, siteAudio.shouldPlay, siteAudio.isReady]);
+
+  // Navigate to the next audio when audio finishes
+  useEffect(() => {
+    if (!isFinishedPlaying) {
+      return;
+    }
+    const index = allTimeSegments.findIndex(t => t === focusedTimeSegment);
+    const afterIndex = (allTimeSegments.length + index + 1) % allTimeSegments.length;
+    const nextTimeSegment = allTimeSegments[afterIndex];
+
+    let url = `/${nextTimeSegment}`;
+    if (focusedSiteId) {
+      url = `/${nextTimeSegment}/${focusedSiteId}`;
+    }
+    navigate(url);
+  }, [focusedSiteId, focusedTimeSegment, isFinishedPlaying]);
 
   // Watch the events
   useEffect(() => {
@@ -195,7 +228,9 @@ function WaveformView(props: WaveformProps) {
 const mapStateToProps = (state: State) => {
   return {
     siteAudio: getSiteAudio(state),
-    requestedTimestamp: getRequestedTimestamp(state)
+    requestedTimestamp: getRequestedTimestamp(state),
+    focusedTimeSegment: getFocusedTimeSegment(state),
+    focusedSiteId: getFocusedSiteId(state)
   };
 };
 

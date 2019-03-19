@@ -4,7 +4,7 @@
   background-color: #002f2a;
 }
 
-.Timeline button {
+.Timeline a {
   width: calc(100% / 26 - 1px);
   border: none;
   margin: 0;
@@ -23,11 +23,11 @@
   justify-content: center;
 }
 
-.Timeline button:hover {
+.Timeline a:hover {
   opacity: 0.8;
 }
 
-.Timeline button img {
+.Timeline a img {
   height: 1.5rem;
 }
 

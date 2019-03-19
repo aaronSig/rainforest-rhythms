@@ -121,10 +121,6 @@ export default function mainReducer(state: State = initialState, action: AnyActi
         }
       });
 
-      if (items.isFinished) {
-        items.shouldPlay = false;
-      }
-
       const siteAudio = Object.assign({}, state.siteAudio, items);
       return Object.assign({}, state, {
         siteAudio

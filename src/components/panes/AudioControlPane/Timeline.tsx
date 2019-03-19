@@ -1,28 +1,46 @@
+import { Link } from "@reach/router";
 import React from "react";
 import { connect } from "react-redux";
 import arrowDark from "../../../icons/arrow-dark.svg";
-import { State } from "../../../state/types";
+import { getFocusedSiteId, getFocusedTimeSegment } from "../../../state/selectors";
+import { allTimeSegments, State, TimeSegment } from "../../../state/types";
 import styles from "./Timeline.module.css";
 import Waveform from "./Waveform";
 
-interface TimelineProps {}
+interface TimelineProps {
+  focusedSiteId: string | null;
+  focusedTimesegment: TimeSegment;
+}
 
 function TimelineView(props: TimelineProps) {
+  const index = allTimeSegments.findIndex(t => t === props.focusedTimesegment);
+
+  const beforeIndex = (allTimeSegments.length + index - 1) % allTimeSegments.length;
+  const afterIndex = (allTimeSegments.length + index + 1) % allTimeSegments.length;
+
+  const previouseTimeSegment = allTimeSegments[beforeIndex];
+  const nextTimeSegment = allTimeSegments[afterIndex];
+
+  const focusedSiteId = props.focusedSiteId || "";
+
   return (
     <div className={styles.Timeline}>
-      <button type="button">
+      <Link to={`/${previouseTimeSegment}/${focusedSiteId}`} aria-label="Previous audio">
         <img className={styles.left} src={arrowDark} alt="Left Arrow" />
-      </button>
+      </Link>
       <Waveform />
-      <button type="button">
+      <Link to={`/${nextTimeSegment}/${focusedSiteId}`} aria-label="Next audio">
         <img src={arrowDark} alt="Right Arrow" />
-      </button>
+      </Link>
     </div>
   );
 }
 
 const mapStateToProps = (state: State) => {
-  return {};
+  return {
+    focusedSiteId: getFocusedSiteId(state),
+    focusedTimesegment: getFocusedTimeSegment(state)
+  };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
