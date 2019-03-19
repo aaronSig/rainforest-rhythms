@@ -1,10 +1,11 @@
 import React from "react";
+import logo from "./logo.svg";
 import styles from "./Navigation.module.css";
 
 export function Navigation() {
   return (
     <header role="navigation" className={styles.nav}>
-      <h2>Logo</h2>
+      <img src={logo} alt="SAFE logo" />
       <ul>
         <li>
           <a href="#findoutmore">Find Out More</a>

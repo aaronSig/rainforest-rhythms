@@ -1,3 +1,4 @@
+import { addMinutes, format, isValid, parse } from "date-fns";
 import { Set } from "immutable";
 import { createSelector } from "reselect";
 import { StreamInfo, Taxon } from "../api/types";
@@ -23,6 +24,7 @@ export const getCurrentSiteAudioId = (state: State) => state.currentSiteAudioId;
 export const getSiteAudio = (state: State) => state.siteAudio;
 export const getRequestedTimestamp = (state: State) => state.requestedTimestamp;
 export const getTaxonAudio = (state: State) => state.taxonAudio;
+export const getSiteAudioTimestamp = (state: State) => state.siteAudio.timestamp;
 
 // An array of all the sites
 export const getAllSites = createSelector(
@@ -179,5 +181,26 @@ export const getFocusedSite = createSelector(
       return null;
     }
     return sitesById.get(focusedSiteId)!;
+  }
+);
+
+/***
+ * Get the time for the clock on the page
+ *
+ * This is a combo of the audio time + timestamp / timesegment
+ */
+export const getTimeOfDay = createSelector(
+  [getFocusedTimeSegment, getSiteAudio, getCurrentSiteAudio, getSiteAudioTimestamp],
+  (timesegment, siteAudio, streamInfo, timestampMinutes) => {
+    if (!streamInfo || siteAudio.url === null) {
+      return timesegment;
+    }
+    const date = parse(`${streamInfo.date}T${streamInfo.time}`);
+    const valid = isValid(date);
+    if (!valid) {
+      return timesegment;
+    }
+    const additional = addMinutes(date, timestampMinutes);
+    return format(additional, "HH:mm");
   }
 );

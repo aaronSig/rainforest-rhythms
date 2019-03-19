@@ -85,6 +85,7 @@ export interface SiteAudioState {
   isPlaying: boolean;
   isFinished: boolean;
   shouldPlay: boolean;
+  timestamp: number;
 }
 
 export interface TaxonAudioState {

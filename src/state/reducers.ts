@@ -18,7 +18,8 @@ import {
   SET_TAXON_AUDIO_READY,
   SET_TAXON_AUDIO_SHOULD_PLAY,
   TOGGLE_SITE_AUDIO_PLAY_STATE,
-  UPDATE_SITE_AUDIO_STATE
+  UPDATE_SITE_AUDIO_STATE,
+  UPDATE_SITE_AUDIO_TIMETAMP
 } from "./actions";
 import { SiteAudioState, State, TaxonAudio, TaxonImage } from "./types";
 
@@ -56,7 +57,8 @@ const initialState: State = {
     isReady: false,
     isPlaying: false,
     isFinished: false,
-    shouldPlay: false
+    shouldPlay: false,
+    timestamp: 0 // will update each minute
   },
   taxonAudio: {
     audioInfo: null,
@@ -122,6 +124,13 @@ export default function mainReducer(state: State = initialState, action: AnyActi
       }
 
       const siteAudio = Object.assign({}, state.siteAudio, items);
+      return Object.assign({}, state, {
+        siteAudio
+      });
+    }
+
+    case UPDATE_SITE_AUDIO_TIMETAMP: {
+      const siteAudio = Object.assign({}, state.siteAudio, { timestamp: action.timestamp });
       return Object.assign({}, state, {
         siteAudio
       });

@@ -5,7 +5,8 @@ import { Site, StreamInfo } from "../../../../api/types";
 import {
   getCurrentSiteAudio,
   getFocusedSite,
-  getFocusedTimeSegment
+  getFocusedTimeSegment,
+  getTimeOfDay
 } from "../../../../state/selectors";
 import { State, TimeSegment } from "../../../../state/types";
 import DayIndicator from "./DayIndicator";
@@ -15,6 +16,7 @@ interface InfoBarProps {
   focusedTimeSegment: TimeSegment;
   focusedSite: Site | null;
   currentSiteAudio: StreamInfo | null;
+  time: string;
 }
 
 function InfoBarView(props: InfoBarProps) {
@@ -22,7 +24,6 @@ function InfoBarView(props: InfoBarProps) {
   const streamInfo = props.currentSiteAudio || ({} as StreamInfo);
   const date = parse(`${streamInfo.date}T${streamInfo.time}`);
   const valid = isValid(date);
-  const time = valid ? format(date, "HH:mm") : props.focusedTimeSegment;
   return (
     <div className={styles.InfoBar}>
       <div className={styles.ForestInfo}>
@@ -34,7 +35,7 @@ function InfoBarView(props: InfoBarProps) {
       </div>
       <div className={styles.Time}>
         <div className={styles.tooltip}>
-          <h2>{time}</h2>
+          <h2>{props.time}</h2>
           {valid && <span>Recorded {format(date, "Do MMM YYYY")}</span>}
         </div>
         <DayIndicator timeSegment={props.focusedTimeSegment} />
@@ -47,7 +48,8 @@ const mapStateToProps = (state: State) => {
   return {
     focusedTimeSegment: getFocusedTimeSegment(state),
     focusedSite: getFocusedSite(state),
-    currentSiteAudio: getCurrentSiteAudio(state)
+    currentSiteAudio: getCurrentSiteAudio(state),
+    time: getTimeOfDay(state)
   };
 };
 

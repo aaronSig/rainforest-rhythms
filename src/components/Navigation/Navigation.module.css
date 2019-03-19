@@ -3,20 +3,21 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  height: 3rem;
+  height: 5rem;
   padding: 0px 2rem 0px 2rem;
   color: #fff;
   flex-shrink: 0;
 }
 
-.nav h2 {
-  flex-grow: 1;
-  text-align: left;
+.nav img {
+  width: 5rem;
 }
 
 .nav ul {
   display: flex;
   list-style: none;
+  flex-grow: 1;
+  justify-content: flex-end;
 }
 
 .nav li {
@@ -32,6 +33,5 @@
 }
 
 .nav li a:hover {
-  transition: color 200ms ease-in;
-  color: #70c38c;
+  text-decoration: underline;
 }

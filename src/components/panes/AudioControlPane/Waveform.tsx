@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { updateSiteAudioState } from "../../../state/actions";
-import { didSeek } from "../../../state/data-actions";
+import { didSeek, siteAudioTimestampDidUpdate } from "../../../state/data-actions";
 import { getRequestedTimestamp, getSiteAudio } from "../../../state/selectors";
 import { SiteAudioState, State } from "../../../state/types";
 import useResizeAware from "../../../utils/useResizeAware";
@@ -20,6 +20,7 @@ interface WaveformProps {
     isFinished?: boolean
   ) => void;
   seek: (percent: string) => void;
+  timestampDidUpdate: (timestamp: number) => void;
 }
 
 const settings = () => {
@@ -65,7 +66,7 @@ const settings = () => {
  * Handles laying out the waveform and contolling the main audio
  */
 function WaveformView(props: WaveformProps) {
-  const { siteAudio, requestedTimestamp, updateState, seek } = props;
+  const { siteAudio, requestedTimestamp, updateState, seek, timestampDidUpdate } = props;
 
   const wavesurfer = useRef(null as any);
   const waveformRef = useRef(null as any);
@@ -125,9 +126,11 @@ function WaveformView(props: WaveformProps) {
       console.error(err);
     });
 
+    // timestamp is in seconds
     wavesurfer.current.on("audioprocess", (timestamp: any) => {
       // this is quite chatty
-      // updateState(timestamp, wavesurfer.current.getDuration());
+
+      timestampDidUpdate(timestamp);
     });
 
     wavesurfer.current.on("loading", (percent: number) => {
@@ -152,7 +155,6 @@ function WaveformView(props: WaveformProps) {
       updateState(undefined, true);
       if (requestedTimestamp) {
         console.log("SEEKING TO TIMESTAMP", requestedTimestamp);
-
         wavesurfer.current.seekTo(requestedTimestamp);
       }
 
@@ -179,7 +181,7 @@ function WaveformView(props: WaveformProps) {
     return () => {
       wavesurfer.current.unAll();
     };
-  }, [wavesurfer, siteAudio.url, seek, requestedTimestamp, updateState, width]);
+  }, [wavesurfer, siteAudio.url, seek, requestedTimestamp, updateState, width, timestampDidUpdate]);
 
   return (
     <div className={styles.WaveformContainer}>
@@ -209,6 +211,9 @@ const mapDispatchToProps = (dispatch: any, props: WaveformProps) => {
     },
     seek: (percent: string) => {
       dispatch(didSeek(percent));
+    },
+    timestampDidUpdate: (timestamp: number) => {
+      dispatch(siteAudioTimestampDidUpdate(timestamp));
     }
   };
 };

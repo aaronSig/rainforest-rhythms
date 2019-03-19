@@ -11,8 +11,11 @@ import {
   Taxon
 } from "./types";
 
+const isServer = false;
+const prefix = isServer ? "/api" : "";
+
 // const host = "https://davidorme.pythonanywhere.com";
-const base = "/call/json/";
+const base = `${prefix}/call/json/`;
 
 async function get(
   path: string | (string | number | undefined)[],
@@ -113,10 +116,10 @@ export default {
 
   geoJson: {
     async streams(): Promise<GeoJSON.GeoJsonObject> {
-      return await get("/rainforest_rhythms/static/geojson/stream_data.geojson", null, "");
+      return await get(`${prefix}/rainforest_rhythms/static/geojson/stream_data.geojson`, null, "");
     },
     async habitats(): Promise<GeoJSON.GeoJsonObject> {
-      return await get("/static/geojson/map_data.geojson", null, "");
+      return await get(`${prefix}/static/geojson/map_data.geojson`, null, "");
     }
   }
 };

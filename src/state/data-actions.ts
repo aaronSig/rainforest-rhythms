@@ -13,7 +13,8 @@ import {
   setTaxaById,
   setTaxaBySite,
   setTaxaBySiteByTime,
-  setTaxaImages
+  setTaxaImages,
+  updateSiteAudioTimestamp
 } from "./actions";
 import {
   getCurrentSiteAudioId,
@@ -22,6 +23,7 @@ import {
   getSiteAudio,
   getSiteAudioByAudioId,
   getSiteAudioByTimeSegment,
+  getSiteAudioTimestamp,
   getTaxaAudioById,
   getTaxaImageById
 } from "./selectors";
@@ -235,5 +237,20 @@ export function didSeek(progressPercent: string) {
     });
 
     console.log("User did seek to position", progressPercent);
+  };
+}
+
+/***
+ * The app is too chatty when we fire for every timestamp update
+ * here we throttle to change only when the minute has changed
+ */
+export function siteAudioTimestampDidUpdate(newTimestamp: number) {
+  return async (dispatch: any, getState: () => State) => {
+    const state = getState();
+    const oldTimestamp = getSiteAudioTimestamp(state);
+    const minutes = Math.round(newTimestamp / 60);
+    if (oldTimestamp !== minutes) {
+      dispatch(updateSiteAudioTimestamp(minutes));
+    }
   };
 }

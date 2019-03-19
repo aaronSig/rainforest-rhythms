@@ -157,6 +157,14 @@ export function updateSiteAudioState(
   };
 }
 
+export const UPDATE_SITE_AUDIO_TIMETAMP = "UPDATE_SITE_AUDIO_TIMETAMP";
+export function updateSiteAudioTimestamp(timestamp: number) {
+  return {
+    type: UPDATE_SITE_AUDIO_TIMETAMP,
+    timestamp
+  };
+}
+
 // -- MARK loading
 
 // call when something has started loading
