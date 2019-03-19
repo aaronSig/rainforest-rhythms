@@ -81,7 +81,9 @@ export default function mainReducer(state: State = initialState, action: AnyActi
         return state;
       }
       // stop any currently playing audio. Reset
-      const siteAudio = Object.assign({}, initialState.siteAudio, action.item.siteAudio);
+      const siteAudio = Object.assign({}, initialState.siteAudio, action.item.siteAudio, {
+        shouldPlay: state.siteAudio.shouldPlay
+      });
       return Object.assign(
         {},
         state,

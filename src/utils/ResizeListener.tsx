@@ -14,7 +14,8 @@ const style = {
   width: "100%",
   overflow: "hidden",
   pointerEvents: "none",
-  zIndex: -1
+  zIndex: -1,
+  border: "none"
 } as any;
 
 interface ListenerProps {

@@ -10,6 +10,7 @@ import {
 } from "../../../../state/selectors";
 import { State, TimeSegment } from "../../../../state/types";
 import DayIndicator from "./DayIndicator";
+import HabitatIcon from "./HabitatIcon/HabitatIcon";
 import styles from "./InfoBar.module.css";
 
 interface InfoBarProps {
@@ -26,6 +27,7 @@ function InfoBarView(props: InfoBarProps) {
   const valid = isValid(date);
   return (
     <div className={styles.InfoBar}>
+      <HabitatIcon habitat={site.habitat} />
       <div className={styles.ForestInfo}>
         <h2>{site.habitat}</h2>
         <p>

@@ -11,7 +11,7 @@ import {
   Taxon
 } from "./types";
 
-const isServer = false;
+const isServer = !window.location.href.includes("://localhost");
 const prefix = isServer ? "/api" : "";
 
 // const host = "https://davidorme.pythonanywhere.com";

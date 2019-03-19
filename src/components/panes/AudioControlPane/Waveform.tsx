@@ -128,8 +128,8 @@ function WaveformView(props: WaveformProps) {
 
     // timestamp is in seconds
     wavesurfer.current.on("audioprocess", (timestamp: any) => {
-      // this is quite chatty
-
+      // this is quite chatty so function being called will debounce and only
+      // update the state each minute
       timestampDidUpdate(timestamp);
     });
 

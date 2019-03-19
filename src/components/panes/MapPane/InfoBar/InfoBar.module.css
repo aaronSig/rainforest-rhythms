@@ -10,6 +10,12 @@
   padding: 0px 1rem;
 }
 
+.InfoBar > img {
+  max-height: 4rem;
+  width: 5rem;
+  margin-right: 1rem;
+}
+
 .ForestInfo {
   flex-grow: 1;
 }

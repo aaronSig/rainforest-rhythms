@@ -1,7 +1,7 @@
 import { GeoJsonObject } from "geojson";
 import "leaflet/dist/leaflet.css";
 import React from "react";
-import { GeoJSON, Map, TileLayer } from "react-leaflet";
+import { GeoJSON, ImageOverlay, Map, TileLayer } from "react-leaflet";
 import { connect } from "react-redux";
 import { Site } from "../../../../api/types";
 import {
@@ -16,6 +16,7 @@ import { styleForest, styleStreams } from "./featureStyles";
 import LocationLabel from "./LocationLabel";
 import styles from "./MapView.module.css";
 import { MiniMap } from "./MiniMap";
+import overlayPixel from "./overlayPixel.png";
 import ResizableMap from "./ResizableMap";
 import SiteMarker from "./SiteMarker";
 
@@ -48,9 +49,14 @@ function MapView(props: MapViewProps) {
                 attribution='Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 ext="jpg"
               />
-              {/* <ScaleControl position="bottomleft" /> */}
+
+              {/* The tiles look better a slightly darker shade. This image is semi transparent to add a colour and keep the features under it */}
+              <ImageOverlay bounds={[[-90, 180], [90, -180]]} url={overlayPixel} />
+
               <GeoJSON data={habitatData} cursor={"auto"} style={styleForest} />
               {streamData && <GeoJSON data={streamData} style={styleStreams} />}
+
+              {/* <ScaleControl position="bottomleft" /> */}
 
               {sites.map(s => (
                 //@ts-ignore

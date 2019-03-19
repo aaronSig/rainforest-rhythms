@@ -17,8 +17,8 @@ export default function useResizeAware(): [ReactNode, Sizes] {
     let height = null as null | number;
 
     if (ref.current) {
-      width = (ref.current!.offsetWidth as number) - 4; // unsure where these 4 px are coming from
-      height = (ref.current!.offsetHeight as number) - 4;
+      width = ref.current!.offsetWidth as number;
+      height = ref.current!.offsetHeight as number;
     }
 
     setSizes({

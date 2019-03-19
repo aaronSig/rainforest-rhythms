@@ -1,0 +1,63 @@
+.Attribution {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: rgba(0, 47, 42, 0.42);
+  opacity: 1;
+  box-shadow: 1px 1px 23px 1px rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.1rem 1rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+
+  transition: all 0.3s ease-out;
+}
+
+.Attribution:hover {
+  opacity: 1;
+  background-color: rgba(0, 47, 42, 0.62);
+}
+
+.CCIcon img {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 2rem;
+}
+
+.Column {
+  display: flex;
+  flex-direction: column;
+}
+
+.Credit {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+  border-top: 1px dashed #fff;
+  padding: 0.3rem 0px 0.3rem 1rem;
+}
+
+.Column :first-child {
+  border-top: none;
+}
+
+.Credit img {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-left: 0.5rem;
+}
+
+.Column:first-child {
+  border-bottom: 1px dashed #fff;
+}
+
+.Credit:hover {
+  text-decoration: underline;
+}
