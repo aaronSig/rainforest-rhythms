@@ -12,7 +12,7 @@ interface HabitatPhotoProps {
 export default function HabitatPhoto(props: HabitatPhotoProps) {
   const habitatPhoto = useHabitatPhoto(props.focusedTimeSegment, props.focusedSite);
   return (
-    <div className={styles.HabitatPhoto}>
+    <div className={`${styles.HabitatPhoto}`}>
       {habitatPhoto && habitatPhoto.length > 0 && (
         <img
           src={habitatPhoto}
