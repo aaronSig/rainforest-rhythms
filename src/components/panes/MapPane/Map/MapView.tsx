@@ -7,12 +7,14 @@ import { Site } from "../../../../api/types";
 import {
   getAllSites,
   getFocusedSite,
+  getFocusedTimeSegment,
   getHabitatData,
   getStreamData
 } from "../../../../state/selectors";
-import { State } from "../../../../state/types";
+import { State, TimeSegment } from "../../../../state/types";
 import useBounds from "../../../../utils/useBounds";
 import { styleForest, styleStreams } from "./featureStyles";
+import HabitatPhoto from "./HabitatPhoto";
 import LocationLabel from "./LocationLabel";
 import styles from "./MapView.module.css";
 import { MiniMap } from "./MiniMap";
@@ -25,6 +27,7 @@ interface MapViewProps {
   streamData: GeoJsonObject | null;
   sites: Site[];
   focusedSite: Site | null;
+  focusedTimeSegment: TimeSegment;
 }
 
 function MapView(props: MapViewProps) {
@@ -67,6 +70,10 @@ function MapView(props: MapViewProps) {
 
           <MiniMap focusedBounds={annotatedForestBounds} />
           <LocationLabel focusedSite={props.focusedSite} />
+          <HabitatPhoto
+            focusedTimeSegment={props.focusedTimeSegment}
+            focusedSite={props.focusedSite}
+          />
         </>
       )}
     </div>
@@ -78,7 +85,8 @@ const mapStateToProps = (state: State) => {
     habitatData: getHabitatData(state),
     streamData: getStreamData(state),
     sites: getAllSites(state),
-    focusedSite: getFocusedSite(state)
+    focusedSite: getFocusedSite(state),
+    focusedTimeSegment: getFocusedTimeSegment(state)
   };
 };
 

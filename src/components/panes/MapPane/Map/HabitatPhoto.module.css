@@ -1,0 +1,19 @@
+.HabitatPhoto {
+  position: absolute;
+  bottom: 1.6rem;
+  right: 1.6rem;
+
+  z-index: 401;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+
+  max-height: 6rem;
+  width: 8rem;
+}
+
+.HabitatPhoto img {
+  max-height: 100%;
+  width: 100%;
+}

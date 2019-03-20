@@ -38,8 +38,6 @@ function LocationView(props: LocationViewProps) {
 
   return (
     <div className={styles.LocationLabel}>
-      <span>{dms}</span>
-
       <svg className={styles.icon} viewBox="0 0 239.18134 346.66666">
         <defs id="defs6">
           <clipPath id="clipPath18" clipPathUnits="userSpaceOnUse">
@@ -62,6 +60,8 @@ function LocationView(props: LocationViewProps) {
           </g>
         </g>
       </svg>
+
+      <span>{dms}</span>
     </div>
   );
 }
