@@ -10,6 +10,7 @@ import {
   getSitesById
 } from "../../state/selectors";
 import { State, TimeSegment } from "../../state/types";
+import Lightbox from "../Lightbox/Lighbox";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import AudioControlPane from "../panes/AudioControlPane/AudioControlPane";
 import InfoPane from "../panes/InfoPane/InfoPane";
@@ -56,6 +57,7 @@ export function IndexView(props: IndexProps) {
         <InfoPane />
       </div>
       <AudioControlPane />
+      <Lightbox />
     </div>
   );
 }

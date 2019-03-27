@@ -11,6 +11,7 @@ import {
 } from "../../../../state/selectors";
 import { SiteAudioState, State, TimeSegment } from "../../../../state/types";
 import PlayButton from "../../../buttons/play/PlayButton";
+import HabitatIcon from "../InfoBar/HabitatIcon/HabitatIcon";
 import ReactMarker from "./ReactMarker";
 import styles from "./SiteMarker.module.css";
 
@@ -99,14 +100,17 @@ function SiteMarkerView(props: SiteMarkerProps) {
               />
             </g>
           </svg>
+          {isFocused && (
+            <PlayButton
+              className={styles.PlayButton}
+              loading={loading}
+              paused={paused}
+              backgroundColor={"#E23E1D"}
+              ariaLabel={label}
+            />
+          )}
 
-          <PlayButton
-            className={styles.PlayButton}
-            loading={loading}
-            paused={paused}
-            backgroundColor={"#E23E1D"}
-            ariaLabel={label}
-          />
+          {!isFocused && <HabitatIcon className={styles.HabitatIcon} habitat={site.habitat} />}
         </div>
       </div>
     </ReactMarker>

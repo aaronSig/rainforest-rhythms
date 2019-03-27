@@ -2,8 +2,6 @@ import "leaflet/dist/leaflet.css";
 import React from "react";
 import { connect } from "react-redux";
 import { State } from "../../../state/types";
-import { Navigation } from "../../Navigation/Navigation";
-import InfoBar from "./InfoBar/InfoBar";
 import MapView from "./Map/MapView";
 import styles from "./MapPane.module.css";
 
@@ -39,9 +37,7 @@ export class MapPaneView extends React.Component<any, MapPaneState> {
     return (
       <section className={styles.MapPane}>
         <div className={styles.Inner}>
-          <Navigation />
           <MapView />
-          <InfoBar />
         </div>
       </section>
     );

@@ -12,17 +12,25 @@ interface SingleImageViewProps {
   taxa: TaxonWithMedia[];
   focusedTaxonId: string | null;
   focusTaxonId: (focusedTaxonId: string) => void;
+  zoomImage: (url: string, alt: string) => void;
 }
 
 function SingleImageView(props: SingleImageViewProps) {
-  const { height, taxa, focusedTaxonId, focusTaxonId } = props;
+  const { height, taxa, focusedTaxonId, focusTaxonId, zoomImage } = props;
 
   const slide = useMemo(() => {
     return taxa.findIndex(t => t.id === focusedTaxonId);
   }, [focusedTaxonId, taxa]);
 
   const imageUrls = useMemo(() => {
-    return taxa.map(t => t.image.gbif_media_identifier);
+    return taxa
+      .map(t => {
+        if (t.image.media_identifier) {
+          return `${process.env.PUBLIC_URL}/taxon-imagery/${t.image.media_identifier}`;
+        }
+        return t.image.gbif_media_identifier;
+      })
+      .filter(i => i !== undefined) as string[];
   }, [taxa]);
 
   const setSlide = useCallback(
@@ -56,11 +64,26 @@ function SingleImageView(props: SingleImageViewProps) {
     }
   }, [setSlide, slide, taxa]);
 
+  const zoomImageOnClick = useCallback(
+    (imageUrl: string) => {
+      const alt = focusedTaxonId
+        ? taxa.find(t => t.id === focusedTaxonId)!.common_name
+        : "Taxon Image";
+      zoomImage(imageUrl, alt);
+    },
+    [focusedTaxonId, taxa, zoomImage]
+  );
+
   const taxon = taxa[slide];
 
   return (
     <>
-      <ImageCarousel index={slide} imageUrls={imageUrls} height={height} />
+      <ImageCarousel
+        index={slide}
+        imageUrls={imageUrls}
+        height={height}
+        onClick={zoomImageOnClick}
+      />
       {taxon && <Attribution isLoading={props.isLoading} taxon={taxon} />}
       {taxa.length > 0 && slide > -1 && (
         <div className={styles.Controls}>

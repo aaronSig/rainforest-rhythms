@@ -27,7 +27,7 @@ export function styleForest(feature?: Feature<GeometryObject, any>): PathOptions
         stroke: false,
         fill: true,
         fillColor: "#04463e",
-        fillOpacity: 0.4
+        fillOpacity: 0.3
       };
     default:
       return {
@@ -40,7 +40,7 @@ export function styleForest(feature?: Feature<GeometryObject, any>): PathOptions
 export function styleStreams(feature?: Feature<GeometryObject, any>): PathOptions {
   return {
     stroke: true,
-    opacity: 0.3,
+    opacity: 0.5,
     weight: 2,
     color: "#39c0ff"
   };

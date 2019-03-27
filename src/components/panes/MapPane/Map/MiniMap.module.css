@@ -1,7 +1,7 @@
 .MiniMap {
   position: absolute;
   top: 1.6rem;
-  left: 1.6rem;
+  right: 1.6rem;
 
   z-index: 400;
 }

@@ -11,7 +11,10 @@ import {
 import { State, TimeSegment } from "../../../../state/types";
 import DayIndicator from "./DayIndicator";
 import HabitatIcon from "./HabitatIcon/HabitatIcon";
+import HabitatPhoto from "./HabitatPhoto";
 import styles from "./InfoBar.module.css";
+import LocationLabel from "./LocationLabel";
+import MapAttribution from "./MapAttribution";
 
 interface InfoBarProps {
   focusedTimeSegment: TimeSegment;
@@ -28,10 +31,12 @@ function InfoBarView(props: InfoBarProps) {
 
   return (
     <div className={styles.InfoBar}>
-      <HabitatIcon habitat={site.habitat} />
+      <HabitatPhoto />
       <div className={styles.ForestInfo}>
-        <h2>{site.habitat}</h2>
-        <p>{site.short_desc || `Information about ${site.habitat} here`}</p>
+        <h2>
+          <HabitatIcon habitat={site.habitat} /> {site.habitat}
+        </h2>
+        <LocationLabel focusedSite={props.focusedSite} />
       </div>
       <div className={styles.Time}>
         <div className={styles.tooltip}>
@@ -40,6 +45,7 @@ function InfoBarView(props: InfoBarProps) {
         </div>
         <DayIndicator timeSegment={props.focusedTimeSegment} />
       </div>
+      <MapAttribution />
     </div>
   );
 }

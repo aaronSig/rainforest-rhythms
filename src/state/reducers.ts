@@ -5,6 +5,7 @@ import {
   DID_FINISH_LOADING,
   DID_START_LOADING,
   FOCUS_TAXON_ID,
+  LIGHTBOX_PHOTO,
   ROUTE_DID_CHANGE,
   SET_CURRENT_SITE_AUDIO_ID,
   SET_PRELOADED_DATA,
@@ -51,6 +52,8 @@ const initialState: State = {
   focusedTaxonId: null,
   currentSiteAudioId: null,
   requestedTimestamp: null,
+  lightboxImageUrl: undefined,
+  lightboxImageAlt: undefined,
   siteAudio: {
     url: null,
     loadedPercent: 0,
@@ -72,6 +75,7 @@ const initialState: State = {
 export default function mainReducer(state: State = initialState, action: AnyAction) {
   switch (action.type) {
     case SET_PRELOADED_DATA:
+    case LIGHTBOX_PHOTO:
       return Object.assign({}, state, action.item);
 
     case SET_CURRENT_SITE_AUDIO_ID:

@@ -4,9 +4,11 @@ import { Site, StreamInfo, Taxon } from "../api/types";
 export interface TaxonImage {
   taxon_id: string;
   // The url to the page in GBIF for this occurrence
-  gbif_occurrence_key: string;
+  gbif_occurrence_key?: string;
   // The URL for the image
-  gbif_media_identifier: string;
+  gbif_media_identifier?: string;
+  // stock image url
+  media_identifier?: string;
 }
 
 export interface TaxonAudio {
@@ -72,6 +74,10 @@ export interface State {
   // the currently loaded / playing audio for the site
   currentSiteAudioId: string | null; //  ++done
   requestedTimestamp: number | null; // this is the timestamp the user requested in the url
+
+  // If present show a lightbox with the supplied image
+  lightboxImageUrl: string | undefined;
+  lightboxImageAlt: string | undefined;
 
   // Audio states
   siteAudio: SiteAudioState;

@@ -13,9 +13,9 @@ import {
 } from "../../../../state/selectors";
 import { State, TimeSegment } from "../../../../state/types";
 import useBounds from "../../../../utils/useBounds";
+import { Navigation } from "../../../Navigation/Navigation";
+import InfoBar from "../InfoBar/InfoBar";
 import { styleForest, styleStreams } from "./featureStyles";
-import HabitatPhoto from "./HabitatPhoto";
-import LocationLabel from "./LocationLabel";
 import styles from "./MapView.module.css";
 import { MiniMap } from "./MiniMap";
 import overlayPixel from "./overlayPixel.png";
@@ -45,7 +45,7 @@ function MapView(props: MapViewProps) {
               maxZoom={12}
               zoomControl={false}
               preferCanvas={true}
-              // attributionControl={false}
+              attributionControl={false}
             >
               <TileLayer
                 url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
@@ -65,15 +65,12 @@ function MapView(props: MapViewProps) {
                 //@ts-ignore
                 <SiteMarker key={s.id} site={s} />
               ))}
+              <InfoBar />
             </Map>
           </ResizableMap>
+          <Navigation />
 
           <MiniMap focusedBounds={annotatedForestBounds} />
-          <LocationLabel focusedSite={props.focusedSite} />
-          <HabitatPhoto
-            focusedTimeSegment={props.focusedTimeSegment}
-            focusedSite={props.focusedSite}
-          />
         </>
       )}
     </div>

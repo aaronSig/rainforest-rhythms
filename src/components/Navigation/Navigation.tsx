@@ -10,9 +10,6 @@ export function Navigation() {
         <li>
           <a href="#findoutmore">Find Out More</a>
         </li>
-        <li>
-          <a href="#contact">Contact Us</a>
-        </li>
       </ul>
     </header>
   );

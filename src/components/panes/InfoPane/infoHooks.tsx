@@ -4,10 +4,8 @@ import { InfoPaneProps } from "./InfoPane";
 /***
  * Load in the data,
  */
-
 export default function useInfoPaneData(props: InfoPaneProps) {
   const { focusedSite, focusedTimeSegment, taxa, loadTaxaForSite } = props;
-
   // Fetch the taxon data when the site and time changes
   useEffect(() => {
     // We've already got the data for this time
@@ -16,7 +14,6 @@ export default function useInfoPaneData(props: InfoPaneProps) {
       loadTaxaForSite(focusedSite.id, focusedTimeSegment);
     }
   }, [focusedSite, focusedTimeSegment, taxa, loadTaxaForSite]);
-
   // Fetch the taxon data for the whole site
   useEffect(() => {
     if (focusedSite && taxa.length === 0) {

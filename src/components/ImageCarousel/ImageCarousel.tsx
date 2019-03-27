@@ -7,6 +7,7 @@ interface ImageCarouselProps {
   index: number;
   height: number;
   imageUrls: string[];
+  onClick: (imageUrl: string) => void;
 }
 
 function ImageCarousel(props: ImageCarouselProps) {
@@ -17,7 +18,7 @@ function ImageCarousel(props: ImageCarouselProps) {
 }
 
 function ImageCarouselInner(props: ImageCarouselProps) {
-  const { index, height, imageUrls } = props;
+  const { index, height, imageUrls, onClick } = props;
 
   const previousIndex = usePrevious(index, -1);
   const movingToNext = previousIndex < index;
@@ -36,10 +37,14 @@ function ImageCarouselInner(props: ImageCarouselProps) {
   return (
     <div className={styles.carousel}>
       {transitions.map(({ item, props, key }) => {
+        const onImageClick = () => {
+          onClick(item);
+        };
         return (
           <animated.div
             key={key}
             className={styles.page}
+            onClick={onImageClick}
             style={{ ...props, backgroundImage: `url("${item}")`, height }}
           />
         );

@@ -7,20 +7,44 @@ import riparianReserve from "./riparian-reserve.svg";
 
 interface HabitatIconProps {
   habitat?: string | null;
+  className?: string;
 }
 
 export default function HabitatIcon(props: HabitatIconProps) {
   switch (props.habitat) {
     case "Cleared Forest":
-      return <img src={clearedForest} alt="Cleared Forest" />;
+      return (
+        <img
+          className={props.className}
+          src={clearedForest}
+          alt="Cleared Forest"
+          title="Cleared Forest"
+        />
+      );
     case "Logged Fragment":
-      return <img src={loggedFragment} alt="Logged Fragment" />;
+      return (
+        <img
+          className={props.className}
+          src={loggedFragment}
+          alt="Logged Fragment"
+          title="Logged Fragment"
+        />
+      );
     case "Old Growth":
-      return <img src={oldGrowth} alt="Old Growth" />;
+      return (
+        <img className={props.className} src={oldGrowth} alt="Old Growth" title="Old Growth" />
+      );
     case "Oil Palm":
-      return <img src={palmOil} alt="Oil Palm" />;
+      return <img className={props.className} src={palmOil} alt="Oil Palm" title="Oil Palm" />;
     case "Riparian Reserve":
-      return <img src={riparianReserve} alt="Riparian Reserve" />;
+      return (
+        <img
+          className={props.className}
+          src={riparianReserve}
+          alt="Riparian Reserve"
+          title="Riparian Reserve"
+        />
+      );
     default:
       return null;
   }

@@ -165,6 +165,11 @@ export function updateSiteAudioTimestamp(timestamp: number) {
   };
 }
 
+export const LIGHTBOX_PHOTO = "LIGHTBOX_PHOTO";
+export function setLightboxPhoto(imageUrl: string | undefined, altText: string | undefined) {
+  return ax(LIGHTBOX_PHOTO, { lightboxImageUrl: imageUrl, lightboxImageAlt: altText });
+}
+
 // -- MARK loading
 
 // call when something has started loading

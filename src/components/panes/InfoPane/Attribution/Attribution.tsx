@@ -18,21 +18,27 @@ export default function Attribution(props: AttributionProps) {
   const imageRightsHolder = useRightsHolder(image.gbif_occurrence_key);
   const audioRightsHolder = useRightsHolder(audio ? audio.gbif_occurrence_key : null);
 
+  if (!imageRightsHolder && !audio) {
+    return null;
+  }
+
   return (
     <div className={`${styles.Attribution} ${props.isLoading ? styles.loading : ""}`}>
       <div className={styles.CCIcon}>
         <img src={ccIcon} alt="Creative Commons Icon" />
       </div>
       <div className={styles.Column}>
-        <a
-          className={styles.Credit}
-          href={image.gbif_occurrence_key}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {imageRightsHolder}
-          <img src={cameraIcon} alt="Camera icon" />
-        </a>
+        {imageRightsHolder && (
+          <a
+            className={styles.Credit}
+            href={image.gbif_occurrence_key}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {imageRightsHolder}
+            <img src={cameraIcon} alt="Camera icon" />
+          </a>
+        )}
         {audio && (
           <a
             className={styles.Credit}
@@ -50,7 +56,7 @@ export default function Attribution(props: AttributionProps) {
 }
 
 // Fetches the rights holder info from gbif
-function useRightsHolder(occuranceKey: string | null) {
+function useRightsHolder(occuranceKey?: string | null) {
   const [rightsHolder, setRightsholder] = useState(null);
 
   useEffect(() => {

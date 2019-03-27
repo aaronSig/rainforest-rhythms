@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { updateSiteAudioState } from "../../../state/actions";
 import { didSeek, siteAudioTimestampDidUpdate } from "../../../state/data-actions";
 import {
+  getCurrentSiteAudioId,
   getFocusedSiteId,
   getFocusedTimeSegment,
   getRequestedTimestamp,
@@ -18,6 +19,7 @@ const allowPlaybackBeforeLoad = !isSafari;
 
 interface WaveformProps {
   siteAudio: SiteAudioState;
+  currentSiteAudioId: string | null;
   focusedTimeSegment: TimeSegment;
   focusedSiteId: string | null;
   requestedTimestamp: number | null;
@@ -81,7 +83,8 @@ function WaveformView(props: WaveformProps) {
     seek,
     timestampDidUpdate,
     focusedTimeSegment,
-    focusedSiteId
+    focusedSiteId,
+    currentSiteAudioId
   } = props;
   const isFinishedPlaying = siteAudio.isFinished;
 
@@ -116,21 +119,33 @@ function WaveformView(props: WaveformProps) {
     (window as any).surfer = wavesurfer.current;
     wavesurfer.current.load(siteAudio.url);
     return () => {
-      wavesurfer.current.empty();
+      updateState(undefined, false);
+      try {
+        // this can throw when audio hasn't loaded correctly
+        wavesurfer.current.empty();
+      } catch {}
     };
-  }, [wavesurfer, siteAudio.url]);
+  }, [wavesurfer, siteAudio.url, updateState]);
+
+  // Ensure the app is not in a ready state when there's no audio loaded
+  // (prevents the old audio hanging over)
+  useEffect(() => {
+    if (currentSiteAudioId === null) {
+      updateState(undefined, false);
+    }
+  }, [currentSiteAudioId, updateState]);
 
   // play/pause
   useEffect(() => {
     if (!wavesurfer.current) {
       return;
     }
-    if (siteAudio.shouldPlay && siteAudio.isReady) {
+    if (siteAudio.shouldPlay && siteAudio.isReady && currentSiteAudioId !== null) {
       wavesurfer.current.play();
     } else {
       wavesurfer.current.pause();
     }
-  }, [wavesurfer, siteAudio.shouldPlay, siteAudio.isReady]);
+  }, [wavesurfer, siteAudio.shouldPlay, siteAudio.isReady, currentSiteAudioId]);
 
   // Navigate to the next audio when audio finishes
   useEffect(() => {
@@ -172,11 +187,11 @@ function WaveformView(props: WaveformProps) {
     });
 
     wavesurfer.current.on("play", () => {
-      updateState(undefined, true, true);
+      updateState(undefined, undefined, true);
     });
 
     wavesurfer.current.on("pause", () => {
-      updateState(undefined, true, false);
+      updateState(undefined, undefined, false);
     });
 
     wavesurfer.current.on("seek", (progress: string) => {
@@ -204,7 +219,7 @@ function WaveformView(props: WaveformProps) {
 
     wavesurfer.current.on("waveform-ready", () => {
       console.log("waveform-ready");
-      updateState(undefined, true);
+      // updateState(undefined, true);
     });
 
     wavesurfer.current.on("finish", () => {
@@ -230,7 +245,8 @@ const mapStateToProps = (state: State) => {
     siteAudio: getSiteAudio(state),
     requestedTimestamp: getRequestedTimestamp(state),
     focusedTimeSegment: getFocusedTimeSegment(state),
-    focusedSiteId: getFocusedSiteId(state)
+    focusedSiteId: getFocusedSiteId(state),
+    currentSiteAudioId: getCurrentSiteAudioId(state)
   };
 };
 

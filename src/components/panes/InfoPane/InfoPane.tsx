@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Site } from "../../../api/types";
-import { focusTaxonId } from "../../../state/actions";
+import { focusTaxonId, setLightboxPhoto } from "../../../state/actions";
 import { loadTaxaForSite } from "../../../state/data-actions";
 import {
   getFocusedSite,
@@ -27,6 +27,7 @@ export interface InfoPaneProps {
 
   focusTaxonId: (focusedTaxonId: string) => void;
   loadTaxaForSite: (siteId: string, time?: TimeSegment | null) => void;
+  zoomImage: (url: string, alt: string) => void;
 }
 
 function InfoPaneView(props: InfoPaneProps) {
@@ -42,6 +43,7 @@ function InfoPaneView(props: InfoPaneProps) {
         taxa={props.taxa}
         focusedTaxonId={props.focusedTaxonId}
         focusTaxonId={props.focusTaxonId}
+        zoomImage={props.zoomImage}
       />
       <TaxonAudioPlayer />
     </section>
@@ -65,6 +67,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     focusTaxonId: (focusedTaxonId: string) => {
       dispatch(focusTaxonId(focusedTaxonId));
+    },
+    zoomImage: (url: string, alt: string) => {
+      dispatch(setLightboxPhoto(url, alt));
     }
   };
 };
