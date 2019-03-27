@@ -15,7 +15,7 @@
   max-width: calc(100% / 26);
   flex-basis: calc(100% / 26);
 
-  background-color: #006a60;
+  /* background-color: #006a60; */
 
   border-top: 1px solid #002f2a;
   border-bottom: 1px solid #002f2a;
@@ -46,6 +46,7 @@
 
 .TimePicker li.dud {
   cursor: auto;
+  background-color: #006a61;
 }
 
 .TimePicker li.dud:hover,

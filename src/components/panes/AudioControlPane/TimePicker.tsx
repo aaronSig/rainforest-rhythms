@@ -1,6 +1,7 @@
 import { Link } from "@reach/router";
 import React, { ReactElement } from "react";
 import { connect } from "react-redux";
+import { interpolate } from "react-spring";
 import { StreamInfo } from "../../../api/types";
 import moon from "../../../icons/moon.svg";
 import sun from "../../../icons/sun.svg";
@@ -50,6 +51,13 @@ function TimePickerView(props: TimePickerProps) {
     props.toggleSiteAudioPlaying();
   }
 
+  // interpolate the background colour depending on the time
+  //  #002f2a; #003832;  lightest -> darkest
+  const inter: any = interpolate([1], c => c).interpolate(
+    [-5, 12, 28],
+    ["#002f2a", "#007E72", "#002f2a"]
+  );
+
   return (
     <ul className={styles.TimePicker}>
       <li className={styles.dud} />
@@ -57,9 +65,9 @@ function TimePickerView(props: TimePickerProps) {
         const active = focusedTimeSegment === t ? styles.active : undefined;
         let icon = null as ReactElement | null;
         if (props.sunrise === t) {
-          icon = <img src={sun} alt="Sunrise" />;
+          icon = <img src={sun} alt="Sunrise" title="Sunrise" />;
         } else if (props.sunset === t) {
-          icon = <img src={moon} alt="Sunset" />;
+          icon = <img src={moon} alt="Sunset" title="Sunset" />;
         }
 
         if (active) {
@@ -86,8 +94,9 @@ function TimePickerView(props: TimePickerProps) {
           );
         }
 
+        const backgroundColor = inter.calc(parseInt(t));
         return (
-          <li key={t}>
+          <li key={t} style={{ backgroundColor }}>
             <Link to={urlFor(t)}>
               <div className={styles.icon}>{icon}</div>
               <span>{t}</span>
