@@ -28,10 +28,11 @@ async function get(
 ): Promise<any | null> {
   let p = path;
   if (path instanceof Array) {
-    p = path.filter(t => t !== undefined).join("/");
+    p = path
+      .filter(t => t !== undefined)
+      .filter(t => t !== null)
+      .join("/");
   }
-  // -- when in the server contex
-  // const req = await fetch(`/api/${basePath}${p}`);
 
   const req = await fetch(`${basePath}${p}`);
   if (req.ok) {
@@ -66,7 +67,7 @@ export default {
 
   streams: {
     async search(siteId: string, time: number, shuffle?: boolean): Promise<StreamInfo | null> {
-      return idsToString(await get(["stream_get", siteId, time, shuffle ? "1" : undefined]));
+      return idsToString(await get(["stream_get", siteId, time, shuffle ? "1" : "0"]));
     },
     async info(streamId: string | number): Promise<StreamInfo | null> {
       return idsToString(await get(["stream_play", streamId]));

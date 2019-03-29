@@ -2,6 +2,7 @@ import { format, isValid, parse } from "date-fns";
 import React from "react";
 import { connect } from "react-redux";
 import { Site, StreamInfo } from "../../../../api/types";
+import { searchForAudioAtTime } from "../../../../state/data-actions";
 import {
   getCurrentSiteAudio,
   getFocusedSite,
@@ -15,12 +16,14 @@ import HabitatPhoto from "./HabitatPhoto";
 import styles from "./InfoBar.module.css";
 import LocationLabel from "./LocationLabel";
 import MapAttribution from "./MapAttribution";
+import TimePicker from "./TimePicker";
 
 interface InfoBarProps {
   focusedTimeSegment: TimeSegment;
   focusedSite: Site | null;
   currentSiteAudio: StreamInfo | null;
   time: string;
+  onSearchForAudio: (time: string, siteId: string) => void;
 }
 
 function InfoBarView(props: InfoBarProps) {
@@ -40,7 +43,15 @@ function InfoBarView(props: InfoBarProps) {
       </div>
       <div className={styles.Time}>
         <div className={styles.tooltip}>
-          <h2>{props.time}</h2>
+          {/* <h2>{props.time}</h2> */}
+          {props.focusedSite && (
+            <TimePicker
+              time={props.time}
+              focusedSite={props.focusedSite}
+              onSearchForAudio={props.onSearchForAudio}
+            />
+          )}
+
           {valid && <span>Recorded {format(date, "Do MMM YYYY")}</span>}
         </div>
         <DayIndicator timeSegment={props.focusedTimeSegment} />
@@ -60,7 +71,11 @@ const mapStateToProps = (state: State) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {};
+  return {
+    onSearchForAudio: (time: string, siteId: string) => {
+      dispatch(searchForAudioAtTime(time, siteId));
+    }
+  };
 };
 
 const InfoBar = connect(

@@ -4,8 +4,6 @@
   position: relative;
   display: flex;
   background-color: #252525;
-  border: 1px solid #003d37;
-  /* border-radius: 8px; */
+  border-right: 1px solid #003d37;
   overflow: hidden;
-  /* box-shadow: 2px 2px 23px 5px rgba(27, 25, 26, 0.35); */
 }

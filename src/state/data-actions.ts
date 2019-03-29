@@ -2,6 +2,7 @@ import { navigate } from "@reach/router";
 import { Map } from "immutable";
 import api from "../api/api";
 import { Site, Taxon } from "../api/types";
+import { getTimeSegment } from "../utils/dates";
 import { byNumberKey } from "../utils/objects";
 import {
   addSiteAudioInfo,
@@ -210,6 +211,37 @@ export function searchForAudio(siteId: string, time: TimeSegment) {
       console.log("Finished search", siteId, decimalTime, result);
       if (result) {
         dispatch(addSiteAudioInfo(result));
+      }
+    } finally {
+      dispatch(didFinishLoading());
+    }
+  };
+}
+
+/***
+ * Used by the time input component. Will look up to find an audio stream and set the url to use the audio it's found
+ */
+export function searchForAudioAtTime(time: string, siteId: string) {
+  return async (dispatch: any, getState: () => State) => {
+    try {
+      dispatch(didStartLoading());
+      const hours = parseFloat(time);
+      let minutes = 0;
+      if (time.includes(":")) {
+        minutes = parseFloat(time.split(":")[1]);
+      }
+      const decimalTime = hours + minutes / 60.0;
+      console.log("Searching for ", time, decimalTime, hours, minutes);
+      const result = await api.streams.search(siteId, decimalTime, true);
+      console.log("Finished search", siteId, decimalTime, result);
+      if (result) {
+        dispatch(addSiteAudioInfo(result));
+        const timeSegment = getTimeSegment(result.time);
+        navigate(`/${timeSegment}/${siteId}/${result.audio}`);
+      } else {
+        // There was no audio for this time. Try and get close
+        const timeSegment = getTimeSegment(time);
+        navigate(`/${timeSegment}/${siteId}`);
       }
     } finally {
       dispatch(didFinishLoading());

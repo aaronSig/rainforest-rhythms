@@ -55,17 +55,11 @@
   margin-left: 1rem;
 }
 
-.Time h2 {
-  font-size: 3rem;
-  margin: 0px;
-  padding: 0px;
-  line-height: 3.4rem;
-}
-
 .tooltip {
+  display: flex;
+  justify-content: flex-end;
   position: relative;
-  position: relative;
-  display: inline-block;
+  /* display: inline-block; */
   border-bottom: 1px dotted rgba(0, 0, 0, 0.3);
   cursor: help;
   user-select: none;
