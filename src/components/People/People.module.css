@@ -1,0 +1,10 @@
+.People {
+  display: flex;
+  flex-direction: row;
+}
+
+.People img {
+  width: 72px;
+  height: 72px;
+  margin: 4px;
+}

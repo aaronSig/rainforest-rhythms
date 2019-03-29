@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import ImageZoom from "react-medium-image-zoom";
 import { connect } from "react-redux";
 import api from "../../../../api/api";
 import { Site } from "../../../../api/types";
@@ -15,21 +16,15 @@ interface HabitatPhotoProps {
 
 function HabitatPhotoView(props: HabitatPhotoProps) {
   const habitatPhoto = useHabitatPhoto(props.focusedTimeSegment, props.focusedSite);
-  const { showHabitatPhoto, focusedSite, focusedTimeSegment } = props;
-  const zoomPhoto = useCallback(() => {
-    if (habitatPhoto) {
-      showHabitatPhoto(
-        habitatPhoto,
-        `${focusedSite ? focusedSite.habitat : "Habitat"} at ${focusedTimeSegment}`
-      );
-    }
-  }, [showHabitatPhoto, habitatPhoto, focusedSite, focusedTimeSegment]);
+  const { focusedSite, focusedTimeSegment } = props;
 
   return (
-    <div
-      className={`${styles.HabitatPhoto}`}
-      onClick={zoomPhoto}
-      style={{ backgroundImage: `url("${habitatPhoto}")` }}
+    <ImageZoom
+      image={{
+        className: styles.HabitatPhoto,
+        src: habitatPhoto!,
+        alt: `${focusedSite ? focusedSite.habitat : "Habitat"} at ${focusedTimeSegment}`
+      }}
     />
   );
 }

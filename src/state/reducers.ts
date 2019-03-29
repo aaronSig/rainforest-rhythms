@@ -61,6 +61,7 @@ const initialState: State = {
     isPlaying: false,
     isFinished: false,
     shouldPlay: false,
+    wasPlaying: false, // if the audio was interupted to play the taxon audio
     timestamp: 0 // will update each minute
   },
   taxonAudio: {
@@ -141,7 +142,7 @@ export default function mainReducer(state: State = initialState, action: AnyActi
     case TOGGLE_SITE_AUDIO_PLAY_STATE: {
       const shouldPlay = !state.siteAudio.shouldPlay;
       const taxonAudio = Object.assign({}, state.taxonAudio, { shouldPlay: false });
-      const siteAudio = Object.assign({}, state.siteAudio, { shouldPlay });
+      const siteAudio = Object.assign({}, state.siteAudio, { shouldPlay, wasPlaying: shouldPlay });
       return Object.assign({}, state, { taxonAudio, siteAudio });
     }
 
@@ -223,16 +224,30 @@ export default function mainReducer(state: State = initialState, action: AnyActi
     }
 
     case SET_TAXON_AUDIO_READY:
-    case SET_TAXON_AUDIO_PLAYING:
-    case SET_TAXON_AUDIO_FINISHED: {
+    case SET_TAXON_AUDIO_PLAYING: {
       const taxonAudio = Object.assign({}, state.taxonAudio, action.item);
       return Object.assign({}, state, { taxonAudio });
+    }
+
+    case SET_TAXON_AUDIO_FINISHED: {
+      const taxonAudio = Object.assign({}, state.taxonAudio, action.item);
+      let siteAudio = state.siteAudio;
+      if (state.siteAudio.wasPlaying) {
+        siteAudio = Object.assign({}, state.siteAudio, { shouldPlay: true });
+      }
+      return Object.assign({}, state, { taxonAudio, siteAudio });
     }
 
     case SET_TAXON_AUDIO_SHOULD_PLAY: {
       const shouldPlay: boolean = action.shouldPlay;
       const taxonAudio = Object.assign({}, state.taxonAudio, { shouldPlay });
-      const siteAudio = Object.assign({}, state.siteAudio, { shouldPlay: false });
+
+      // Pause the site audio if it is playing.
+      // Resume the site audio if the taxon audio has stopped and the site audio was playing before
+      const siteAudioUpdate = shouldPlay
+        ? { shouldPlay: false, wasPlaying: state.siteAudio.wasPlaying }
+        : { shouldPlay: state.siteAudio.wasPlaying };
+      const siteAudio = Object.assign({}, state.siteAudio, siteAudioUpdate);
       return Object.assign({}, state, { taxonAudio, siteAudio });
     }
 

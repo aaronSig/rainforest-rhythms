@@ -1,0 +1,9 @@
+.Affiliations {
+  display: flex;
+  flex-direction: row;
+}
+
+.Affiliations img {
+  width: auto;
+  height: 100px;
+}

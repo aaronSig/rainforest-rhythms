@@ -6,7 +6,7 @@ function MapAttribution() {
     <div className={styles.MapAttribution}>
       Created by
       <a href="http://weareup.co" title="Up Creative">
-        UP Creative
+        UP
       </a>
       | Map tiles by <a href="http://stamen.com">Stamen Design</a>,
       <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>| Map data ©

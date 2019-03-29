@@ -8,9 +8,18 @@
       "config": { "distDir": "build" }
     }
   ],
+  "env": {
+    "IS_NOW": "true"
+  },
+  "build": {
+    "env": {
+      "NODE_PATH": "src"
+    }
+  },
   "routes": [
     {
       "src": "^/api/(.*)",
+      "headers": { "cache-control": "public,s-maxage=3600,immutable" },
       "dest": "https://davidorme.pythonanywhere.com/$1"
     },
     {

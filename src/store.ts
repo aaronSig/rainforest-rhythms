@@ -2,7 +2,6 @@ import { Map } from "immutable";
 import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import initialState from "./state/initialState";
-import taxaImageById from "./state/initialTaxaImageById";
 import reducer from "./state/reducers";
 
 const w = window as any;
@@ -14,8 +13,10 @@ const state = Object.assign({}, initialState, {
   taxaById: Map(initialState.taxaById),
   taxaIdBySiteId: Map(),
   taxaIdBySiteIdByTime: Map(),
-  taxaAudioById: Map(initialState.taxaAudioById),
-  taxaImageById: Map(taxaImageById)
+  taxaAudioById: Map(),
+  taxaImageById: Map()
+  // taxaAudioById: Map(initialState.taxaAudioById)
+  // taxaImageById: Map(taxaImageById)
 });
 
 const store = createStore(reducer, state, composeEnhancers(applyMiddleware(thunk)));

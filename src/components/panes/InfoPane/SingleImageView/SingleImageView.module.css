@@ -27,20 +27,23 @@
   font-size: 1.8rem;
 }
 
+.InfoText h1 a {
+  margin: 0px;
+  font-size: 1.8rem;
+
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px dotted rgb(91, 160, 153, 0.4);
+}
+
 .InfoText h4 {
   margin: 0px;
-}
-.InfoText h4 a {
   font-style: italic;
   font-weight: 100;
   font-family: "PT Serif", serif;
   color: #5ba099;
   text-decoration: none;
-  border-bottom: 1px dotted rgb(91, 160, 153, 0.4);
-}
-
-.InfoText h4 a:hover {
-  border-bottom: 1px dotted rgb(91, 160, 153, 1);
+  user-select: none;
 }
 
 .SliderButton {

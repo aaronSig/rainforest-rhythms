@@ -172,7 +172,9 @@ export const getTaxaWithMedia = createSelector(
         })
       ) as TaxonWithMedia[];
 
-    return withMedia.sort((a, b) => (a.seenAtThisTime && !b.seenAtThisTime ? 1 : -1));
+    return withMedia
+      .sort((a, b) => (a.common_name < b.common_name ? -1 : 1))
+      .sort((a, b) => (a.seenAtThisTime && !b.seenAtThisTime ? -1 : 1));
   }
 );
 

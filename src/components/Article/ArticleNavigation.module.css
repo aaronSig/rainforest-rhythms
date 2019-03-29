@@ -1,0 +1,39 @@
+.ArticleNavigation {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 5rem;
+  padding: 0px 2rem 0px 2rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.ArticleNavigation img {
+  width: 5rem;
+}
+
+.ArticleNavigation ul {
+  display: flex;
+  list-style: none;
+  /* flex-grow: 1; */
+  justify-content: flex-end;
+}
+
+.ArticleNavigation li {
+  margin: 0px 1rem 0px 1rem;
+}
+
+.ArticleNavigation li a {
+  font-family: "Lato", sans-serif;
+  color: rgb(77, 77, 77);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.ArticleNavigation li a:hover {
+  text-decoration: underline;
+}

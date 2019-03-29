@@ -1,4 +1,4 @@
-import "whatwg-fetch";
+import "isomorphic-fetch";
 import { TaxonAudio, TaxonImage } from "../state/types";
 import {
   AccessToken,
@@ -11,8 +11,12 @@ import {
   Taxon
 } from "./types";
 
-const isServer = !window.location.href.includes("://localhost");
-const prefix = isServer ? "/api" : "";
+const isServer = typeof window === "undefined";
+const isLocal = !isServer && window.location.href.includes("://localhost");
+let prefix = !isLocal ? "/api" : "";
+if (isServer) {
+  prefix = "https://rainforest-rhythms.asig.now.sh/api";
+}
 
 // const host = "https://davidorme.pythonanywhere.com";
 const base = `${prefix}/call/json/`;

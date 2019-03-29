@@ -15,6 +15,9 @@ interface SingleImageViewProps {
   zoomImage: (url: string, alt: string) => void;
 }
 
+const SEEN_AT_TIME = "Ususally spotted at this time";
+const SEEN_AT_SITE = "Lives in this area";
+
 function SingleImageView(props: SingleImageViewProps) {
   const { height, taxa, focusedTaxonId, focusTaxonId, zoomImage } = props;
 
@@ -92,16 +95,17 @@ function SingleImageView(props: SingleImageViewProps) {
             <img className={styles.left} src={arrowLight} alt="Left Arrow" />
           </button>
           <div className={styles.InfoText}>
-            <h1>{taxa[slide].common_name}</h1>
-            <h4>
+            <h1>
               <a
                 href={`https://www.gbif.org/species/${taxon.gbif_key}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {taxa[slide].scientific_name}
+                {taxa[slide].common_name}
               </a>
-            </h4>
+            </h1>
+
+            <h4>{taxon.seenAtThisTime ? SEEN_AT_TIME : SEEN_AT_SITE}</h4>
             <ul className={styles.pips}>
               {imageUrls.map((u, i) => {
                 function moveToSlide() {
