@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Article.module.css";
+import ArticleFooter from "./ArticleFooter";
 import ArticleNavigation from "./ArticleNavigation";
 
 interface ArticleProps {
@@ -12,6 +13,7 @@ function Article(props: ArticleProps) {
     <div className={styles.ArticleContainer}>
       <ArticleNavigation />
       <div className={styles.Article}>{props.children}</div>
+      <ArticleFooter />
     </div>
   );
 }

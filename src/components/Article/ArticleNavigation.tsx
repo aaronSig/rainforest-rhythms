@@ -26,10 +26,11 @@ function ArticleNavigation(props: ArticleNavigationProps) {
         <img src={logo} alt="SAFE logo" />
       </Link>
 
-      {/* <ul>
+      {/* 
+        Uncomment this if you want to add in any links
+      <ul>
         <li>
              <Link to="/about">Find Out More</Link>
-
         </li>
       </ul> */}
     </header>

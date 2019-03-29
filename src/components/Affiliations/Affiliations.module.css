@@ -7,3 +7,27 @@
   width: auto;
   height: 100px;
 }
+
+.Affiliations a {
+  border: none;
+}
+
+@media only screen and (min-width: 600px) {
+  .Affiliations img {
+    width: auto;
+    height: 80px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .Affiliations {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .Affiliations img {
+    height: 60px;
+    margin: 8px;
+  }
+}

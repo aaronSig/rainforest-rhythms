@@ -1,13 +1,17 @@
-.ArticleContainer {
+.Article {
   display: flex;
-  flex-direction: column;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  min-width: 100%;
+  justify-content: center;
 }
 
-.Article {
-  margin: auto;
+.Article > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding-top: 6rem;
+  padding-bottom: 50px;
+  width: 720px;
 }
 
 .Article h1,
@@ -24,7 +28,7 @@
 .Article blockquote,
 .Article figure,
 .Article code {
-  margin: 0 auto;
+  margin: 0px;
   width: 550px;
 }
 
@@ -46,6 +50,8 @@
   line-height: 27px;
   margin-top: 25px;
   margin-bottom: 25px;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 .Article h1,
@@ -137,12 +143,46 @@
   border: 0;
 }
 
-.Article img,
-.Article iframe {
+.Article img {
   width: 650px;
-  margin-left: 35px;
   margin-bottom: 3rem;
   margin-top: 3rem;
   display: block;
   border-bottom-style: none;
+}
+
+@media only screen and (max-width: 600px) {
+  .Article h1,
+  .Article h2,
+  .Article h3,
+  .Article h4,
+  .Article h5,
+  .Article h6,
+  .Article p,
+  .Article ol,
+  .Article ul,
+  .Article dl,
+  .Article table,
+  .Article blockquote,
+  .Article figure,
+  .Article code {
+    width: 90%;
+  }
+
+  .Article img {
+    width: 650px;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    display: block;
+    border-bottom-style: none;
+  }
+
+  .Article hr {
+    width: 430px;
+  }
+
+  .Article img {
+    width: 90%;
+    height: auto;
+  }
 }

@@ -13,9 +13,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   display: flex;
   flex-direction: column;
-
-  min-width: 1366px;
-  min-height: 768px;
 }
 
 textarea,

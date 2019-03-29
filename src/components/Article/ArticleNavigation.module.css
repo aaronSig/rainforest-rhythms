@@ -18,7 +18,6 @@
 .ArticleNavigation ul {
   display: flex;
   list-style: none;
-  /* flex-grow: 1; */
   justify-content: flex-end;
 }
 

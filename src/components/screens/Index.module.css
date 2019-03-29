@@ -6,4 +6,6 @@
   width: 100%;
   flex-direction: column;
   font-family: "Montserrat", sans-serif;
+  min-width: 1366px;
+  min-height: 768px;
 }

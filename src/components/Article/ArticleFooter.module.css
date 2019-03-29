@@ -1,0 +1,35 @@
+.ArticleFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 720px;
+  margin: auto;
+  padding: 2rem 0rem 3rem;
+
+  border-top: 1px solid rgb(51, 51, 51, 0.1);
+}
+
+@media only screen and (max-width: 600px) {
+  .ArticleFooter {
+    width: 90%;
+  }
+}
+
+.ArticleFooter a {
+  color: rgb(51, 51, 51, 0.8);
+  text-decoration: none;
+}
+
+.ArticleFooter a:hover {
+  color: rgb(51, 51, 51, 1);
+  text-decoration: underline;
+}
+
+.ArticleFooter a:visited {
+  color: rgb(51, 51, 51, 0.8);
+}
+
+.ArticleFooter img {
+  width: 40px;
+  margin-top: 0.6rem;
+}
