@@ -19,7 +19,6 @@
   "routes": [
     {
       "src": "^/api/(.*)",
-      "headers": { "cache-control": "public,s-maxage=3600,immutable" },
       "dest": "https://davidorme.pythonanywhere.com/$1"
     },
     {
@@ -37,7 +36,7 @@
       "dest": "/service-worker.js"
     },
     {
-      "src": "^/(.*)",
+      "src": "^/.*",
       "headers": { "cache-control": "s-maxage=0" },
       "dest": "/index.html"
     }
