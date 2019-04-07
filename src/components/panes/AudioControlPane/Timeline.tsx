@@ -1,9 +1,10 @@
 import { Link } from "@reach/router";
 import React from "react";
 import { connect } from "react-redux";
+import { TimeSegment } from "../../../api/types";
 import arrowDark from "../../../icons/arrow-dark.svg";
 import { getFocusedSiteId, getFocusedTimeSegment } from "../../../state/selectors";
-import { allTimeSegments, State, TimeSegment } from "../../../state/types";
+import { allTimeSegments, State } from "../../../state/types";
 import styles from "./Timeline.module.css";
 import Waveform from "./Waveform";
 

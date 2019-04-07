@@ -1,7 +1,7 @@
 import { format, isValid, parse } from "date-fns";
 import React from "react";
 import { connect } from "react-redux";
-import { Site, StreamInfo } from "../../../../api/types";
+import { Site, StreamInfo, TimeSegment } from "../../../../api/types";
 import { searchForAudioAtTime } from "../../../../state/data-actions";
 import {
   getCurrentSiteAudio,
@@ -9,7 +9,7 @@ import {
   getFocusedTimeSegment,
   getTimeOfDay
 } from "../../../../state/selectors";
-import { State, TimeSegment } from "../../../../state/types";
+import { State } from "../../../../state/types";
 import DayIndicator from "./DayIndicator";
 import HabitatIcon from "./HabitatIcon/HabitatIcon";
 import HabitatPhoto from "./HabitatPhoto";

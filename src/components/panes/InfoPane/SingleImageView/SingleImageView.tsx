@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react";
+import { TaxonWithPresence } from "../../../../api/types";
 import arrowLight from "../../../../icons/arrow-light.svg";
-import { TaxonWithMedia } from "../../../../state/types";
 import ImageCarousel from "../../../ImageCarousel/ImageCarousel";
 import Attribution from "../Attribution/Attribution";
 import TaxonAudioButton from "../TaxonAudioButton";
@@ -9,7 +9,7 @@ import styles from "./SingleImageView.module.css";
 interface SingleImageViewProps {
   height: number;
   isLoading: boolean;
-  taxa: TaxonWithMedia[];
+  taxa: TaxonWithPresence[];
   focusedTaxonId: string | null;
   focusTaxonId: (focusedTaxonId: string) => void;
   zoomImage: (url: string, alt: string) => void;
@@ -28,10 +28,7 @@ function SingleImageView(props: SingleImageViewProps) {
   const imageUrls = useMemo(() => {
     return taxa
       .map(t => {
-        if (t.image.media_identifier) {
-          return `${process.env.PUBLIC_URL}/taxon-imagery/${t.image.media_identifier}`;
-        }
-        return t.image.gbif_media_identifier;
+        return t.image.media_url;
       })
       .filter(i => i !== undefined) as string[];
   }, [taxa]);

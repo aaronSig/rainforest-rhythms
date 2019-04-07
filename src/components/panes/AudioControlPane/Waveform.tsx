@@ -1,6 +1,7 @@
 import { navigate } from "@reach/router";
 import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
+import { TimeSegment } from "../../../api/types";
 import { updateSiteAudioState } from "../../../state/actions";
 import { didSeek, siteAudioTimestampDidUpdate } from "../../../state/data-actions";
 import {
@@ -10,7 +11,7 @@ import {
   getRequestedTimestamp,
   getSiteAudio
 } from "../../../state/selectors";
-import { allTimeSegments, SiteAudioState, State, TimeSegment } from "../../../state/types";
+import { allTimeSegments, SiteAudioState, State } from "../../../state/types";
 import useResizeAware from "../../../utils/useResizeAware";
 import styles from "./Waveform.module.css";
 

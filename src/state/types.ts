@@ -1,36 +1,10 @@
-import { Map, Set } from "immutable";
-import { Site, StreamInfo, Taxon } from "../api/types";
-
-export interface TaxonImage {
-  taxon_id: string;
-  // The url to the page in GBIF for this occurrence
-  gbif_occurrence_key?: string;
-  // The URL for the image
-  gbif_media_identifier?: string;
-  // stock image url
-  media_identifier?: string;
-}
-
-export interface TaxonAudio {
-  taxon_id: string;
-  // The url to the page in GBIF for this occurrence
-  gbif_occurrence_key: string;
-  // url for the  sound
-  gbif_media_identifier: string;
-  // if the recording is a song, call or of both
-  gbif_occurrence_behavior: string;
-}
-
-// an object merging the taxon data with its images and audio when they're loaded
-export interface TaxonWithMedia extends Taxon {
-  audio: TaxonAudio[];
-  image: TaxonImage;
-  // A flag denoting if this animal is ususally present at
-  // the currently focused time.
-  seenAtThisTime: boolean;
-}
+import { Map } from "immutable";
+import { Site, StreamInfo, Taxon, TaxonAudio, TimeSegment } from "../api/types";
 
 export interface State {
+  // unlocks the rest of the UI once the first load has finished
+  initialLoadComplete: boolean;
+
   loading: number; // a number larger than 1 means something is loading
 
   sunrise: TimeSegment; // "06:00"
@@ -48,19 +22,13 @@ export interface State {
   siteAudioByAudioId: Map<string, StreamInfo>;
 
   // We cache all the organisms that the API passes
-  taxaById: Map<string, Taxon>; //  ++done
+  taxaById: { [taxonId: string]: Taxon }; //  ++done
 
   // Ids of all the taxa available at a site
-  taxaIdBySiteId: Map<string, Set<string>>; //  ++done
+  taxaIdBySiteId: { [siteId: string]: string[] }; //  ++done
 
   // Ids of taxa spotted at a particular time at a site
-  taxaIdBySiteIdByTime: Map<string, Map<TimeSegment, Set<string>>>; //  ++done
-
-  // If there is audio available for an animal you can look it up by it's ID here
-  taxaAudioById: Map<string, TaxonAudio[]>;
-
-  // Simiar as the audio but for images.
-  taxaImageById: Map<string, TaxonImage>;
+  taxaIdBySiteIdByTime: { [siteId: string]: { [timeSegment in TimeSegment]: string[] } }; //  ++done
 
   // User's focus a site by clicking on it from the map
   focusedSiteId: string | null; //  ++done
@@ -104,32 +72,6 @@ export interface TaxonAudioState {
   // instruct the audio to play, if it can.
   shouldPlay: boolean;
 }
-
-export type TimeSegment =
-  | "01:00"
-  | "02:00"
-  | "03:00"
-  | "04:00"
-  | "05:00"
-  | "06:00"
-  | "07:00"
-  | "08:00"
-  | "09:00"
-  | "10:00"
-  | "11:00"
-  | "12:00"
-  | "13:00"
-  | "14:00"
-  | "15:00"
-  | "16:00"
-  | "17:00"
-  | "18:00"
-  | "19:00"
-  | "20:00"
-  | "21:00"
-  | "22:00"
-  | "23:00"
-  | "00:00";
 
 // These need to be in order
 export const allTimeSegments: TimeSegment[] = [

@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import React from "react";
 import { GeoJSON, ImageOverlay, Map, TileLayer } from "react-leaflet";
 import { connect } from "react-redux";
-import { Site } from "../../../../api/types";
+import { Site, TimeSegment } from "../../../../api/types";
 import {
   getAllSites,
   getFocusedSite,
@@ -11,7 +11,7 @@ import {
   getHabitatData,
   getStreamData
 } from "../../../../state/selectors";
-import { State, TimeSegment } from "../../../../state/types";
+import { State } from "../../../../state/types";
 import useBounds from "../../../../utils/useBounds";
 import { Navigation } from "../../../Navigation/Navigation";
 import InfoBar from "../InfoBar/InfoBar";

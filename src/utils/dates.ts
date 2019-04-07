@@ -1,4 +1,4 @@
-import { TimeSegment } from "../state/types";
+import { TimeSegment } from "../api/types";
 
 // works out the closest TimeSegment from a time in the format HH:mm:ss
 export function getTimeSegment(time: string): TimeSegment {

@@ -1,62 +1,36 @@
 import { GeoJsonObject } from "geojson";
 import { Map } from "immutable";
-import { Site, StreamInfo, Taxon } from "../api/types";
+import { MegaResponse, StreamInfo, TimeSegment } from "../api/types";
 import ax from "./ax";
-import { TaxonAudio, TaxonImage, TimeSegment } from "./types";
 
 // in here are normal actions that will lead into reducers
-
-// -- MARK Taxa
-
-export const SET_TAXA_BY_ID = "SET_TAXA_BY_ID";
-export function setTaxaById(taxaById: { [id: string]: Taxon }) {
-  return { type: SET_TAXA_BY_ID, item: Map(taxaById) };
-}
-
-export const SET_TAXA_BY_SITE = "SET_TAXA_BY_SITE";
-export function setTaxaBySite(siteId: string, taxaIds: string[]) {
-  return {
-    type: SET_TAXA_BY_SITE,
-    siteId,
-    taxaIds
-  };
-}
-
-export const SET_TAXA_BY_SITE_BY_TIME = "SET_TAXA_BY_SITE_BY_TIME";
-export function setTaxaBySiteByTime(siteId: string, time: TimeSegment, taxaIds: string[]) {
-  return {
-    type: SET_TAXA_BY_SITE_BY_TIME,
-    siteId,
-    time,
-    taxaIds
-  };
-}
-
-export const SET_TAXA_AUDIO = "SET_TAXA_AUDIO";
-export function setTaxaAudio(audio: { [id: string]: TaxonAudio[] }) {
-  return {
-    type: SET_TAXA_AUDIO,
-    audio: Map(audio)
-  };
-}
-
-export const SET_TAXA_IMAGES = "SET_TAXA_IMAGES";
-export function setTaxaImages(images: { [id: string]: TaxonImage }) {
-  return {
-    type: SET_TAXA_IMAGES,
-    images: Map(images)
-  };
-}
 
 // -- MARK preload
 
 export const SET_PRELOADED_DATA = "SET_PRELOADED_DATA";
 export function setPreloadedData(
-  habitatData: GeoJsonObject,
-  streamData: GeoJsonObject,
-  sitesById: Map<string, Site>
+  megaResponse: MegaResponse,
+  habitatData: GeoJsonObject | null,
+  streamData: GeoJsonObject | null
 ) {
-  return ax(SET_PRELOADED_DATA, { habitatData, streamData, sitesById });
+  const {
+    sitesById,
+    siteAudioByAudioId,
+    taxaById,
+    taxaIdBySiteId,
+    taxaIdBySiteIdByTime
+  } = megaResponse;
+
+  return ax(SET_PRELOADED_DATA, {
+    initialLoadComplete: true,
+    habitatData,
+    streamData,
+    sitesById: Map(sitesById),
+    siteAudioByAudioId: Map(siteAudioByAudioId),
+    taxaById,
+    taxaIdBySiteId,
+    taxaIdBySiteIdByTime
+  });
 }
 
 // -- MARK audio

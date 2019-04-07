@@ -1,15 +1,16 @@
 import { Map } from "immutable";
 import React from "react";
 import { connect } from "react-redux";
-import { Site, StreamInfo } from "../../api/types";
+import { Site, StreamInfo, TimeSegment } from "../../api/types";
 import { routeDidChange } from "../../state/actions";
 import { initialLoad, loadAudioInfo, searchForAudio } from "../../state/data-actions";
 import {
   getAudioForFocusedSiteAtCurrentTime,
   getCurrentSiteAudioId,
-  getSitesById
+  getSitesById,
+  isInitialLoadComplete
 } from "../../state/selectors";
-import { State, TimeSegment } from "../../state/types";
+import { State } from "../../state/types";
 import Lightbox from "../Lightbox/Lighbox";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import AudioControlPane from "../panes/AudioControlPane/AudioControlPane";
@@ -33,6 +34,8 @@ export interface IndexProps {
   currentSiteAudioId: string | null;
   sitesById: Map<string, Site>;
 
+  isInitialLoadComplete: boolean;
+
   initialLoad: () => void;
   updateTimeAndSite: (timeSegment: TimeSegment, siteId?: string) => void;
   loadAudio: (audioId?: string, timestamp?: number) => void;
@@ -49,6 +52,10 @@ export interface IndexProps {
 export function IndexView(props: IndexProps) {
   useIndexHook(props);
 
+  if (!props.isInitialLoadComplete) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className={styles.Home}>
       <LoadingIndicator />
@@ -64,6 +71,7 @@ export function IndexView(props: IndexProps) {
 
 const mapStateToProps = (state: State) => {
   return {
+    isInitialLoadComplete: isInitialLoadComplete(state),
     currentSiteAudioId: getCurrentSiteAudioId(state),
     availableAudio: getAudioForFocusedSiteAtCurrentTime(state),
     sitesById: getSitesById(state)

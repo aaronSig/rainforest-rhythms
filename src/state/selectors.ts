@@ -1,10 +1,10 @@
 import { addMinutes, format, isValid, parse } from "date-fns";
-import { Set } from "immutable";
 import { createSelector } from "reselect";
-import { StreamInfo, Taxon } from "../api/types";
+import { StreamInfo, Taxon, TaxonWithPresence, TimeSegment } from "../api/types";
 import { getTimeSegment } from "../utils/dates";
-import { allTimeSegments, State, TaxonWithMedia, TimeSegment } from "./types";
+import { allTimeSegments, State } from "./types";
 
+export const isInitialLoadComplete = (state: State) => state.initialLoadComplete;
 export const isLoading = (state: State) => state.loading > 0;
 export const getSunrise = (state: State) => state.sunrise;
 export const getSunset = (state: State) => state.sunset;
@@ -15,8 +15,6 @@ export const getSiteAudioByAudioId = (state: State) => state.siteAudioByAudioId;
 export const getTaxaById = (state: State) => state.taxaById;
 export const getTaxaIdBySiteId = (state: State) => state.taxaIdBySiteId;
 export const getTaxaIdBySiteIdByTime = (state: State) => state.taxaIdBySiteIdByTime;
-export const getTaxaAudioById = (state: State) => state.taxaAudioById;
-export const getTaxaImageById = (state: State) => state.taxaImageById;
 export const getFocusedSiteId = (state: State) => state.focusedSiteId;
 export const getFocusedTimeSegment = (state: State) => state.focusedTimeSegment;
 export const getFocusedTaxonId = (state: State) => state.focusedTaxonId;
@@ -62,6 +60,11 @@ export const getSiteAudioByTimeSegment = createSelector(
 
     // build up the structure
     const allSiteIds = Array.from(sitesById.keys());
+    if (allSiteIds.length === 0) {
+      // still loading
+      return {};
+    }
+
     for (const siteId of allSiteIds) {
       siteAudioByTimeSegment[siteId] = allTimeSegments.reduce(
         (acc, curr: TimeSegment) => {
@@ -77,7 +80,7 @@ export const getSiteAudioByTimeSegment = createSelector(
       .valueSeq()
       .filter(a => allSiteIds.includes(a.site)) // protect for when sites haven't yet loaded
       .forEach(a => {
-        const segment = getTimeSegment(a.time);
+        const segment = getTimeSegment(a.time) as TimeSegment;
         siteAudioByTimeSegment[a.site][segment].push(a);
         siteAudioByTimeSegment[a.site][segment].sort((a, b) => (a.time < b.time ? 1 : -1));
       });
@@ -95,7 +98,11 @@ export const getSiteAudioByTimeSegment = createSelector(
  */
 export const getAudioForFocusedSiteAtCurrentTime = createSelector(
   [getFocusedSiteId, getFocusedTimeSegment, getSiteAudioByTimeSegment],
-  (focusedSiteId, focusedTimeSegment, siteAudioByTimeSegment) => {
+  (
+    focusedSiteId,
+    focusedTimeSegment,
+    siteAudioByTimeSegment: { [siteId: string]: { [time in TimeSegment]: StreamInfo[] } }
+  ) => {
     if (!focusedSiteId || !focusedTimeSegment) {
       return [];
     }
@@ -114,17 +121,16 @@ export const getAudioForFocusedSiteAtCurrentTime = createSelector(
 export const getTaxaForFocusedSite = createSelector(
   [getFocusedSiteId, getTaxaIdBySiteId, getTaxaById],
   (focusedSiteId, taxaIdBySiteId, taxaById) => {
-    if (!focusedSiteId || !taxaIdBySiteId.has(focusedSiteId)) {
+    if (!focusedSiteId || !(focusedSiteId in taxaIdBySiteId)) {
       return [] as Taxon[];
     }
-    const taxa = taxaIdBySiteId
-      .get(focusedSiteId)!
+    const taxa = taxaIdBySiteId[focusedSiteId]
       .map(id => {
-        return taxaById.get(id);
+        return taxaById[id];
       })
-      .filter(t => t !== undefined) as Set<Taxon>;
+      .filter(t => t !== undefined);
 
-    return taxa.toArray() as Taxon[];
+    return taxa;
   }
 );
 
@@ -137,42 +143,40 @@ export const getTaxaForFocusedSiteAtCurrentTime = createSelector(
     if (
       !focusedSiteId ||
       focusedTimeSegment === null ||
-      !taxaIdBySiteIdByTime.has(focusedSiteId) ||
-      !taxaIdBySiteIdByTime.get(focusedSiteId)!.has(focusedTimeSegment)
+      !(focusedSiteId in taxaIdBySiteIdByTime) ||
+      !(focusedTimeSegment in taxaIdBySiteIdByTime[focusedSiteId])
     ) {
       return [] as Taxon[];
     }
-    const taxa = taxaIdBySiteIdByTime
-      .get(focusedSiteId)!
-      .get(focusedTimeSegment)!
+    const taxa = taxaIdBySiteIdByTime[focusedSiteId][focusedTimeSegment]
       .map(id => {
-        return taxaById.get(id);
+        return taxaById[id];
       })
-      .filter(t => t !== undefined) as Set<Taxon>;
+      .filter(t => t !== undefined);
 
-    return taxa.toArray() as Taxon[];
+    return taxa;
   }
 );
 
 /***
  * The species that appear at this site, sorted to put the ones that ususally appear at this time at the top
  *
- * Will merge in the image and audio info. Filters out any without images.
+ * Filters out any without images.
+ *
+ * TODO Corrects images that have the incorrect relative referencing
  */
-export const getTaxaWithMedia = createSelector(
-  [getTaxaForFocusedSite, getTaxaForFocusedSiteAtCurrentTime, getTaxaAudioById, getTaxaImageById],
-  (taxaForFocusedSite, taxaForFocusedSiteAtCurrentTime, taxaAudioById, taxaImageById) => {
-    const withMedia = taxaForFocusedSite
-      .filter(t => taxaImageById.has(t.id))
+export const getTaxaWithPresence = createSelector(
+  [getTaxaForFocusedSite, getTaxaForFocusedSiteAtCurrentTime],
+  (taxaForFocusedSite, taxaForFocusedSiteAtCurrentTime) => {
+    const withPresence = taxaForFocusedSite
+      .filter(t => t.image.media_url !== null)
       .map(t =>
         Object.assign({}, t, {
-          audio: taxaAudioById.has(t.id) ? taxaAudioById.get(t.id) : [],
-          image: taxaImageById.get(t.id),
           seenAtThisTime: taxaForFocusedSiteAtCurrentTime.includes(t)
         })
-      ) as TaxonWithMedia[];
+      ) as TaxonWithPresence[];
 
-    return withMedia
+    return withPresence
       .sort((a, b) => (a.common_name < b.common_name ? -1 : 1))
       .sort((a, b) => (a.seenAtThisTime && !b.seenAtThisTime ? -1 : 1));
   }

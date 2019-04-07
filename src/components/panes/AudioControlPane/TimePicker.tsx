@@ -2,7 +2,7 @@ import { Link } from "@reach/router";
 import React, { ReactElement } from "react";
 import { connect } from "react-redux";
 import { interpolate } from "react-spring";
-import { StreamInfo } from "../../../api/types";
+import { StreamInfo, TimeSegment } from "../../../api/types";
 import moon from "../../../icons/moon.svg";
 import sun from "../../../icons/sun.svg";
 import { toggleSiteAudioPlayState } from "../../../state/actions";
@@ -14,7 +14,7 @@ import {
   getSunrise,
   getSunset
 } from "../../../state/selectors";
-import { allTimeSegments, SiteAudioState, State, TimeSegment } from "../../../state/types";
+import { allTimeSegments, SiteAudioState, State } from "../../../state/types";
 import PlayButton from "../../buttons/play/PlayButton";
 import styles from "./TimePicker.module.css";
 

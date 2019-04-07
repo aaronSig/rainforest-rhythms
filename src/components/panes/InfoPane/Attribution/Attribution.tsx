@@ -1,24 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { TaxonWithMedia } from "../../../../state/types";
+import React from "react";
+import { TaxonWithPresence } from "../../../../api/types";
 import styles from "./Attribution.module.css";
 import audioIcon from "./audio.svg";
 import cameraIcon from "./camera.svg";
 import ccIcon from "./cc.svg";
 
 interface AttributionProps {
-  taxon: TaxonWithMedia;
+  taxon: TaxonWithPresence;
   isLoading: boolean;
 }
 
 export default function Attribution(props: AttributionProps) {
-  const { image } = props.taxon;
-
-  const audio = props.taxon.audio.length > 0 && props.taxon.audio[0];
-
-  const imageRightsHolder = useRightsHolder(image.gbif_occurrence_key);
-  const audioRightsHolder = useRightsHolder(audio ? audio.gbif_occurrence_key : null);
-
-  if (!imageRightsHolder && !audio) {
+  if (!props.taxon.audio.gbif_rights_holder && !props.taxon.image.gbif_rights_holder) {
     return null;
   }
 
@@ -28,58 +21,29 @@ export default function Attribution(props: AttributionProps) {
         <img src={ccIcon} alt="Creative Commons Icon" />
       </div>
       <div className={styles.Column}>
-        {imageRightsHolder && (
+        {!props.taxon.image.gbif_rights_holder && (
           <a
             className={styles.Credit}
-            href={image.gbif_occurrence_key}
+            href={props.taxon.image.gbif_occurrence_key || ""}
             target="_blank"
             rel="noopener noreferrer"
           >
-            {imageRightsHolder}
+            {!props.taxon.image.gbif_rights_holder}
             <img src={cameraIcon} alt="Camera icon" />
           </a>
         )}
-        {audio && (
+        {props.taxon.audio.gbif_rights_holder && (
           <a
             className={styles.Credit}
-            href={audio.gbif_occurrence_key}
+            href={props.taxon.audio.gbif_occurrence_key || ""}
             target="_blank"
             rel="noopener noreferrer"
           >
-            {audioRightsHolder}
+            {props.taxon.audio.gbif_rights_holder}
             <img src={audioIcon} alt="Audio icon" />
           </a>
         )}
       </div>
     </div>
   );
-}
-
-// Fetches the rights holder info from gbif
-function useRightsHolder(occuranceKey?: string | null) {
-  const [rightsHolder, setRightsholder] = useState(null);
-
-  useEffect(() => {
-    setRightsholder(null);
-    if (!occuranceKey) {
-      return;
-    }
-
-    const apiUrl = occuranceKey.replace(
-      "https://www.gbif.org/occurrence/",
-      "https://api.gbif.org/v1/occurrence/"
-    );
-    fetch(apiUrl)
-      .then(async result => {
-        if (result.ok) {
-          const occurance = await result.json();
-          setRightsholder(occurance.rightsHolder);
-        }
-      })
-      .catch(e => {
-        console.error("Problem fetching attribution info", e);
-      });
-  }, [occuranceKey, setRightsholder]);
-
-  return rightsHolder;
 }

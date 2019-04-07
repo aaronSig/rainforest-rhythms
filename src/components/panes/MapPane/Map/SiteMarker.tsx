@@ -1,7 +1,7 @@
 import { navigate } from "@reach/router";
 import React, { useCallback, useMemo } from "react";
 import { connect } from "react-redux";
-import { Site, StreamInfo } from "../../../../api/types";
+import { Site, StreamInfo, TimeSegment } from "../../../../api/types";
 import { toggleSiteAudioPlayState } from "../../../../state/actions";
 import {
   getFocusedSiteId,
@@ -9,7 +9,7 @@ import {
   getSiteAudio,
   getSiteAudioByTimeSegment
 } from "../../../../state/selectors";
-import { SiteAudioState, State, TimeSegment } from "../../../../state/types";
+import { SiteAudioState, State } from "../../../../state/types";
 import PlayButton from "../../../buttons/play/PlayButton";
 import HabitatIcon from "../InfoBar/HabitatIcon/HabitatIcon";
 import ReactMarker from "./ReactMarker";

@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import { animated, useTransition } from "react-spring";
+import { TimeSegment } from "../../../../api/types";
 import moon from "../../../../icons/moon.svg";
 import sun from "../../../../icons/sun.svg";
 import { getSunrise, getSunset } from "../../../../state/selectors";
-import { allTimeSegments, State, TimeSegment } from "../../../../state/types";
+import { allTimeSegments, State } from "../../../../state/types";
 import usePrevious from "../../../../utils/usePrevious";
 import styles from "./DayIndicator.module.css";
 

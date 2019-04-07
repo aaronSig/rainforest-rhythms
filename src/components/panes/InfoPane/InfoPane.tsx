@@ -1,18 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Site } from "../../../api/types";
+import { Site, TaxonWithPresence, TimeSegment } from "../../../api/types";
 import { focusTaxonId, setLightboxPhoto } from "../../../state/actions";
-import { loadTaxaForSite } from "../../../state/data-actions";
 import {
   getFocusedSite,
   getFocusedTaxonId,
   getFocusedTimeSegment,
-  getTaxaWithMedia,
+  getTaxaWithPresence,
   isLoading
 } from "../../../state/selectors";
-import { State, TaxonWithMedia, TimeSegment } from "../../../state/types";
+import { State } from "../../../state/types";
 import useResizeAware from "../../../utils/useResizeAware";
-import useInfoPaneData from "./infoHooks";
 import styles from "./InfoPane.module.css";
 import SingleImageView from "./SingleImageView/SingleImageView";
 import TaxonAudioPlayer from "./TaxonAudioPlayer";
@@ -23,15 +21,13 @@ export interface InfoPaneProps {
   focusedTaxonId: string | null;
   isLoading: boolean;
 
-  taxa: TaxonWithMedia[];
+  taxa: TaxonWithPresence[];
 
   focusTaxonId: (focusedTaxonId: string) => void;
-  loadTaxaForSite: (siteId: string, time?: TimeSegment | null) => void;
   zoomImage: (url: string, alt: string) => void;
 }
 
 function InfoPaneView(props: InfoPaneProps) {
-  useInfoPaneData(props);
   const [resizeListener, sizes] = useResizeAware();
   const height = sizes.height || 0;
   return (
@@ -54,7 +50,7 @@ const mapStateToProps = (state: State) => {
   return {
     focusedSite: getFocusedSite(state),
     focusedTimeSegment: getFocusedTimeSegment(state),
-    taxa: getTaxaWithMedia(state),
+    taxa: getTaxaWithPresence(state),
     focusedTaxonId: getFocusedTaxonId(state),
     isLoading: isLoading(state)
   };
@@ -62,9 +58,6 @@ const mapStateToProps = (state: State) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    loadTaxaForSite: (siteId: string, time: TimeSegment | null = null) => {
-      dispatch(loadTaxaForSite(siteId, time));
-    },
     focusTaxonId: (focusedTaxonId: string) => {
       dispatch(focusTaxonId(focusedTaxonId));
     },

@@ -33,11 +33,6 @@ interface APIResponse {
    * }
    */
   taxaIdBySiteIdByTime: Map<string, Map<TimeSegment, Array<string>>>;
-
-  // These are hardcoded at the moment as it stays the same throughout the year
-  // but we could make this API led if you'd prefer
-  sunrise: TimeSegment; // "06:00"
-  sunset: TimeSegment; // "18:00"
 }
 
 // Existing API Objects used in the APIResponse

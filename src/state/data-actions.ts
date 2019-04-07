@@ -1,20 +1,13 @@
 import { navigate } from "@reach/router";
-import { Map } from "immutable";
 import api from "../api/api";
-import { Site, Taxon } from "../api/types";
+import { StreamInfo, TimeSegment } from "../api/types";
 import { getTimeSegment } from "../utils/dates";
-import { byNumberKey } from "../utils/objects";
 import {
   addSiteAudioInfo,
   didFinishLoading,
   didStartLoading,
   setCurrentSiteAudio,
   setPreloadedData,
-  setTaxaAudio,
-  setTaxaById,
-  setTaxaBySite,
-  setTaxaBySiteByTime,
-  setTaxaImages,
   updateSiteAudioTimestamp
 } from "./actions";
 import {
@@ -24,11 +17,9 @@ import {
   getSiteAudio,
   getSiteAudioByAudioId,
   getSiteAudioByTimeSegment,
-  getSiteAudioTimestamp,
-  getTaxaAudioById,
-  getTaxaImageById
+  getSiteAudioTimestamp
 } from "./selectors";
-import { State, TaxonAudio, TaxonImage, TimeSegment } from "./types";
+import { State } from "./types";
 
 // these are actions / thunks that use the server to load in data
 
@@ -37,86 +28,25 @@ export function initialLoad() {
   return async (dispatch: any) => {
     try {
       dispatch(didStartLoading());
-      const [habitats, streams, sites] = await Promise.all([
-        api.geoJson.habitats(),
-        api.geoJson.streams(),
-        api.sites.list()
+      const habitats = null;
+      const streams = null;
+      let [megaResponse] = await Promise.all([
+        api.getMegaRequest()
+        // api.geoJson.habitats(),
+        // api.geoJson.streams()
       ]);
 
-      const sitesById: { [key: string]: Site } = {};
-      for (const site of sites) {
-        sitesById[site.id] = site;
+      if (megaResponse === null) {
+        console.warn("Issue loading mega response. Retrying...");
+        megaResponse = await api.getMegaRequest();
       }
 
-      dispatch(setPreloadedData(habitats, streams, Map(sitesById)));
-    } finally {
-      dispatch(didFinishLoading());
-    }
-  };
-}
-
-export function loadTaxaForSite(siteId: string, time: TimeSegment | null = null) {
-  return async (dispatch: any, getState: () => State) => {
-    try {
-      dispatch(didStartLoading());
-      let result: Taxon[];
-      if (time !== null) {
-        // this works as TimeSegment are round hours
-        const decimalTime = parseInt(time);
-        result = await api.taxa.get(siteId, decimalTime);
-      } else {
-        result = await api.taxa.get(siteId);
+      if (megaResponse === null) {
+        alert("Sorry there has been an error loading. Please check you're online and try again.");
+        return;
       }
 
-      // reduce the taxa into a map with the id as it's key
-      const taxaById = byNumberKey("id", result);
-      dispatch(setTaxaById(taxaById));
-
-      // set the taxaIdBySiteId
-      const taxaIds = Object.keys(taxaById);
-      dispatch(setTaxaBySite(siteId, taxaIds));
-
-      if (time !== null) {
-        dispatch(setTaxaBySiteByTime(siteId, time, taxaIds));
-      }
-
-      const state = getState();
-      const imagesLoaded = getTaxaImageById(state);
-      const audioLoaded = getTaxaAudioById(state);
-
-      // fetch all the images and audio for the taxa
-      const imageRequests = result
-        .filter(t => !imagesLoaded.has(t.id))
-        .map(t => api.taxa.image(t.id));
-      const audioRequests = result
-        .filter(t => !audioLoaded.has(t.id))
-        .map(t => api.taxa.audio(t.id));
-
-      {
-        const images = (await Promise.all(imageRequests)).filter(i => i !== null) as TaxonImage[];
-        const imagesById = images.reduce(
-          (acc, curr) => {
-            acc[curr.taxon_id] = curr;
-            return acc;
-          },
-          {} as { [id: string]: TaxonImage }
-        );
-        dispatch(setTaxaImages(imagesById));
-      }
-
-      {
-        const audio = await Promise.all(audioRequests);
-        const audioById = audio
-          .filter(a => a.length > 0)
-          .reduce(
-            (acc, curr) => {
-              acc[curr[0]!.taxon_id] = curr;
-              return acc;
-            },
-            {} as { [id: string]: TaxonAudio[] }
-          );
-        dispatch(setTaxaAudio(audioById));
-      }
+      dispatch(setPreloadedData(megaResponse, habitats, streams));
     } finally {
       dispatch(didFinishLoading());
     }
@@ -125,6 +55,8 @@ export function loadTaxaForSite(siteId: string, time: TimeSegment | null = null)
 
 /****
  * Loads a specifc piece of audio, setting the site, time and optionally the timestamp
+ *
+ * Will download the audio StreamInfo if it's not already present
  */
 export function loadAudioInfo(audioId: string, timestamp?: number) {
   // const audioId = "33631"; //14:00 6
@@ -193,17 +125,22 @@ export function loadAudioInfo(audioId: string, timestamp?: number) {
 /****
  * Find audio that matches the supplied site and time and slots it into siteAudioByAudioId
  *
- * If we already have audio for this time do nothing
+ * If we already have audio for this time do nothing. In most cases this will not need to do anything as it's all loaded up front.
  */
 export function searchForAudio(siteId: string, time: TimeSegment) {
   return async (dispatch: any, getState: () => State) => {
     try {
       dispatch(didStartLoading());
       const state = getState();
-      const audio = getSiteAudioByTimeSegment(state);
-      if (siteId in audio && audio[siteId][time].length) {
-        // already have audio loaded
-        return;
+      const audio = getSiteAudioByTimeSegment(state) as {
+        [siteId: string]: { [time in TimeSegment]: StreamInfo[] };
+      };
+      if (siteId in audio) {
+        const audioByTime: { [time in TimeSegment]: StreamInfo[] } = audio[siteId];
+        if (audioByTime[time].length) {
+          // already have audio loaded
+          return;
+        }
       }
 
       const decimalTime = parseInt(time);
@@ -273,7 +210,9 @@ export function didSeek(progressPercent: string) {
 }
 
 /***
- * The app is too chatty when we fire for every timestamp update
+ * Record where the current site audio playback timestamp is
+ *
+ * The app is too chatty when we fire for every timestamp update (every 100ms or so)
  * here we throttle to change only when the minute has changed
  */
 export function siteAudioTimestampDidUpdate(newTimestamp: number) {

@@ -1,15 +1,7 @@
 import "isomorphic-fetch";
-import { TaxonAudio, TaxonImage } from "../state/types";
-import {
-  AccessToken,
-  HabitatName,
-  RecorderType,
-  Site,
-  SiteInfo,
-  Status,
-  StreamInfo,
-  Taxon
-} from "./types";
+import { allTimeSegments } from "../state/types";
+import { byStringKey } from "../utils/objects";
+import { AccessToken, HabitatName, MegaResponse, RecorderType, Site, SiteInfo, Status, StreamInfo, TimeSegment } from "./types";
 
 const isServer = typeof window === "undefined";
 const isLocal = !isServer && window.location.href.includes("://localhost");
@@ -47,6 +39,78 @@ export default {
     return await get("get_status");
   },
 
+  /***
+   * A response contains all the site, taxon and almost all audio info we will need.
+   *
+   * To speed up the app once it's running we preload as much info as possible saving short hops to the server later
+   */
+  async getMegaRequest(): Promise<MegaResponse | null> {
+    const mega = (await get("api_response")) as MegaResponse | null;
+    if (!mega) {
+      return null;
+    }
+
+    // add the ID to the object and turn the ID to a string
+    const sites = Object.keys(mega.sitesById).map(id =>
+      Object.assign({}, mega.sitesById[id], { id: `${id}` })
+    );
+    const sitesById = byStringKey("id", sites);
+
+    // this one comes in as an array
+    const siteAudio = (mega.siteAudioByAudioId as any) as StreamInfo[];
+    const siteAudioByAudio = siteAudio.map(a => idsToString(a));
+    const siteAudioByAudioId = byStringKey("audio", siteAudioByAudio);
+
+    const taxa = Object.values(mega.taxaById)
+      .filter(t => t.image.media_url === null || t.image.media_url === "")
+      .filter(t => t.image.media_url === "/download")
+      .map(t => idsToString(t));
+    const taxaById = byStringKey("id", taxa);
+
+    const taxaIdBySiteId = Object.keys(mega.taxaIdBySiteId).reduce(
+      (acc, curr) => {
+        // these come through as numbers
+        const taxaIdNumbers = (mega.taxaIdBySiteId[curr] as any) as number[];
+        const taxaIds: string[] = taxaIdNumbers.map(id => `${id}`);
+        const siteId = `${curr}`;
+        acc[siteId] = taxaIds;
+        return acc;
+      },
+      {} as { [siteId: string]: string[] }
+    );
+
+    const siteNumericalIds = (Object.keys(mega.taxaIdBySiteIdByTime) as unknown) as number[];
+    const taxaIdBySiteIdByTime = siteNumericalIds.reduce(
+      (topAcc, siteNId) => {
+        const taxaBytime = (mega.taxaIdBySiteIdByTime[siteNId] as unknown) as {
+          [time: number]: number[];
+        };
+        topAcc[`${siteNId}`] = allTimeSegments.reduce(
+          (acc, timeSegment) => {
+            const tInt = parseInt(timeSegment);
+            if (tInt in taxaBytime) {
+              acc[timeSegment] = taxaBytime[tInt].map(taxaId => `${taxaId}`);
+            } else {
+              acc[timeSegment] = [];
+            }
+            return acc;
+          },
+          {} as { [time in TimeSegment]: string[] }
+        );
+        return topAcc;
+      },
+      {} as { [siteId: string]: { [time in TimeSegment]: string[] } }
+    );
+
+    return {
+      sitesById,
+      siteAudioByAudioId,
+      taxaById,
+      taxaIdBySiteId,
+      taxaIdBySiteIdByTime
+    } as MegaResponse;
+  },
+
   sites: {
     async list(): Promise<Site[]> {
       return (await get("get_sites", [])).map(idsToString);
@@ -58,11 +122,10 @@ export default {
     /***
      * Gets an image for this site at this time
      */
-    async imageUrl(time: number, siteId: string): Promise<string | null> {
-      const image = await get(["get_site_image", siteId, time], null);
-      console.log("habitatPhoto imageUrl image", image, time, siteId);
-      return image;
-    }
+    // async imageUrl(time: number, siteId: string): Promise<string | null> {
+    //   const image = await get(["get_site_image", siteId, time], null);
+    //   return image;
+    // }
   },
 
   streams: {
@@ -90,9 +153,7 @@ export default {
       if (!token) {
         return null;
       }
-      return `https://dl.boxcloud.com/api/2.0/files/${boxId}/content?access_token=${
-        token.access_token
-      }`;
+      return `https://dl.boxcloud.com/api/2.0/files/${boxId}/content?access_token=${token}`;
     }
   },
 
@@ -108,25 +169,25 @@ export default {
     }
   },
 
-  taxa: {
-    async get(siteId: number | string, time?: number): Promise<Taxon[]> {
-      return (await get(["get_taxa", siteId, time], [])).map(idsToString);
-    },
-    async image(taxonId: string): Promise<TaxonImage | null> {
-      const result = (await get(["get_taxon_image", taxonId], null)) as TaxonImage | null;
-      if (result) {
-        result.taxon_id = taxonId;
-      }
-      return result;
-    },
-    async audio(taxonId: string): Promise<TaxonAudio[]> {
-      let results = (await get(["get_taxon_sounds", taxonId], [])) as TaxonAudio[];
-      if (results) {
-        results.forEach(r => (r.taxon_id = taxonId));
-      }
-      return results;
-    }
-  },
+  // taxa: {
+  //   async get(siteId: number | string, time?: number): Promise<Taxon[]> {
+  //     return (await get(["get_taxa", siteId, time], [])).map(idsToString);
+  //   },
+  //   async image(taxonId: string): Promise<TaxonImage | null> {
+  //     const result = (await get(["get_taxon_image", taxonId], null)) as TaxonImage | null;
+  //     if (result) {
+  //       result.taxon_id = taxonId;
+  //     }
+  //     return result;
+  //   },
+  //   async audio(taxonId: string): Promise<TaxonAudio[]> {
+  //     let results = (await get(["get_taxon_sounds", taxonId], [])) as TaxonAudio[];
+  //     if (results) {
+  //       results.forEach(r => (r.taxon_id = taxonId));
+  //     }
+  //     return results;
+  //   }
+  // },
 
   geoJson: {
     async streams(): Promise<GeoJSON.GeoJsonObject> {

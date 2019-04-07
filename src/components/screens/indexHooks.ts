@@ -17,7 +17,8 @@ export default function useIndexHook(props: IndexProps) {
     currentSiteAudioId,
     sitesById,
     loadAudio,
-    searchForAudio
+    searchForAudio,
+    isInitialLoadComplete
   } = props;
 
   // load the geojson & sites on startup
@@ -27,62 +28,72 @@ export default function useIndexHook(props: IndexProps) {
 
   // focus the site & time segment based on the url. Start loading if needed
   useEffect(() => {
-    if (!timeSegment) {
-      //if there isn't a time segment set, set it to 6:00 site 10
-      navigate(`/06:00/10`, {
-        replace: true
-      });
-    }
-    updateTimeAndSite(timeSegment, siteId);
-  }, [siteId, timeSegment, updateTimeAndSite]);
-
-  // Add the first site to the url once the sites have loaded (if there's not one already)
-  useEffect(() => {
-    if (sitesById.count() > 0) {
-      if (timeSegment && !siteId) {
-        const firstSite = sitesById.keys().next().value;
-        navigate(`/${timeSegment}/${firstSite}`, {
+    if (isInitialLoadComplete) {
+      if (!timeSegment) {
+        //if there isn't a time segment set, set it to 6:00 site 10
+        navigate(`/06:00/10`, {
           replace: true
         });
       }
+      updateTimeAndSite(timeSegment, siteId);
     }
-  }, [timeSegment, siteId, sitesById]);
+  }, [isInitialLoadComplete, siteId, timeSegment, updateTimeAndSite]);
 
-  //Search for the audio metadata when the site or time changes IF we don't have
-  // streaminfo for this combination already
+  // Add the first site to the url once the sites have loaded (if there's not one already)
   useEffect(() => {
-    if (siteId && timeSegment) {
-      if (availableAudio.length === 0) {
-        console.log("useIndexHook, Searching for audio", siteId, timeSegment);
-        searchForAudio(siteId, timeSegment);
+    if (isInitialLoadComplete) {
+      if (sitesById.count() > 0) {
+        if (timeSegment && !siteId) {
+          const firstSite = sitesById.keys().next().value;
+          navigate(`/${timeSegment}/${firstSite}`, {
+            replace: true
+          });
+        }
       }
     }
-  }, [siteId, timeSegment, availableAudio, searchForAudio]);
+  }, [isInitialLoadComplete, timeSegment, siteId, sitesById]);
+
+  // Search for the audio metadata when the site or time changes IF we don't have
+  // streaminfo for this combination already
+  useEffect(() => {
+    if (isInitialLoadComplete) {
+      if (siteId && timeSegment) {
+        if (availableAudio.length === 0) {
+          console.log("useIndexHook, Searching for audio", siteId, timeSegment);
+          searchForAudio(siteId, timeSegment);
+        }
+      }
+    }
+  }, [isInitialLoadComplete, siteId, timeSegment, availableAudio, searchForAudio]);
 
   // This is triggered when the audioId is added to the url
   // watch for audio to load. This fetches the audio stream URL
   useEffect(() => {
-    if (audioId) {
-      if (audioId !== currentSiteAudioId) {
-        // only load on change
-        loadAudio(audioId, timestamp);
-      } else {
-        // just the timestamp has changed. We don't support seeking by manually changing the URL as
-        // clicking the timeline will change the url too.
-        // Seeking to a time is supported if the whole url is reladed though.
+    if (isInitialLoadComplete) {
+      if (audioId) {
+        if (audioId !== currentSiteAudioId) {
+          // only load on change
+          loadAudio(audioId, timestamp);
+        } else {
+          // just the timestamp has changed. We don't support seeking by manually changing the URL as
+          // clicking the timeline will change the url too.
+          // Seeking to a time is supported if the whole url is reloaded though.
+        }
       }
     }
-  }, [audioId, timestamp, currentSiteAudioId, loadAudio]);
+  }, [isInitialLoadComplete, audioId, timestamp, currentSiteAudioId, loadAudio]);
 
   // Play the audio once we've loaded the stream info
   useEffect(() => {
-    // pop the audio ID into the url. It'll be picked up in IndexView
-    if (currentSiteAudioId === null) {
-      if (!audioId && availableAudio.length > 0) {
-        const streamInfo = availableAudio[0];
-        console.log("useIndexHook, Setting audio", streamInfo);
-        navigate(`/${timeSegment}/${siteId}/${streamInfo.audio}`);
+    if (isInitialLoadComplete) {
+      // pop the audio ID into the url. It'll be picked up in IndexView
+      if (currentSiteAudioId === null) {
+        if (!audioId && availableAudio.length > 0) {
+          const streamInfo = availableAudio[0];
+          console.log("useIndexHook, Setting audio", streamInfo);
+          navigate(`/${timeSegment}/${siteId}/${streamInfo.audio}`);
+        }
       }
     }
-  }, [siteId, timeSegment, audioId, availableAudio, currentSiteAudioId]);
+  }, [isInitialLoadComplete, siteId, timeSegment, audioId, availableAudio, currentSiteAudioId]);
 }

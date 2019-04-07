@@ -1,13 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
+import { TaxonWithPresence } from "../../../api/types";
 import { setTaxonAudioShouldPlay } from "../../../state/actions";
 import { getTaxonAudio } from "../../../state/selectors";
-import { State, TaxonAudioState, TaxonWithMedia } from "../../../state/types";
+import { State, TaxonAudioState } from "../../../state/types";
 import PlayButton from "../../buttons/play/PlayButton";
 import styles from "./TaxonAudioButton.module.css";
 
 interface TaxonAudioButtonProps {
-  taxon: TaxonWithMedia;
+  taxon: TaxonWithPresence;
   taxonAudioState: TaxonAudioState;
   shouldPlay: (shouldPlay: boolean) => void;
 }
@@ -16,7 +17,7 @@ function TaxonAudioButtonView(props: TaxonAudioButtonProps) {
   const audio = props.taxonAudioState;
   const { taxon } = props;
 
-  if (props.taxon.audio.length === 0) {
+  if (!props.taxon.audio.gbif_media_identifier) {
     return null;
   }
 
@@ -26,7 +27,7 @@ function TaxonAudioButtonView(props: TaxonAudioButtonProps) {
 
   const loading = audio.shouldPlay && !audio.isPlaying;
 
-  let label = `Hear a clip of a ${taxon.common_name} ${taxon.audio[0].gbif_occurrence_behavior}`;
+  let label = `Hear a clip of a ${taxon.common_name} ${taxon.audio.gbif_occurrence_behavior}`;
   if (!audio.isReady) {
     label = `Loading clip`;
   } else if (audio.isPlaying) {
