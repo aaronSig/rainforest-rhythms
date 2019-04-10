@@ -9,7 +9,7 @@
 .People img {
   width: 72px;
   height: 72px;
-  margin: 6px;
+  margin: 1rem 6px 4px;
 }
 
 .People .NameBlock {
@@ -21,6 +21,12 @@
 
 .Name {
   text-align: center;
+}
+
+a.NameBlock span {
+  border-bottom-color: rgb(225, 225, 225);
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
 }
 
 @media only screen and (max-width: 600px) {

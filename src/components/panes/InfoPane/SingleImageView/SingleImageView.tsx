@@ -15,7 +15,7 @@ interface SingleImageViewProps {
   zoomImage: (url: string, alt: string) => void;
 }
 
-const SEEN_AT_TIME = "Ususally spotted at this time";
+const SEEN_AT_TIME = "Ususally spotted here at this time";
 const SEEN_AT_SITE = "Lives in this area";
 
 function SingleImageView(props: SingleImageViewProps) {
