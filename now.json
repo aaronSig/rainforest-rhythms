@@ -22,6 +22,10 @@
       "dest": "https://davidorme.pythonanywhere.com/$1"
     },
     {
+      "src": "^/download/(.*)",
+      "dest": "https://davidorme.pythonanywhere.com/download/$1"
+    },
+    {
       "src": "^/static/(.*)",
       "headers": { "cache-control": "s-maxage=31536000,immutable" },
       "dest": "/static/$1"

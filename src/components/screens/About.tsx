@@ -11,7 +11,7 @@ interface AboutProps {
 function About(props: AboutProps) {
   return (
     <Article>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div style={{ height: "100vh" }}>Loading...</div>}>
         <Content />
       </Suspense>
     </Article>
