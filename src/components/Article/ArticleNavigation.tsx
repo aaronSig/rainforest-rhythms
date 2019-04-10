@@ -1,5 +1,4 @@
 import { Link } from "@reach/router";
-import logo from "images/SAFE.svg";
 import React from "react";
 import { connect } from "react-redux";
 import {
@@ -8,6 +7,7 @@ import {
   getFocusedTimeSegment
 } from "../../state/selectors";
 import { State } from "../../state/types";
+import logo from "../Navigation/logo.svg";
 import styles from "./ArticleNavigation.module.css";
 
 interface ArticleNavigationProps {

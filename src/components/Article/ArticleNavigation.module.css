@@ -9,6 +9,8 @@
   padding: 0px 2rem 0px 2rem;
   color: #fff;
   flex-shrink: 0;
+  width: 800px;
+  margin: auto;
 }
 
 .ArticleNavigation img {
@@ -35,4 +37,10 @@
 
 .ArticleNavigation li a:hover {
   text-decoration: underline;
+}
+
+@media only screen and (max-width: 600px) {
+  .ArticleNavigation {
+    padding: 0px 1rem 0px 1rem;
+  }
 }

@@ -1,0 +1,56 @@
+.Container {
+  height: calc(66vh - 6rem);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  flex-grow: 1;
+}
+
+.HeroImage {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 66vh;
+  min-height: 200px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+}
+
+h1.Title {
+  color: #fff;
+  font-size: 4rem;
+  margin: 0px 1rem 1rem 2rem;
+  max-width: 66%;
+}
+
+@media only screen and (max-width: 810px) {
+  .Container {
+    margin-bottom: 1rem;
+    height: calc(45vh - 6rem);
+    min-height: 150px;
+    width: 90%;
+  }
+
+  .HeroImage {
+    height: 45vh;
+    min-height: 150px;
+  }
+
+  h1.Title {
+    margin: 0px 0rem 1rem -1rem;
+    font-size: 4rem;
+    max-width: 86%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  h1.Title {
+    font-size: 2.6rem;
+  }
+}

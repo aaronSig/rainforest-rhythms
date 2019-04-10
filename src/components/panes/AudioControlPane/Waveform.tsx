@@ -4,11 +4,15 @@ import { connect } from "react-redux";
 import { animated, useSpring } from "react-spring";
 import { updateSiteAudioState } from "../../../state/actions";
 import { didSeek, siteAudioTimestampDidUpdate } from "../../../state/data-actions";
-import { getCurrentSiteAudioId, getNextAudioLink, getRequestedTimestamp, getSiteAudio } from "../../../state/selectors";
+import {
+  getCurrentSiteAudioId,
+  getNextAudioLink,
+  getRequestedTimestamp,
+  getSiteAudio
+} from "../../../state/selectors";
 import { SiteAudioState, State } from "../../../state/types";
 import useResizeAware from "../../../utils/useResizeAware";
 import styles from "./Waveform.module.css";
-
 
 const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 const allowPlaybackBeforeLoad = !isSafari;
@@ -153,7 +157,7 @@ function WaveformView(props: WaveformProps) {
     if (!isFinishedPlaying) {
       return;
     }
-    console.log("Opening next stream")
+    console.log("Opening next stream");
     navigate(nextAudioLink);
   }, [isFinishedPlaying, nextAudioLink]);
 

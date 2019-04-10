@@ -1,4 +1,7 @@
 import People from "components/People/People";
+import hero1 from "images/hero-canopy-1.jpg";
+import hero2 from "images/hero-canopy-2.jpg";
+import HeroImage from "components/HeroImage/HeroImage";
 import camp_cropped from "images/camp_cropped.jpg";
 import recorder_vjr1 from "images/recorder_vjr1.jpg";
 import frog_and_bird from "images/frog_and_bird.jpg";
@@ -6,26 +9,34 @@ import ImageZoom from "react-medium-image-zoom";
 import Affiliations from "components/Affiliations/Affiliations";
 import YouTube from "components/YouTube/YouTube";
 
-<YouTube title="The SAFE Project" src="https://www.youtube-nocookie.com/embed/yco5xhShYFs" />
+<HeroImage src={hero2} title="Listening to the Rainforest" subtitle="Listening to the Rainforest" />
 
 Tropical forests are the most biodiverse regions on earth, providing a rich habitat for thousands of species of animals and plants. Monitoring the wildlife living within these areas is essential for scientists studying the effect of human pressures on the health of ecosystems, as well as to ensure the conservation of rare species.
+
 Traditionally, biodiversity monitoring has been done manually by highly skilled specialists who are trained to recognise animals within the forest by sight or sound. Over the course of months and years, it is possible to build up a comprehensive list of all the animals found at a given location in the forest. Whilst this is a tried and tested method, it is expensive, slow, and susceptible to human biases.
+
 SAFE Acoustics is an interdisciplinary research project, where we are applying cutting-edge advances from the fields of engineering and machine learning to fully automate biodiversity monitoring in the tropical forests of Borneo. We do this by listening to the sounds of the animals.
+
 We have developed real-time acoustic monitoring units which we have deployed in a network across varying levels of forest degradation at the SAFE project research site in Sabah, Malaysia. Some of our recorders are in primary forest that’s largely untouched by humans, whilst others are in logged forests and even inside commercial oil-palm plantations.
+
 Have a browse around our interactive map on the homepage to listen to audio streaming directly from the tropical forests of Borneo, straight to your device. We've found in addition to the wealth of scientific information held within these audio streams, they also provide beautiful, unique background sounds to listen to whilst going about your daily life.
+
 For more information on our project, read on below, or if you have any questions get in touch via [email](mailto:s.sethi16@imperial.ac.uk) or [Twitter](https://twitter.com/SafeAcoustics). Enjoy!
 
 # Team
 
 We are a team of scientists based at Imperial College London, Universiti Malaysia Sabah and at the South East Asia Rainforest Research Partnership. We conduct this work at the SAFE project field site in Sabah, Malaysia.
-Sarab Sethi (PhD student, ICL), Rob Ewers (Professor, ICL), Lorenzo Picinali (Senior Lecturer, ICL), Nick Jones (Reader, ICL), David Orme (Research Fellow, ICL), Henry Bernard, (Associate Professor, UMS), Jani Sleutel (Research Assistant, SEARRP), Nursyamin Zulkifli (Research Assistant, SEARRP), Adi Shabrani (Former Research Assistant, SEARRP)
 
 <People />
+
+Sarab Sethi (PhD student, ICL), Rob Ewers (Professor, ICL), Lorenzo Picinali (Senior Lecturer, ICL), Nick Jones (Reader, ICL), David Orme (Research Fellow, ICL), Henry Bernard, (Associate Professor, UMS), Jani Sleutel (Research Assistant, SEARRP), Nursyamin Zulkifli (Research Assistant, SEARRP), Adi Shabrani (Former Research Assistant, SEARRP)
 
 # Real-time ecosystem monitoring units
 
 Recording audio from tropical forests is tricky. With daily thunderstorms, mid-day temperatures that often reach well over 30 °C, and consistent humidity around 100%, most commercially available electronics wouldn't last a few days if left out in the open.
+
 There are a small number of audio recording devices made especially for environments with extreme weather conditions which have been used by ecologists. However, these are often expensive, inflexible, and require regular maintenance to continue running over long deployments.
+
 We were looking for a device that was adaptable, inexpensive and would allow us to stream data directly from the field, requiring minimal effort in the way of maintenance. Since it didn't exist, we developed our own hardware based around the Raspberry Pi microcomputer.
 
 <ImageZoom image={{ src: camp_cropped, alt: "Our Camp" }} />
@@ -34,18 +45,22 @@ The real-time monitoring device is powered by solar panels propped up in the can
 
 <ImageZoom image={{ src: recorder_vjr1, alt: "The real time recorder" }} />
 
-Once we'd extensively tested it, we made our hardware design and software fully open-source so other scientists tackling ecosystem monitoring could easily get up and running for a fraction of the price compared to commercial alternatives. We published an open-access paper on our device in [Methods in Ecology and Evolution](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13089), and for programming enthusiasts the Python code is available on [Github](http://github.com/sarabsethi/rpi-eco-monitoring). Finally, simple, step-by-step instructions on how to put together one of these devices from scratch yourself is available at rpi-eco-monitoring.com.
+Once we'd extensively tested it, we made our hardware design and software fully open-source so other scientists tackling ecosystem monitoring could easily get up and running for a fraction of the price compared to commercial alternatives. We published an open-access paper on our device in [Methods in Ecology and Evolution](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13089), and for programming enthusiasts the Python code is available on [Github](http://github.com/sarabsethi/rpi-eco-monitoring). Finally, simple, step-by-step instructions on how to put together one of these devices from scratch yourself is available at [rpi-eco-monitoring.com](http://rpi-eco-monitoring.com).
 
 # Audio analyses
 
 Collecting audio from these locations is the first step of a fully automated biodiversity monitoring system. The next stage is applying machine learning techniques to draw out information from the huge amounts of audio data coming into our servers from the real-time monitoring units.
+
 Broadly speaking, people tend to take two approaches to analysing audio from ecosystems. One is to try and replicate the job of the expert standing in the forest, writing down all the species they see and hear. A computer is first shown examples of all the different calls that one species might make, and builds a model for what the audio from that animal sounds like. Then in subsequent new recordings it is able to estimate how many calls in the audio belonged to that species. In this way it is possible to track populations of species in different areas of the forest.
+
 Another approach takes a more holistic view of the ‘soundscape’. Rather than individually labelling each call in the audio as belonging to a species, the computer assigns a number corresponding to the general activity of the audio clip. For example, audio from a dawn chorus in a tropical forest would have a higher "activity level" than audio recorded in the depths of the night from a desert. This is true without needing to understand exactly which species are calling in each audio clip.
+
 We are using both techniques to analyse the sounds from the SAFE Acoustics project. Once we've validated our methods we hope to add the outputs from our automated analyses to this website - stay tuned!
 
 # Species communities
 
 At each of our recorder sites, over the course of a year, we have put together a complete list of bird, frog and reptile species encountered using the point count method. Each site was surveyed at least twice at every hour of the day, to make sure we didn't miss any animals with unusual waking hours.
+
 This data is essential as a ground truth, to ensure that the outputs of the automated analyses we are working on match up with what we observe in the field. No automated method will ever be 100% accurate, and this allows us to gain insight into the advantages and pitfalls of each of the different machine learning models we use.
 
 <ImageZoom image={{ src: frog_and_bird, alt: "A frog and bird" }} />
@@ -55,12 +70,14 @@ To date, across all sites, we have found 120+ species of bird, and 40+ of frogs 
 # SAFE project
 
 The SAFE Project is one of the largest ecological experiments in the world. At SAFE, an international team of researchers study how biodiversity and ecosystem function change as forests are modified by human activities. As well as studying the change, scientists also explore whether preserving sections of forest within modified landscapes and around waterways can protect biodiversity and ecosystem function, and how much protection is needed to be effective.
+
 Watch the video below for a summary of the work going on at SAFE, beyond our acoustics work, and for more detailed information visit the [SAFE project website](http://safeproject.net/).
 
-<YouTube title="Life At Camp" src="https://www.youtube-nocookie.com/embed/K0NMLHD_qSU" />
+<YouTube title="The SAFE Project" src="https://www.youtube-nocookie.com/embed/yco5xhShYFs" />
 
 # Press / blogs
 
+France24: [Tech24 - Saving the planet's biodiversity with technology](https://www.france24.com/en/20190405-tech24-saving-wildlife-animals-ai-safe-acoustics-sarab-sethi-cryoconservation-metafly)
 New Scientist: [AI eavesdrops on Borneo’s rainforests to check on biodiversity](https://www.newscientist.com/article/2179850-ai-eavesdrops-on-borneos-rainforests-to-check-on-biodiversity/)
 MagPi (pgs 18-19): [Ecosystem Monitor](https://www.raspberrypi.org/magpi-issues/MagPi76.pdf?mc_cid=b185284408&mc_eid=66de66302d)
 Systems and signals blog: [Towards fully automated remote ecosystem monitoring](http://systems-signals.blogspot.com/2018/10/towards-fully-automated-remote.html?m=1)

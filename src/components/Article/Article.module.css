@@ -11,7 +11,6 @@
 
   padding-top: 6rem;
   padding-bottom: 50px;
-  width: 720px;
 }
 
 .Article h1,
@@ -29,7 +28,8 @@
 .Article figure,
 .Article code {
   margin: 0px;
-  width: 550px;
+  width: 800px;
+  max-width: 90%;
 }
 
 .Article figcaption {
@@ -144,14 +144,14 @@
 }
 
 .Article img {
-  width: 650px;
+  width: 800px;
   margin-bottom: 3rem;
   margin-top: 3rem;
   display: block;
   border-bottom-style: none;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 810px) {
   .Article h1,
   .Article h2,
   .Article h3,

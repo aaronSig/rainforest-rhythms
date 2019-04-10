@@ -9,11 +9,18 @@
 .People img {
   width: 72px;
   height: 72px;
-  margin: 4px;
+  margin: 6px;
 }
 
-.People a {
+.People .NameBlock {
   border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Name {
+  text-align: center;
 }
 
 @media only screen and (max-width: 600px) {
