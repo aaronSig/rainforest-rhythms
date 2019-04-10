@@ -130,7 +130,7 @@ function WaveformView(props: WaveformProps) {
         wavesurfer.current.empty();
       } catch {}
     };
-  }, [wavesurfer, siteAudio.url, updateState, setLoadingPercent, set]);
+  }, [wavesurfer, siteAudio.url, updateState, setLoadingPercent, set, width]);
 
   // Ensure the app is not in a ready state when there's no audio loaded
   // (prevents the old audio hanging over)
@@ -219,7 +219,6 @@ function WaveformView(props: WaveformProps) {
 
     wavesurfer.current.on("waveform-ready", () => {
       console.log("waveform-ready");
-      // updateState(undefined, true);
     });
 
     wavesurfer.current.on("finish", () => {
@@ -242,10 +241,11 @@ function WaveformView(props: WaveformProps) {
 
   return (
     <div className={styles.WaveformContainer}>
-      <div ref={waveformRef} className={styles.Waveform}>
-        {resizeComponent}
-      </div>
-      <animated.div className={styles.LoadingOverlay} style={{ width: springProps.width }} />
+      {resizeComponent}
+      <div ref={waveformRef} className={styles.Waveform} style={{ width: width || 1400 }} />
+      {allowPlaybackBeforeLoad && (
+        <animated.div className={styles.LoadingOverlay} style={{ width: springProps.width }} />
+      )}
     </div>
   );
 }

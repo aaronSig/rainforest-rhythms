@@ -3,12 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Site, StreamInfo, TimeSegment } from "../../../../api/types";
 import { searchForAudioAtTime } from "../../../../state/data-actions";
-import {
-  getCurrentSiteAudio,
-  getFocusedSite,
-  getFocusedTimeSegment,
-  getTimeOfDay
-} from "../../../../state/selectors";
+import { getCurrentSiteAudio, getFocusedSite, getFocusedTimeSegment, getTimeOfDay } from "../../../../state/selectors";
 import { State } from "../../../../state/types";
 import DayIndicator from "./DayIndicator";
 import HabitatIcon from "./HabitatIcon/HabitatIcon";
@@ -42,6 +37,7 @@ function InfoBarView(props: InfoBarProps) {
         <LocationLabel focusedSite={props.focusedSite} />
       </div>
       <div className={styles.Time}>
+        <DayIndicator timeSegment={props.focusedTimeSegment} />
         <div className={styles.tooltip}>
           {/* <h2>{props.time}</h2> */}
           {props.focusedSite && (
@@ -54,7 +50,6 @@ function InfoBarView(props: InfoBarProps) {
 
           {valid && <span>Recorded {format(date, "do MMM yyyy")}</span>}
         </div>
-        <DayIndicator timeSegment={props.focusedTimeSegment} />
       </div>
       <MapAttribution />
     </div>

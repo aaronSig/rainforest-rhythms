@@ -8,19 +8,18 @@
 .TimePicker input {
   font-size: 3rem;
   margin: 0px;
-  margin-right: -2.4rem;
+  margin-right: 0rem;
   padding: 0px;
   line-height: 3.4rem;
   background: transparent;
   border: 1px solid transparent;
   padding: 4px 8px;
   color: #fff;
-  width: 160px;
+  width: 170px;
   text-align: center;
   font-family: "Montserrat", sans-serif;
   font-weight: bold;
   border-radius: 5px;
-
   cursor: text;
 }
 
