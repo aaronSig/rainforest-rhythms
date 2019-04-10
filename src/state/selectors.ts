@@ -1,4 +1,4 @@
-import { addMinutes, format, isValid, parse } from "date-fns";
+import { addMinutes, format, isValid, parseISO } from "date-fns";
 import { createSelector } from "reselect";
 import { StreamInfo, Taxon, TaxonWithPresence, TimeSegment } from "../api/types";
 import { getTimeSegment } from "../utils/dates";
@@ -82,10 +82,24 @@ export const getSiteAudioByTimeSegment = createSelector(
       .forEach(a => {
         const segment = getTimeSegment(a.time) as TimeSegment;
         siteAudioByTimeSegment[a.site][segment].push(a);
-        siteAudioByTimeSegment[a.site][segment].sort((a, b) => (a.time < b.time ? 1 : -1));
+        siteAudioByTimeSegment[a.site][segment].sort((a, b) => (a.time < b.time ? -1 : 1));
       });
 
     return siteAudioByTimeSegment;
+  }
+);
+
+/***
+ * An array of all the audio for a site sorted by time
+ */
+export const getAllForSiteAudioSorted = createSelector(
+  [getSiteAudioByAudioId, getFocusedSiteId],
+  (siteAudioByAudioId, siteId) => {
+    const audio = siteAudioByAudioId
+      .filter(a => a.site === siteId)
+      .valueSeq()
+      .toArray();
+    return audio.sort((a, b) => (a.time < b.time ? -1 : 1));
   }
 );
 
@@ -129,7 +143,6 @@ export const getTaxaForFocusedSite = createSelector(
         return taxaById[id];
       })
       .filter(t => t !== undefined);
-
     return taxa;
   }
 );
@@ -203,12 +216,74 @@ export const getTimeOfDay = createSelector(
     if (!streamInfo || siteAudio.url === null) {
       return timesegment;
     }
-    const date = parse(`${streamInfo.date}T${streamInfo.time}`);
+    const date = parseISO(`${streamInfo.date}T${streamInfo.time}`);
     const valid = isValid(date);
     if (!valid) {
       return timesegment;
     }
     const additional = addMinutes(date, timestampMinutes);
     return format(additional, "HH:mm");
+  }
+);
+
+export const getPreviousTimeSegment = createSelector(
+  [getFocusedTimeSegment],
+  (focusedTimesegment: TimeSegment) => {
+    const index = allTimeSegments.findIndex(t => t === focusedTimesegment);
+    const beforeIndex = (allTimeSegments.length + index - 1) % allTimeSegments.length;
+    return allTimeSegments[beforeIndex];
+  }
+);
+
+export const getNexTimeSegment = createSelector(
+  [getFocusedTimeSegment],
+  (focusedTimesegment: TimeSegment) => {
+    const index = allTimeSegments.findIndex(t => t === focusedTimesegment);
+    const afterIndex = (allTimeSegments.length + index + 1) % allTimeSegments.length;
+    return allTimeSegments[afterIndex];
+  }
+);
+
+/***
+ * Returns the url for the audio that preceeds logically from the
+ * audio playing. Only uses the audio we have stored
+ */
+export const getPreviousAudioLink = createSelector(
+  [getFocusedSiteId, getPreviousTimeSegment, getCurrentSiteAudioId, getAllForSiteAudioSorted],
+  (focusedSiteId, previousTimeSegment, currentSiteAudioId, allAudio) => {
+    if (!currentSiteAudioId || allAudio.length < 1) {
+      // no audio. Just move back a time segment.
+      return `/${previousTimeSegment}/${focusedSiteId}`;
+    }
+    const idx = allAudio.findIndex(a => a.audio === currentSiteAudioId);
+    if (idx === -1) {
+      return `/${previousTimeSegment}/${focusedSiteId}`;
+    }
+    const prevIndex = (allAudio.length + idx - 1) % allAudio.length;
+    const prevAudio = allAudio[prevIndex];
+
+    return `/${getTimeSegment(prevAudio.time)}/${focusedSiteId}/${prevAudio.audio}`;
+  }
+);
+
+/***
+ * Returns the url for the audio that is next logically from the
+ * audio we have stored
+ */
+export const getNextAudioLink = createSelector(
+  [getFocusedSiteId, getNexTimeSegment, getCurrentSiteAudioId, getAllForSiteAudioSorted],
+  (focusedSiteId, nextTimeSegment, currentSiteAudioId, allAudio) => {
+    if (!currentSiteAudioId || allAudio.length < 1) {
+      // no audio. Just move forward a time segment.
+      return `/${nextTimeSegment}/${focusedSiteId}`;
+    }
+    const idx = allAudio.findIndex(a => a.audio === currentSiteAudioId);
+    if (idx === -1) {
+      return `/${nextTimeSegment}/${focusedSiteId}`;
+    }
+    const nextIndex = (allAudio.length + idx + 1) % allAudio.length;
+    const nextAudio = allAudio[nextIndex];
+
+    return `/${getTimeSegment(nextAudio.time)}/${focusedSiteId}/${nextAudio.audio}`;
   }
 );

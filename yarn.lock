@@ -4102,9 +4102,9 @@ data-urls@^1.0.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
-date-fns@^1.30.1:
-  version "1.30.1"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
+date-fns@^v2.0.0-alpha.27:
+  version "2.0.0-alpha.27"
+  resolved "https://npm.travaplan.com/date-fns/-/date-fns-2.0.0-alpha.27.tgz#5ecd4204ef0e7064264039570f6e8afbc014481c"
 
 date-now@^0.1.4:
   version "0.1.4"
@@ -8647,9 +8647,9 @@ react-scripts@3.0.0-next.b0cbf2ca:
   optionalDependencies:
     fsevents "1.2.7"
 
-react-spring@^8.0.15:
-  version "8.0.18"
-  resolved "https://registry.yarnpkg.com/react-spring/-/react-spring-8.0.18.tgz#f6fa09ab5acdeb37618c0e340d59830171b95c33"
+react-spring@^8.0.19:
+  version "8.0.19"
+  resolved "https://npm.travaplan.com/react-spring/-/react-spring-8.0.19.tgz#62f4f396b4b73fa402838200a1c80374338cb12e"
   dependencies:
     "@babel/runtime" "^7.3.1"
 

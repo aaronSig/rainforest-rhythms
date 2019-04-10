@@ -42,10 +42,13 @@ function TimePicker(props: TimePickerProps) {
   };
 
   return (
-    <div className={styles.TimePicker} onFocus={onFocus} onBlur={onBlur} onChange={onChage}>
+    <div className={styles.TimePicker}>
       <input
         ref={inputRef}
         type="time"
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onChange={onChage}
         value={isFocused || isOveridden ? searchTime : time}
         onKeyPress={onKeyPress}
         required

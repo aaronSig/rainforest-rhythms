@@ -31,6 +31,7 @@ export default function useIndexHook(props: IndexProps) {
     if (isInitialLoadComplete) {
       if (!timeSegment) {
         //if there isn't a time segment set, set it to 6:00 site 10
+        console.log("Setting to initial default");
         navigate(`/06:00/10`, {
           replace: true
         });
@@ -45,6 +46,7 @@ export default function useIndexHook(props: IndexProps) {
       if (sitesById.count() > 0) {
         if (timeSegment && !siteId) {
           const firstSite = sitesById.keys().next().value;
+          console.log("Adding the first site to URL");
           navigate(`/${timeSegment}/${firstSite}`, {
             replace: true
           });
@@ -90,7 +92,7 @@ export default function useIndexHook(props: IndexProps) {
       if (currentSiteAudioId === null) {
         if (!audioId && availableAudio.length > 0) {
           const streamInfo = availableAudio[0];
-          console.log("useIndexHook, Setting audio", streamInfo);
+          console.log("useIndexHook, Setting audio", streamInfo, "availableAudio", availableAudio);
           navigate(`/${timeSegment}/${siteId}/${streamInfo.audio}`);
         }
       }

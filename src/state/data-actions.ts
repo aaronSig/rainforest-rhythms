@@ -28,12 +28,10 @@ export function initialLoad() {
   return async (dispatch: any) => {
     try {
       dispatch(didStartLoading());
-      const habitats = null;
-      const streams = null;
-      let [megaResponse] = await Promise.all([
-        api.getMegaRequest()
-        // api.geoJson.habitats(),
-        // api.geoJson.streams()
+      let [megaResponse, habitats, streams] = await Promise.all([
+        api.getMegaRequest(),
+        api.geoJson.habitats(),
+        api.geoJson.streams()
       ]);
 
       if (megaResponse === null) {
@@ -174,10 +172,12 @@ export function searchForAudioAtTime(time: string, siteId: string) {
       if (result) {
         dispatch(addSiteAudioInfo(result));
         const timeSegment = getTimeSegment(result.time);
+        console.log("Setting result Audio");
         navigate(`/${timeSegment}/${siteId}/${result.audio}`);
       } else {
         // There was no audio for this time. Try and get close
         const timeSegment = getTimeSegment(time);
+        console.log("Unable to find audio, navigating to timestamp");
         navigate(`/${timeSegment}/${siteId}`);
       }
     } finally {
@@ -201,6 +201,7 @@ export function didSeek(progressPercent: string) {
       return;
     }
 
+    console.log("Did seek", timeSegment, siteId, audioId, progressPercent);
     navigate(`/${timeSegment}/${siteId}/${audioId}?t=${progressPercent}`, {
       replace: true
     });

@@ -52,9 +52,9 @@ export interface IndexProps {
 export function IndexView(props: IndexProps) {
   useIndexHook(props);
 
-  if (!props.isInitialLoadComplete) {
-    return <div>Loading...</div>;
-  }
+  // if (!props.isInitialLoadComplete) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div className={styles.Home}>

@@ -21,21 +21,21 @@ export default function Attribution(props: AttributionProps) {
         <img src={ccIcon} alt="Creative Commons Icon" />
       </div>
       <div className={styles.Column}>
-        {!props.taxon.image.gbif_rights_holder && (
+        {props.taxon.image.gbif_rights_holder && (
           <a
             className={styles.Credit}
-            href={props.taxon.image.gbif_occurrence_key || ""}
+            href={`https://www.gbif.org/occurrence/${props.taxon.image.gbif_occurrence_key}`}
             target="_blank"
             rel="noopener noreferrer"
           >
-            {!props.taxon.image.gbif_rights_holder}
+            {props.taxon.image.gbif_rights_holder}
             <img src={cameraIcon} alt="Camera icon" />
           </a>
         )}
         {props.taxon.audio.gbif_rights_holder && (
           <a
             className={styles.Credit}
-            href={props.taxon.audio.gbif_occurrence_key || ""}
+            href={`https://www.gbif.org/occurrence/${props.taxon.audio.gbif_occurrence_key}`}
             target="_blank"
             rel="noopener noreferrer"
           >

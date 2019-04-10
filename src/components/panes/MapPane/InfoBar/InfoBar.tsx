@@ -1,4 +1,4 @@
-import { format, isValid, parse } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
 import React from "react";
 import { connect } from "react-redux";
 import { Site, StreamInfo, TimeSegment } from "../../../../api/types";
@@ -29,7 +29,7 @@ interface InfoBarProps {
 function InfoBarView(props: InfoBarProps) {
   const site = props.focusedSite || ({} as Site);
   const streamInfo = props.currentSiteAudio || ({} as StreamInfo);
-  const date = parse(`${streamInfo.date}T${streamInfo.time}`);
+  const date = parseISO(`${streamInfo.date}T${streamInfo.time}`);
   const valid = isValid(date);
 
   return (
@@ -52,7 +52,7 @@ function InfoBarView(props: InfoBarProps) {
             />
           )}
 
-          {valid && <span>Recorded {format(date, "Do MMM YYYY")}</span>}
+          {valid && <span>Recorded {format(date, "do MMM yyyy")}</span>}
         </div>
         <DayIndicator timeSegment={props.focusedTimeSegment} />
       </div>

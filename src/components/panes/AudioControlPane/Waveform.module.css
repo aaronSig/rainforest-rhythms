@@ -1,4 +1,6 @@
 .WaveformContainer {
+  position: relative;
+
   flex-grow: 1;
   display: flex;
   height: 136px;
@@ -9,4 +11,14 @@
   position: relative;
   height: 272px;
   width: 100%;
+  z-index: 1;
+}
+
+.LoadingOverlay {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: #002f2a;
+  z-index: 2;
 }

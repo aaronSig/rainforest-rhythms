@@ -6,6 +6,14 @@ import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import store from "./store";
 
+function noop() {}
+
+if (process.env.NODE_ENV !== "development") {
+  console.log = noop;
+  console.warn = noop;
+  console.error = noop;
+}
+
 ReactDOM.render(
   <StrictMode>
     <Provider store={store}>

@@ -15,6 +15,7 @@ import {
   getSunset
 } from "../../../state/selectors";
 import { allTimeSegments, SiteAudioState, State } from "../../../state/types";
+import { sortClosestToTime } from "../../../utils/dates";
 import PlayButton from "../../buttons/play/PlayButton";
 import styles from "./TimePicker.module.css";
 
@@ -40,7 +41,8 @@ function TimePickerView(props: TimePickerProps) {
       if (focusedSiteId in siteAudioByTimeSegment) {
         const audio = siteAudioByTimeSegment[focusedSiteId][t];
         if (audio.length) {
-          parts.push(audio[0].audio);
+          const sortedAudio = sortClosestToTime(audio, t);
+          parts.push(sortedAudio[0].audio);
         }
       }
     }

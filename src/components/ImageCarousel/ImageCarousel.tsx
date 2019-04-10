@@ -26,13 +26,22 @@ function ImageCarouselInner(props: ImageCarouselProps) {
   const transitions = useTransition(imageUrls[index], p => p, {
     from: { opacity: 0, transform: `translate3d(${movingToNext ? 100 : -50}%,0,0)` },
     enter: { opacity: 1, transform: `translate3d(0%,0,0)` },
-    leave: { opacity: 0, transform: `translate3d(${movingToNext ? -50 : 100},0,0)` }
+    leave: { opacity: 0, transform: `translate3d(${movingToNext ? -50 : 100},0,0)` },
+    unique: true,
+    reset: true
   });
 
-  // preload the two images either side of where we are
+  // preload the two images either side of where we are. and three ahead
   const beforeIndex = (imageUrls.length + index - 1) % imageUrls.length;
   const afterIndex = (imageUrls.length + index + 1) % imageUrls.length;
-  const linksToPreload = [imageUrls[beforeIndex], imageUrls[afterIndex]];
+  const afterAfterIndex = (imageUrls.length + index + 2) % imageUrls.length;
+  const afterAfterAfterIndex = (imageUrls.length + index + 3) % imageUrls.length;
+  const linksToPreload = [
+    imageUrls[beforeIndex],
+    imageUrls[afterIndex],
+    imageUrls[afterAfterIndex],
+    imageUrls[afterAfterAfterIndex]
+  ];
 
   return (
     <div className={styles.carousel}>

@@ -87,7 +87,6 @@ function SingleImageView(props: SingleImageViewProps) {
       {taxon && <Attribution isLoading={props.isLoading} taxon={taxon} />}
       {taxa.length > 0 && slide > -1 && (
         <div className={styles.Controls}>
-          <TaxonAudioButton taxon={taxa[slide]} />
           <button type="button" className={styles.SliderButton} onClick={previous}>
             <img className={styles.left} src={arrowLight} alt="Left Arrow" />
           </button>
@@ -103,7 +102,10 @@ function SingleImageView(props: SingleImageViewProps) {
             </h1>
 
             <h4>{taxon.seenAtThisTime ? SEEN_AT_TIME : SEEN_AT_SITE}</h4>
-            <ul className={styles.pips}>
+            <span className={styles.Counter}>
+              {slide + 1} of {imageUrls.length}
+            </span>
+            {/* <ul className={styles.pips}>
               {imageUrls.map((u, i) => {
                 function moveToSlide() {
                   setSlide(i);
@@ -116,11 +118,12 @@ function SingleImageView(props: SingleImageViewProps) {
                   />
                 );
               })}
-            </ul>
+            </ul> */}
           </div>
           <button type="button" className={styles.SliderButton} onClick={next}>
             <img src={arrowLight} alt="Right Arrow" />
           </button>
+          <TaxonAudioButton taxon={taxa[slide]} />
         </div>
       )}
     </>

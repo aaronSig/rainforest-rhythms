@@ -2,13 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Site, TaxonWithPresence, TimeSegment } from "../../../api/types";
 import { focusTaxonId, setLightboxPhoto } from "../../../state/actions";
-import {
-  getFocusedSite,
-  getFocusedTaxonId,
-  getFocusedTimeSegment,
-  getTaxaWithPresence,
-  isLoading
-} from "../../../state/selectors";
+import { getFocusedSite, getFocusedTaxonId, getFocusedTimeSegment, getTaxaWithPresence, isLoading } from "../../../state/selectors";
 import { State } from "../../../state/types";
 import useResizeAware from "../../../utils/useResizeAware";
 import styles from "./InfoPane.module.css";

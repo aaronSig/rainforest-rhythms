@@ -59,8 +59,8 @@ function AudioPlayerController(props: AudioPlayerProps) {
     console.log("Audio - setting new source");
     sound.current = new Howl({
       src: [src],
-      preload: false,
-      autoplay: true,
+      preload: true,
+      autoplay: false,
       loop: false,
       onload: () => {
         setIsReady(true);

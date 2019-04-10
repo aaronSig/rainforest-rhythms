@@ -1,7 +1,7 @@
 import "isomorphic-fetch";
 import { allTimeSegments } from "../state/types";
 import { byStringKey } from "../utils/objects";
-import { AccessToken, HabitatName, MegaResponse, RecorderType, Site, SiteInfo, Status, StreamInfo, TimeSegment } from "./types";
+import { AccessToken, HabitatName, MegaResponse, RecorderType, Site, SiteInfo, Status, StreamInfo, Taxon, TimeSegment } from "./types";
 
 const isServer = typeof window === "undefined";
 const isLocal = !isServer && window.location.href.includes("://localhost");
@@ -61,10 +61,17 @@ export default {
     const siteAudioByAudio = siteAudio.map(a => idsToString(a));
     const siteAudioByAudioId = byStringKey("audio", siteAudioByAudio);
 
-    const taxa = Object.values(mega.taxaById)
-      .filter(t => t.image.media_url === null || t.image.media_url === "")
-      .filter(t => t.image.media_url === "/download")
-      .map(t => idsToString(t));
+    const taxa = Object.keys(mega.taxaById)
+      .map(id => mega.taxaById[id])
+      .filter(t => t.image.media_url !== null || t.image.media_url !== "")
+      .filter(t => t.image.media_url !== "/download")
+      .map(t => {
+        const audio = t.audio;
+        const tx = idsToString(t) as Taxon;
+        tx.audio = audio;
+        return tx;
+      });
+
     const taxaById = byStringKey("id", taxa);
 
     const taxaIdBySiteId = Object.keys(mega.taxaIdBySiteId).reduce(
@@ -117,7 +124,7 @@ export default {
     },
     async get(siteId: number): Promise<SiteInfo> {
       return idsToString(await get("get_site", [siteId]));
-    },
+    }
 
     /***
      * Gets an image for this site at this time

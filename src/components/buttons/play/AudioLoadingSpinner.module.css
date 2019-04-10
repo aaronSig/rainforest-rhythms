@@ -1,9 +1,9 @@
 .AudioLoadingSpinner .circle {
-  width: 90%;
-  height: 90%;
+  width: 60%;
+  height: 60%;
   position: absolute;
-  left: 5%;
-  top: 5%;
+  left: 20%;
+  top: 20%;
 }
 
 .AudioLoadingSpinner .circle:before {

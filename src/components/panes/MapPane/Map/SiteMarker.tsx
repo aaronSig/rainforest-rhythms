@@ -50,6 +50,7 @@ function SiteMarkerView(props: SiteMarkerProps) {
           url = `${url}/${audio[0].audio}`;
         }
       }
+      console.log("Selecting Site");
       navigate(url);
     }
   }, [focusedTimeSegment, isFocused, toggleAudio, site.id, siteAudioByTimeSegment]);

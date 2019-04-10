@@ -1,19 +1,14 @@
 import { navigate } from "@reach/router";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { TimeSegment } from "../../../api/types";
+import { animated, useSpring } from "react-spring";
 import { updateSiteAudioState } from "../../../state/actions";
 import { didSeek, siteAudioTimestampDidUpdate } from "../../../state/data-actions";
-import {
-  getCurrentSiteAudioId,
-  getFocusedSiteId,
-  getFocusedTimeSegment,
-  getRequestedTimestamp,
-  getSiteAudio
-} from "../../../state/selectors";
-import { allTimeSegments, SiteAudioState, State } from "../../../state/types";
+import { getCurrentSiteAudioId, getNextAudioLink, getRequestedTimestamp, getSiteAudio } from "../../../state/selectors";
+import { SiteAudioState, State } from "../../../state/types";
 import useResizeAware from "../../../utils/useResizeAware";
 import styles from "./Waveform.module.css";
+
 
 const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 const allowPlaybackBeforeLoad = !isSafari;
@@ -21,9 +16,8 @@ const allowPlaybackBeforeLoad = !isSafari;
 interface WaveformProps {
   siteAudio: SiteAudioState;
   currentSiteAudioId: string | null;
-  focusedTimeSegment: TimeSegment;
-  focusedSiteId: string | null;
   requestedTimestamp: number | null;
+  nextAudioLink: string;
   updateState: (
     loadedPercent?: number,
     isReady?: boolean,
@@ -83,16 +77,19 @@ function WaveformView(props: WaveformProps) {
     updateState,
     seek,
     timestampDidUpdate,
-    focusedTimeSegment,
-    focusedSiteId,
-    currentSiteAudioId
+    currentSiteAudioId,
+    nextAudioLink
   } = props;
   const isFinishedPlaying = siteAudio.isFinished;
 
   const wavesurfer = useRef(null as any);
   const waveformRef = useRef(null as any);
+  const [loadingPercent, setLoadingPercent] = useState(0);
   const [resizeComponent, containerSize] = useResizeAware();
   const width = containerSize.width;
+
+  const [springProps, set] = useSpring(() => ({ width: "0%" }));
+  set({ width: `${100 - loadingPercent}%` });
 
   // Setup the wavesurfer object
   useEffect(() => {
@@ -119,6 +116,9 @@ function WaveformView(props: WaveformProps) {
     console.log("Loading audio");
     (window as any).surfer = wavesurfer.current;
     wavesurfer.current.load(siteAudio.url);
+    setLoadingPercent(0);
+    set({ width: `0%` });
+
     return () => {
       updateState(undefined, false);
       try {
@@ -126,7 +126,7 @@ function WaveformView(props: WaveformProps) {
         wavesurfer.current.empty();
       } catch {}
     };
-  }, [wavesurfer, siteAudio.url, updateState]);
+  }, [wavesurfer, siteAudio.url, updateState, setLoadingPercent, set]);
 
   // Ensure the app is not in a ready state when there's no audio loaded
   // (prevents the old audio hanging over)
@@ -153,16 +153,9 @@ function WaveformView(props: WaveformProps) {
     if (!isFinishedPlaying) {
       return;
     }
-    const index = allTimeSegments.findIndex(t => t === focusedTimeSegment);
-    const afterIndex = (allTimeSegments.length + index + 1) % allTimeSegments.length;
-    const nextTimeSegment = allTimeSegments[afterIndex];
-
-    let url = `/${nextTimeSegment}`;
-    if (focusedSiteId) {
-      url = `/${nextTimeSegment}/${focusedSiteId}`;
-    }
-    navigate(url);
-  }, [focusedSiteId, focusedTimeSegment, isFinishedPlaying]);
+    console.log("Opening next stream")
+    navigate(nextAudioLink);
+  }, [isFinishedPlaying, nextAudioLink]);
 
   // Watch the events
   useEffect(() => {
@@ -183,8 +176,7 @@ function WaveformView(props: WaveformProps) {
     });
 
     wavesurfer.current.on("loading", (percent: number) => {
-      // console.log("loading", percent);
-      // updateState(percent);
+      setLoadingPercent(percent);
     });
 
     wavesurfer.current.on("play", () => {
@@ -214,7 +206,10 @@ function WaveformView(props: WaveformProps) {
           .fill(0.5)
           .concat([1, -1]);
 
-        wavesurfer.current.drawer.drawPeaks(demoPeaks, width! * 2, 0, width! * 2);
+        setTimeout(() => {
+          // sometimes peaks dont clear
+          wavesurfer.current.drawer.drawPeaks(demoPeaks, width! * 2, 0, width! * 2);
+        }, 500);
       }
     });
 
@@ -230,13 +225,23 @@ function WaveformView(props: WaveformProps) {
     return () => {
       wavesurfer.current.unAll();
     };
-  }, [wavesurfer, siteAudio.url, seek, requestedTimestamp, updateState, width, timestampDidUpdate]);
+  }, [
+    wavesurfer,
+    siteAudio.url,
+    seek,
+    requestedTimestamp,
+    updateState,
+    width,
+    timestampDidUpdate,
+    setLoadingPercent
+  ]);
 
   return (
     <div className={styles.WaveformContainer}>
       <div ref={waveformRef} className={styles.Waveform}>
         {resizeComponent}
       </div>
+      <animated.div className={styles.LoadingOverlay} style={{ width: springProps.width }} />
     </div>
   );
 }
@@ -245,9 +250,8 @@ const mapStateToProps = (state: State) => {
   return {
     siteAudio: getSiteAudio(state),
     requestedTimestamp: getRequestedTimestamp(state),
-    focusedTimeSegment: getFocusedTimeSegment(state),
-    focusedSiteId: getFocusedSiteId(state),
-    currentSiteAudioId: getCurrentSiteAudioId(state)
+    currentSiteAudioId: getCurrentSiteAudioId(state),
+    nextAudioLink: getNextAudioLink(state)
   };
 };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import ImageZoom from "react-medium-image-zoom";
 import { connect } from "react-redux";
 import { Site, TimeSegment } from "../../../../api/types";
 import { setLightboxPhoto } from "../../../../state/actions";
@@ -10,11 +9,11 @@ import styles from "./HabitatPhoto.module.css";
 interface HabitatPhotoProps {
   focusedTimeSegment: TimeSegment;
   focusedSite: Site | null;
-  showHabitatPhoto: (url: string, alt: string) => void;
+  zoomImage: (url: string, alt: string) => void;
 }
 
 function HabitatPhotoView(props: HabitatPhotoProps) {
-  const { focusedSite, focusedTimeSegment } = props;
+  const { focusedSite, focusedTimeSegment, zoomImage } = props;
 
   let habitatPhoto: string | undefined = undefined;
   if (focusedSite) {
@@ -26,13 +25,19 @@ function HabitatPhotoView(props: HabitatPhotoProps) {
     return null;
   }
 
+  function zoom() {
+    zoomImage(
+      habitatPhoto!,
+      `${focusedSite ? focusedSite.habitat : "Habitat"} at ${focusedTimeSegment}`
+    );
+  }
+
   return (
-    <ImageZoom
-      image={{
-        className: styles.HabitatPhoto,
-        src: habitatPhoto,
-        alt: `${focusedSite ? focusedSite.habitat : "Habitat"} at ${focusedTimeSegment}`
-      }}
+    <img
+      className={styles.HabitatPhoto}
+      src={habitatPhoto}
+      alt={`${focusedSite ? focusedSite.habitat : "Habitat"} at ${focusedTimeSegment}`}
+      onClick={zoom}
     />
   );
 }
@@ -48,7 +53,7 @@ const mapStateToProps = (state: State) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    showHabitatPhoto: (url: string, alt: string) => {
+    zoomImage: (url: string, alt: string) => {
       dispatch(setLightboxPhoto(url, alt));
     }
   };
