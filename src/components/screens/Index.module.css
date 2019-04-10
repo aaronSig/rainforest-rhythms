@@ -4,6 +4,7 @@
   flex-grow: 1;
   height: 100%;
   width: 100%;
+  min-width: 900px;
   flex-direction: column;
   font-family: "Montserrat", sans-serif;
   background-color: #1e1e1e;

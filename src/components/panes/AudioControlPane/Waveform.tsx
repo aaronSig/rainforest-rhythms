@@ -4,7 +4,12 @@ import { connect } from "react-redux";
 import { animated, useSpring } from "react-spring";
 import { updateSiteAudioState } from "../../../state/actions";
 import { didSeek, siteAudioTimestampDidUpdate } from "../../../state/data-actions";
-import { getCurrentSiteAudioId, getNextAudioLink, getRequestedTimestamp, getSiteAudio } from "../../../state/selectors";
+import {
+  getCurrentSiteAudioId,
+  getNextAudioLink,
+  getRequestedTimestamp,
+  getSiteAudio
+} from "../../../state/selectors";
 import { SiteAudioState, State } from "../../../state/types";
 import useResizeAware from "../../../utils/useResizeAware";
 import styles from "./Waveform.module.css";
