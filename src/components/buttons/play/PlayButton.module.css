@@ -16,10 +16,6 @@
   cursor: pointer;
 }
 
-.PlayButton.loading {
-  padding: 20px;
-}
-
 .PlayButtonInner {
   position: absolute;
   top: 30%;

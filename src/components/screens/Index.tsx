@@ -19,6 +19,7 @@ import MapPane from "../panes/MapPane/MapPane";
 import withTimestamp from "../withTimestamp";
 import styles from "./Index.module.css";
 import useIndexHook from "./indexHooks";
+import "./Index.css"
 
 export interface IndexProps {
   // the path used by the router

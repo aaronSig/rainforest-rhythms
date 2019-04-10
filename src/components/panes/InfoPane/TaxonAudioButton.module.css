@@ -1,12 +1,12 @@
 .TaxonAudioButton {
   position: absolute;
-  top: -22px;
+  top: -1.375rem;
   left: 50%;
-  margin-left: -22px;
-  max-height: 44px;
-  max-width: 44px;
-  height: 44px;
-  width: 44px;
+  margin-left: -1.375rem;
+  max-height: 2.75rem;
+  max-width: 2.75rem;
+  height: 2.75rem;
+  width: 2.75rem;
   background-color: #e23e1d;
   border-radius: 50%;
 }

@@ -19,7 +19,7 @@
 
   border-top: 1px solid #002f2a;
   border-bottom: 1px solid #002f2a;
-  border-left: 1px solid #002f2a;
+  border-left: 1px solid rgba(0, 47, 42, 0.7);
 }
 
 .TimePicker li a {
@@ -58,8 +58,8 @@
 }
 
 .TimePicker .icon img {
-  height: 24px;
-  width: 24px;
+  height: 1.5rem;
+  width: 1.5rem;
   padding: 0.3rem;
 }
 
@@ -90,8 +90,8 @@ li.active {
 }
 
 li.active button {
-  height: 28px;
-  width: 28px;
+  height: 1.5rem;
+  width: 1.5rem;
   background-color: #fff;
   border-radius: 50%;
   margin-bottom: 8px;
