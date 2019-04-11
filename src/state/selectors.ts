@@ -25,6 +25,7 @@ export const getTaxonAudio = (state: State) => state.taxonAudio;
 export const getSiteAudioTimestamp = (state: State) => state.siteAudio.timestamp;
 export const getLightboxImage = (state: State) => state.lightboxImageUrl;
 export const getLightboxImageAlt = (state: State) => state.lightboxImageAlt;
+export const getIntroShowing = (state: State) => state.introShowing;
 
 // An array of all the sites
 export const getAllSites = createSelector(

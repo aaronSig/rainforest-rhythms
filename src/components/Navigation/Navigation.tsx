@@ -10,6 +10,12 @@ export function Navigation() {
         <li>
           <Link to="/about">Find Out More</Link>
         </li>
+
+        <li>
+          <a href="https://www.safeproject.net/" target="_blank" rel="noopener noreferrer">
+            The SAFE Project
+          </a>
+        </li>
       </ul>
     </header>
   );

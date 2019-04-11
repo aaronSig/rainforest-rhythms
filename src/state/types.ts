@@ -10,6 +10,8 @@ export interface State {
   sunrise: TimeSegment; // "06:00"
   sunset: TimeSegment; // "18:00"
 
+  introShowing: boolean;
+
   // The features we're showing on the map
   habitatData: GeoJSON.GeoJsonObject | null; //  ++done
   streamData: GeoJSON.GeoJsonObject | null; //  ++done

@@ -144,6 +144,11 @@ export function setLightboxPhoto(imageUrl: string | undefined, altText: string |
   return ax(LIGHTBOX_PHOTO, { lightboxImageUrl: imageUrl, lightboxImageAlt: altText });
 }
 
+export const SET_INTRO_SHOWING = "SET_INTRO_SHOWING";
+export function setIntroShowing(introShowing: boolean) {
+  return ax(SET_INTRO_SHOWING, { introShowing });
+}
+
 // -- MARK loading
 
 // call when something has started loading

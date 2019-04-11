@@ -9,6 +9,7 @@ import {
   LIGHTBOX_PHOTO,
   ROUTE_DID_CHANGE,
   SET_CURRENT_SITE_AUDIO_ID,
+  SET_INTRO_SHOWING,
   SET_PRELOADED_DATA,
   SET_TAXON_AUDIO_FINISHED,
   SET_TAXON_AUDIO_PLAYING,
@@ -25,6 +26,7 @@ const initialState: State = {
   loading: 0,
   sunrise: "06:00",
   sunset: "18:00",
+  introShowing: true,
   habitatData: null,
   streamData: null,
   sitesById: Map(),
@@ -60,6 +62,7 @@ const initialState: State = {
 
 export default function mainReducer(state: State = initialState, action: AnyAction) {
   switch (action.type) {
+    case SET_INTRO_SHOWING:
     case SET_PRELOADED_DATA:
     case LIGHTBOX_PHOTO:
       return Object.assign({}, state, action.item);

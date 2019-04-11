@@ -11,15 +11,16 @@ import {
   isInitialLoadComplete
 } from "../../state/selectors";
 import { State } from "../../state/types";
+import Intro from "../Intro/Intro";
 import Lightbox from "../Lightbox/Lighbox";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import AudioControlPane from "../panes/AudioControlPane/AudioControlPane";
 import InfoPane from "../panes/InfoPane/InfoPane";
 import MapPane from "../panes/MapPane/MapPane";
 import withTimestamp from "../withTimestamp";
+import "./Index.css";
 import styles from "./Index.module.css";
 import useIndexHook from "./indexHooks";
-import "./Index.css"
 
 export interface IndexProps {
   // the path used by the router
@@ -66,6 +67,7 @@ export function IndexView(props: IndexProps) {
       </div>
       <AudioControlPane />
       <Lightbox />
+      <Intro />
     </div>
   );
 }
