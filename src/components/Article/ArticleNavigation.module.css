@@ -2,6 +2,7 @@
   position: absolute;
   top: 0px;
   left: 0px;
+  right: 0px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -9,7 +10,7 @@
   padding: 0px 2rem 0px 2rem;
   color: #fff;
   flex-shrink: 0;
-  width: 800px;
+  z-index: 20;
 }
 
 .ArticleNavigation img {

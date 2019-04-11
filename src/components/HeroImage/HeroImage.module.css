@@ -7,6 +7,7 @@
   align-items: flex-start;
   margin-bottom: 2rem;
   flex-grow: 1;
+  z-index: 2;
 }
 
 .HeroImage {
@@ -19,7 +20,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  z-index: -1;
+  z-index: 1;
 }
 
 h1.Title {
@@ -27,6 +28,7 @@ h1.Title {
   font-size: 4rem;
   margin: 0px 1rem 2rem 2rem;
   max-width: 66%;
+  z-index: 2;
 }
 
 h2.Subtitle {
@@ -34,6 +36,7 @@ h2.Subtitle {
   font-size: 2rem;
   margin: 0px 1rem 1.3rem 2rem;
   max-width: 100%;
+  z-index: 2;
 }
 
 @media only screen and (max-width: 810px) {
@@ -69,5 +72,15 @@ h2.Subtitle {
 
   h2.Subtitle {
     font-size: 1.2rem;
+  }
+}
+
+@media only screen and (max-width: 860px) and (orientation: landscape) {
+  .Container {
+    height: calc(95vh - 6rem);
+  }
+
+  .HeroImage {
+    height: 95vh;
   }
 }

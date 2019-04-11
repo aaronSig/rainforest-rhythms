@@ -9,3 +9,8 @@
   font-family: "Montserrat", sans-serif;
   background-color: #1e1e1e;
 }
+
+@media only screen and (max-width: 860px) and (orientation: landscape) {
+  .Home {
+  }
+}

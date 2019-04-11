@@ -17,6 +17,13 @@
     width: auto;
     height: 80px;
   }
+
+  .Affiliations {
+    max-width: 90%;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -24,6 +31,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    max-width: 90%;
   }
 
   .Affiliations img {

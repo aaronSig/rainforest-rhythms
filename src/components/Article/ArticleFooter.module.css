@@ -1,16 +1,21 @@
 .ArticleFooter {
+  background-color: #fff;
+  margin-top: -2px;
+}
+
+.Inner {
+  width: 90%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 720px;
   margin: auto;
   padding: 2rem 0rem 3rem;
 
   border-top: 1px solid rgb(51, 51, 51, 0.1);
 }
-
 @media only screen and (max-width: 600px) {
-  .ArticleFooter {
+  .Inner {
     width: 90%;
   }
 }

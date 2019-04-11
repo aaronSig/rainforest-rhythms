@@ -2,6 +2,10 @@ html,
 body,
 #root {
   font-size: 15px;
+  background-color: #1e1e1e;
+
+  height: 100%;
+  width: 100%;
 }
 
 @media only screen and (max-width: 1204px) {
