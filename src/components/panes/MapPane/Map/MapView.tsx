@@ -33,7 +33,6 @@ interface MapViewProps {
 function MapView(props: MapViewProps) {
   const { habitatData, streamData, sites } = props;
   const annotatedForestBounds = useBounds(habitatData);
-
   return (
     <div className={styles.MapPane}>
       {habitatData && annotatedForestBounds && (
@@ -62,6 +61,7 @@ function MapView(props: MapViewProps) {
               {/* <ScaleControl position="bottomleft" /> */}
 
               {sites.map(s => (
+                // Ensure to trigger marker is redrawn on resize as leaflet clobbers it
                 //@ts-ignore
                 <SiteMarker key={s.id} site={s} />
               ))}

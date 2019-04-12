@@ -14,6 +14,7 @@ if (process.env.NODE_ENV !== "development") {
   console.error = noop;
 }
 
+console.log("Rendering");
 ReactDOM.render(
   <StrictMode>
     <Provider store={store}>
@@ -24,4 +25,4 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-serviceWorker.register();
+serviceWorker.unregister();

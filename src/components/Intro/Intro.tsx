@@ -23,11 +23,11 @@ function IntroView(props: IntroProps) {
           That audio is now available to listen to here.
         </p>
         <p>
-          Try out listening to the 6:20am dawn chorus when the animals are just waking. Or see if
-          you can work out which of the animals you're hearing on the stream - we'll list animals
-          that live in that area and could likely be around at that time. You may be surprised to
-          find out too that even from just the sound alone it is possible to hear differences
-          between Old Growth and Logged forest.
+          Try out listening to the dawn chorus starting at 6am when the animals are just waking. Or
+          see if you can work out which of the animals you're hearing on the stream - we'll list
+          animals that live in that area and could likely be around at that time. You may also be
+          surprised to find out that from the sound alone you are able to hear differences between
+          separate parts of the forest.
         </p>
         <p>We hope you enjoy exploring.</p>
         <br />

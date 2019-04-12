@@ -1,6 +1,7 @@
 import { divIcon } from "leaflet";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ReactDOM from "react-dom";
+//@ts-ignore
 import { Marker, MarkerProps } from "react-leaflet";
 
 interface ReactMarkerProps extends MarkerProps {
@@ -12,7 +13,8 @@ interface ReactMarkerProps extends MarkerProps {
  * A leaflet marker that can use a react node
  */
 export default function ReactMarker(props: ReactMarkerProps) {
-  const container = useRef(null as HTMLElement | null);
+  const [container, setContainer] = useState(null as HTMLElement | null);
+
   const { id, icon, children, ...remaining } = props;
   const i = useMemo(() => {
     return divIcon({
@@ -22,14 +24,15 @@ export default function ReactMarker(props: ReactMarkerProps) {
   }, [id]);
 
   useEffect(() => {
-    if (!container.current || container.current.id !== id) {
-      container.current = document.getElementById(id);
+    if (!container || container.id !== id) {
+      setContainer(document.getElementById(`${id}`));
     }
   }, [container, id]);
+
   return (
     <>
       <Marker icon={i} {...remaining} />
-      <Portal container={container.current}>{children}</Portal>
+      <Portal container={container}>{children}</Portal>
     </>
   );
 }

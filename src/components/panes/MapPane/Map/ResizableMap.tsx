@@ -22,14 +22,17 @@ export default function ResizableMap(props: ResizableMapProps) {
   );
 
   // Key is needed to reload the map when the viewport changes
-  const key = width || 0 + (height || 0);
+  const key = (width || 0) + (height || 0);
   const clone = React.cloneElement(element, {
     key,
-    style: mapStyle
+    style: mapStyle,
+    width,
+    height
   });
+
   return (
     <>
-      {clone}
+      {width && height && clone}
       {resizeComponent}
     </>
   );
