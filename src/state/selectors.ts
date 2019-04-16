@@ -123,7 +123,9 @@ export const getAudioForFocusedSiteAtCurrentTime = createSelector(
     }
 
     if (focusedSiteId in siteAudioByTimeSegment) {
-      return siteAudioByTimeSegment[focusedSiteId][focusedTimeSegment];
+      if (focusedTimeSegment in siteAudioByTimeSegment[focusedSiteId]) {
+        return siteAudioByTimeSegment[focusedSiteId][focusedTimeSegment];
+      }
     }
 
     return [];

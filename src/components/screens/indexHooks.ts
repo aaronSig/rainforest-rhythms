@@ -60,7 +60,7 @@ export default function useIndexHook(props: IndexProps) {
   useEffect(() => {
     if (isInitialLoadComplete) {
       if (siteId && timeSegment) {
-        if (availableAudio.length === 0) {
+        if (availableAudio && availableAudio.length === 0) {
           console.log("useIndexHook, Searching for audio", siteId, timeSegment);
           searchForAudio(siteId, timeSegment);
         }

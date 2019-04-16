@@ -1,14 +1,27 @@
 import "isomorphic-fetch";
 import { allTimeSegments } from "../state/types";
 import { byStringKey } from "../utils/objects";
-import { AccessToken, HabitatName, MegaResponse, RecorderType, Site, SiteInfo, Status, StreamInfo, Taxon, TimeSegment } from "./types";
+import {
+  AccessToken,
+  HabitatName,
+  MegaResponse,
+  RecorderType,
+  Site,
+  SiteInfo,
+  Status,
+  StreamInfo,
+  Taxon,
+  TimeSegment
+} from "./types";
 
 const isServer = typeof window === "undefined";
 const isLocal = !isServer && window.location.href.includes("://localhost");
 let prefix = !isLocal ? "/api" : "";
-if (isServer) {
-  prefix = "https://rainforest-rhythms.asig.now.sh/api";
-}
+// if (isServer) {
+prefix = "https://davidorme.pythonanywhere.com";
+// when using now:
+// prefix = "https://rainforest-rhythms.asig.now.sh/api";
+// }
 
 // const host = "https://davidorme.pythonanywhere.com";
 const base = `${prefix}/call/json/`;
@@ -198,10 +211,14 @@ export default {
 
   geoJson: {
     async streams(): Promise<GeoJSON.GeoJsonObject> {
-      return await get(`${prefix}/rainforest_rhythms/static/geojson/stream_data.geojson`, null, "");
+      // return await get(`${prefix}/rainforest_rhythms/static/geojson/stream_data.geojson`, null, "");
+      const data = await get(`${process.env.PUBLIC_URL}/stream_data.geojson`, null, "");
+      return data;
     },
     async habitats(): Promise<GeoJSON.GeoJsonObject> {
-      return await get(`${prefix}/static/geojson/map_data.geojson`, null, "");
+      // return await get(`${prefix}/static/geojson/map_data.geojson`, null, "");
+      const data = await get(`${process.env.PUBLIC_URL}/map_data.geojson`, null, "");
+      return data;
     }
   }
 };
