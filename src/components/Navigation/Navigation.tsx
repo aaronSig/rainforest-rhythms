@@ -7,9 +7,7 @@ export function Navigation() {
       <img src={logo} alt="SAFE logo" />
       <ul>
         <li>
-          <a href="/about" target="_blank" rel="noopener noreferrer">
-            Find Out More
-          </a>
+          <a href="/about">Find Out More</a>
         </li>
 
         <li>

@@ -41,6 +41,11 @@
     <link rel="preconnect" href="https://static.inaturalist.org" />
 
     <title>SAFE Acoustics - Rainforest Audio</title>
+    <script>
+      if (window.location.hash && window.location.hash.startsWith("#!")) {
+        history.pushState({}, "entry page", location.hash.substring(2));
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

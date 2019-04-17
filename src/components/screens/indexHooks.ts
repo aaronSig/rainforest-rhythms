@@ -32,6 +32,14 @@ export default function useIndexHook(props: IndexProps) {
       if (!timeSegment) {
         //if there isn't a time segment set, set it to 6:00 site 10
         console.log("Setting to initial default");
+
+        if (window.location.hash && window.location.hash.startsWith("#!")) {
+          navigate(window.location.hash.substring(2), {
+            replace: true
+          });
+          return;
+        }
+
         navigate(`/06:00/10`, {
           replace: true
         });
