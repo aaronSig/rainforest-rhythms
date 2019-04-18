@@ -1,10 +1,11 @@
-The source code for: http://acoustics.safeproject.net
+This app is available to view here: http://acoustics.safeproject.net
 
-Run: 
 
-> yarn install
+## Development
 
-to get started
+### `yarn install`
+
+To download all dependencies.
 
 ### `yarn start`
 
