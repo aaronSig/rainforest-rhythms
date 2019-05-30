@@ -1,0 +1,33 @@
+.PlayBar {
+  background-color: #002e2a;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.PlayBar > button {
+  border: none;
+  padding: 0px;
+  margin: 1rem;
+  border-radius: 50%;
+  background-color: #e23e1d;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.Previous {
+}
+
+.Play {
+}
+
+.Next {
+}

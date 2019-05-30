@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@turf/turf": "^5.1.6",
+    "@types/react-responsive": "^3.0.3",
     "date-fns": "^v2.0.0-alpha.27",
     "howler": "^2.1.1",
     "immutable": "^4.0.0-rc.12",
@@ -22,6 +23,7 @@
     "react-leaflet": "^2.2.1",
     "react-medium-image-zoom": "^3.0.15",
     "react-redux": "^6.0.1",
+    "react-responsive": "^6.1.2",
     "react-scripts": "3.0.0-next.b0cbf2ca",
     "react-spring": "^8.0.19",
     "redux": "^4.0.1",

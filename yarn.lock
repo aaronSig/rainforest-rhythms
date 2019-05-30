@@ -2396,6 +2396,12 @@
     "@types/react" "*"
     redux "^4.0.0"
 
+"@types/react-responsive@^3.0.3":
+  version "3.0.3"
+  resolved "https://npm.travaplan.com/@types%2freact-responsive/-/react-responsive-3.0.3.tgz#a31b599c7cfe4135c5cc2f45d0b71df64803b23f"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-slick@^0.23.3":
   version "0.23.3"
   resolved "https://registry.yarnpkg.com/@types/react-slick/-/react-slick-0.23.3.tgz#c9d14323a75f54f46a652fb745fe553aad091ce0"
@@ -3969,6 +3975,10 @@ css-loader@2.1.1:
     postcss-modules-values "^2.0.0"
     postcss-value-parser "^3.3.0"
     schema-utils "^1.0.0"
+
+css-mediaquery@^0.1.2:
+  version "0.1.2"
+  resolved "https://npm.travaplan.com/css-mediaquery/-/css-mediaquery-0.1.2.tgz#6a2c37344928618631c54bd33cedd301da18bea0"
 
 css-prefers-color-scheme@^3.1.1:
   version "3.1.1"
@@ -5603,6 +5613,10 @@ https-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
 
+hyphenate-style-name@^1.0.0:
+  version "1.0.3"
+  resolved "https://npm.travaplan.com/hyphenate-style-name/-/hyphenate-style-name-1.0.3.tgz#097bb7fa0b8f1a9cf0bd5c734cf95899981a9b48"
+
 iconv-lite@0.4.23:
   version "0.4.23"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.23.tgz#297871f63be507adcfbfca715d0cd0eed84e9a63"
@@ -6867,6 +6881,12 @@ map-visit@^1.0.0:
 markdown-escapes@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.2.tgz#e639cbde7b99c841c0bacc8a07982873b46d2122"
+
+matchmediaquery@^0.3.0:
+  version "0.3.0"
+  resolved "https://npm.travaplan.com/matchmediaquery/-/matchmediaquery-0.3.0.tgz#6f672bcdbc44de16825c6917fbcdcfb9b82607b1"
+  dependencies:
+    css-mediaquery "^0.1.2"
 
 md5.js@^1.3.4:
   version "1.3.5"
@@ -8659,6 +8679,14 @@ react-redux@^6.0.1:
     loose-envify "^1.4.0"
     prop-types "^15.7.2"
     react-is "^16.8.2"
+
+react-responsive@^6.1.2:
+  version "6.1.2"
+  resolved "https://npm.travaplan.com/react-responsive/-/react-responsive-6.1.2.tgz#b9b9cc3ee35f37e80cb036f1c9038ef73aec920b"
+  dependencies:
+    hyphenate-style-name "^1.0.0"
+    matchmediaquery "^0.3.0"
+    prop-types "^15.6.1"
 
 react-scripts@3.0.0-next.b0cbf2ca:
   version "3.0.0-next.b0cbf2ca"

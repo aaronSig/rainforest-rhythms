@@ -11,9 +11,11 @@ import {
   isInitialLoadComplete
 } from "../../state/selectors";
 import { State } from "../../state/types";
+import { Desktop, Mobile } from "../../utils/resoinsive";
 import Intro from "../Intro/Intro";
 import Lightbox from "../Lightbox/Lighbox";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
+import MobileRoot from "../mobile/MobileRoot";
 import AudioControlPane from "../panes/AudioControlPane/AudioControlPane";
 import InfoPane from "../panes/InfoPane/InfoPane";
 import MapPane from "../panes/MapPane/MapPane";
@@ -54,10 +56,20 @@ export interface IndexProps {
 export function IndexView(props: IndexProps) {
   useIndexHook(props);
 
-  // if (!props.isInitialLoadComplete) {
-  //   return <div>Loading...</div>;
-  // }
+  return (
+    <>
+      <Desktop>
+        <IndexViewDesktop {...props} />
+      </Desktop>
 
+      <Mobile>
+        <MobileRoot />
+      </Mobile>
+    </>
+  );
+}
+
+function IndexViewDesktop(props: IndexProps) {
   return (
     <div className={styles.Home}>
       <LoadingIndicator />

@@ -7,6 +7,7 @@ function App() {
   return (
     <Router style={{ height: "100%" }}>
       <About path="/about" />
+
       <Index path="/" />
       <Index path="/:timeSegment" />
       <Index path="/:timeSegment/:siteId" />
