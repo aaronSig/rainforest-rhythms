@@ -18,7 +18,7 @@ const isServer = typeof window === "undefined";
 const isLocal = !isServer && window.location.href.includes("://localhost");
 let prefix = !isLocal ? "/api" : "";
 // if (isServer) {
-prefix = "https://davidorme.pythonanywhere.com";
+prefix = "https://acoustics-db.safeproject.net";
 // when using now:
 // prefix = "https://rainforest-rhythms.asig.now.sh/api";
 // }
