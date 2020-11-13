@@ -28,3 +28,8 @@
   -webkit-appearance: none;
   margin: 0;
 }
+
+.TimePicker input[type="time"]::-webkit-calendar-picker-indicator {
+  background: none;
+  margin-right: -40px;
+}
