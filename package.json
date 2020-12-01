@@ -22,7 +22,7 @@
     "react-leaflet": "^2.2.1",
     "react-medium-image-zoom": "^3.0.15",
     "react-redux": "^6.0.1",
-    "react-scripts": "3.0.0-next.b0cbf2ca",
+    "react-scripts": "3.4.4",
     "react-spring": "^8.0.19",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
