@@ -4,6 +4,8 @@ import styles from "./MapAttribution.module.css";
 function MapAttribution() {
   return (
     <div className={styles.MapAttribution}>
+      <a href='/accessibility'>Accessibility </a>
+      | 
       Created by
       <a href="http://weareup.co" title="Up Creative" target="_blank">
         UP
