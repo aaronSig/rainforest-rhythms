@@ -15,11 +15,7 @@ import {
   TimeSegment,
 } from "./types";
 
-const isServer = typeof window === "undefined";
-const isLocal = !isServer && window.location.href.includes("://localhost");
-let prefix = !isLocal ? "/api" : settings.apiUrl;
-
-const base = `${prefix}/call/json/`;
+const base = `${settings.apiUrl}/call/json/`;
 
 async function get(
   path: string | (string | number | undefined)[],
