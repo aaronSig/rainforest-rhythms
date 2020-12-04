@@ -9,6 +9,7 @@ import styles from "./People.module.css";
 import rob from "./rob_circle.png";
 import sarab from "./sarab_circle.png";
 import syamin from "./syamin_circle.png";
+import becky from "./becky_circle.png";
 
 function People() {
   return (
@@ -28,6 +29,10 @@ function People() {
       <a className={styles.NameBlock} href="https://www.imperial.ac.uk/people/nick.jones">
         <img src={nick} alt="Nick" />
         <span className={styles.Name}>Nick</span>
+      </a>
+      <a className={styles.NameBlock} href="https://www.imperial.ac.uk/people/r.heath18">
+        <img src={becky} alt="Becky" />
+        <span className={styles.Name}>Becky</span>
       </a>
       <a className={styles.NameBlock} href="https://www.imperial.ac.uk/people/d.orme">
         <img src={david} alt="David" />
