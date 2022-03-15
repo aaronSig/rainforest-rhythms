@@ -8,7 +8,7 @@ import {
   didStartLoading,
   setCurrentSiteAudio,
   setPreloadedData,
-  updateSiteAudioTimestamp
+  updateSiteAudioTimestamp,
 } from "./actions";
 import {
   getCurrentSiteAudioId,
@@ -17,7 +17,7 @@ import {
   getSiteAudio,
   getSiteAudioByAudioId,
   getSiteAudioByTimeSegment,
-  getSiteAudioTimestamp
+  getSiteAudioTimestamp,
 } from "./selectors";
 import { State } from "./types";
 
@@ -31,7 +31,7 @@ export function initialLoad() {
       let [megaResponse, habitats, streams] = await Promise.all([
         api.getMegaRequest(),
         api.geoJson.habitats(),
-        api.geoJson.streams()
+        api.geoJson.streams(),
       ]);
 
       if (megaResponse === null) {
@@ -40,7 +40,9 @@ export function initialLoad() {
       }
 
       if (megaResponse === null) {
-        alert("Sorry there has been an error loading. Please check you're online and try again.");
+        alert(
+          "Sorry there has been an error loading. Please check you're online and try again."
+        );
         return;
       }
 
@@ -134,7 +136,8 @@ export function searchForAudio(siteId: string, time: TimeSegment) {
         [siteId: string]: { [time in TimeSegment]: StreamInfo[] };
       };
       if (siteId in audio) {
-        const audioByTime: { [time in TimeSegment]: StreamInfo[] } = audio[siteId];
+        const audioByTime: { [time in TimeSegment]: StreamInfo[] } =
+          audio[siteId];
         if (audioByTime[time].length) {
           // already have audio loaded
           return;
@@ -203,7 +206,7 @@ export function didSeek(progressPercent: string) {
 
     console.log("Did seek", timeSegment, siteId, audioId, progressPercent);
     navigate(`/${timeSegment}/${siteId}/${audioId}?t=${progressPercent}`, {
-      replace: true
+      replace: true,
     });
 
     console.log("User did seek to position", progressPercent);

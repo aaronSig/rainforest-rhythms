@@ -3,12 +3,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { animated, useSpring } from "react-spring";
 import { updateSiteAudioState } from "../../../state/actions";
-import { didSeek, siteAudioTimestampDidUpdate } from "../../../state/data-actions";
+import {
+  didSeek,
+  siteAudioTimestampDidUpdate,
+} from "../../../state/data-actions";
 import {
   getCurrentSiteAudioId,
   getNextAudioLink,
   getRequestedTimestamp,
-  getSiteAudio
+  getSiteAudio,
 } from "../../../state/selectors";
 import { SiteAudioState, State } from "../../../state/types";
 import useResizeAware from "../../../utils/useResizeAware";
@@ -62,10 +65,10 @@ const settings = () => {
             padding: "4px",
             transform: "translateY(-100px)",
             "font-family": `"Lato", sans-serif`,
-            "font-size": "13px"
-          }
-        })
-      ]
+            "font-size": "13px",
+          },
+        }),
+      ],
     },
     backend
   );
@@ -82,7 +85,7 @@ function WaveformView(props: WaveformProps) {
     seek,
     timestampDidUpdate,
     currentSiteAudioId,
-    nextAudioLink
+    nextAudioLink,
   } = props;
   const isFinishedPlaying = siteAudio.isFinished;
 
@@ -103,11 +106,15 @@ function WaveformView(props: WaveformProps) {
     const WaveSurfer = (window as any).WaveSurfer as any;
     wavesurfer.current = WaveSurfer.create({
       container: waveformRef.current,
-      ...settings()
+      ...settings(),
     });
     return () => {
       if (wavesurfer.current) {
-        wavesurfer.current.destroy();
+        try {
+          wavesurfer.current.destroy();
+        } catch (e) {
+          console.error("Error removing wavesurfer", e);
+        }
       }
     };
   }, [wavesurfer, waveformRef]);
@@ -145,7 +152,11 @@ function WaveformView(props: WaveformProps) {
     if (!wavesurfer.current) {
       return;
     }
-    if (siteAudio.shouldPlay && siteAudio.isReady && currentSiteAudioId !== null) {
+    if (
+      siteAudio.shouldPlay &&
+      siteAudio.isReady &&
+      currentSiteAudioId !== null
+    ) {
       wavesurfer.current.play();
     } else {
       wavesurfer.current.pause();
@@ -212,7 +223,12 @@ function WaveformView(props: WaveformProps) {
 
         setTimeout(() => {
           // sometimes peaks dont clear
-          wavesurfer.current.drawer.drawPeaks(demoPeaks, width! * 2, 0, width! * 2);
+          wavesurfer.current.drawer.drawPeaks(
+            demoPeaks,
+            width! * 2,
+            0,
+            width! * 2
+          );
         }, 500);
       }
     });
@@ -236,15 +252,22 @@ function WaveformView(props: WaveformProps) {
     updateState,
     width,
     timestampDidUpdate,
-    setLoadingPercent
+    setLoadingPercent,
   ]);
 
   return (
     <div className={styles.WaveformContainer}>
       {resizeComponent}
-      <div ref={waveformRef} className={styles.Waveform} style={{ width: width || 1400 }} />
+      <div
+        ref={waveformRef}
+        className={styles.Waveform}
+        style={{ width: width || 1400 }}
+      />
       {allowPlaybackBeforeLoad && (
-        <animated.div className={styles.LoadingOverlay} style={{ width: springProps.width }} />
+        <animated.div
+          className={styles.LoadingOverlay}
+          style={{ width: springProps.width }}
+        />
       )}
     </div>
   );
@@ -255,7 +278,7 @@ const mapStateToProps = (state: State) => {
     siteAudio: getSiteAudio(state),
     requestedTimestamp: getRequestedTimestamp(state),
     currentSiteAudioId: getCurrentSiteAudioId(state),
-    nextAudioLink: getNextAudioLink(state)
+    nextAudioLink: getNextAudioLink(state),
   };
 };
 
@@ -267,20 +290,19 @@ const mapDispatchToProps = (dispatch: any, props: WaveformProps) => {
       isPlaying?: boolean,
       isFinished?: boolean
     ) => {
-      dispatch(updateSiteAudioState(loadedPercent, isReady, isPlaying, isFinished));
+      dispatch(
+        updateSiteAudioState(loadedPercent, isReady, isPlaying, isFinished)
+      );
     },
     seek: (percent: string) => {
       dispatch(didSeek(percent));
     },
     timestampDidUpdate: (timestamp: number) => {
       dispatch(siteAudioTimestampDidUpdate(timestamp));
-    }
+    },
   };
 };
 
-const Waveform = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(WaveformView);
+const Waveform = connect(mapStateToProps, mapDispatchToProps)(WaveformView);
 
 export default Waveform as any;
